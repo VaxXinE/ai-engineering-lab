@@ -1,0 +1,45 @@
+# Environment / credentials
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+*credentials*.json
+secrets/
+# Python
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.venv/
+venv/
+dist/
+build/
+*.egg-info/
+.coverage
+htmlcov/
+# Node / Next.js
+node_modules/
+.next/
+.nuxt/
+coverage/
+*.tsbuildinfo
+# IDE / OS
+.idea/
+.vscode/*
+!.vscode/extensions.json
+.DS_Store
+Thumbs.db
+# Local runtime & model artifacts
+logs/
+tmp/
+temp/
+*.sqlite3
+*.db
+models/
+artifacts/
+# Do not track raw/private data (synthetic fixtures under datasets/synthetic are permitted)
+datasets/raw/
+datasets/private/
+datasets/real/
