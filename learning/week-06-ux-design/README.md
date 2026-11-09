@@ -1,5 +1,8 @@
 # Week 06 — User Experience for AI-Assisted Workflows
 
+> **Materi v2:** [Deep Dive](deep-dive.md) → [Worked Examples](worked-examples.md) → [Knowledge Check + pembahasan](knowledge-check.md) → [Learning Contract](study-contract.md). Setelah itu baru praktik memakai [Lab Guide](lab-guide.md). Dokumentasi tersedia **bukan berarti latihan peserta sudah selesai**.
+
+
 **Status materi: Siap dipelajari** · **Status praktik: Belum dikerjakan** · **Alokasi:** 8–10 jam
 
 > **Ruang lingkup unit pada daftar LSP yang terpublikasi:** J.620100.006.01 — Merancang User Experience. Kode/skema final harus diverifikasi kembali pada dokumen LSP terkini.

@@ -15,7 +15,7 @@ MODULES = [
     "13-ai-installation", "14-maintenance-planning",
     "15-maintenance-execution", "16-assessment",
 ]
-REQUIRED = ("README.md", "theory.md", "lab-guide.md", "exercises.md", "assessment.md")
+REQUIRED = ("README.md", "theory.md", "deep-dive.md", "worked-examples.md", "knowledge-check.md", "study-contract.md", "lab-guide.md", "exercises.md", "assessment.md")
 MD_LINK = re.compile(r"(?<!!)\[[^\]]+\]\(([^)\s]+)(?:\s+[\"'][^\"']+[\"'])?\)")
 FENCE = re.compile(r"^\s*(?:~{3}|\x60{3})")
 
@@ -72,4 +72,4 @@ if __name__ == "__main__":
     if issues:
         print(f"{len(issues)} curriculum checks failed.", file=sys.stderr)
         raise SystemExit(1)
-    print("Curriculum OK: 16 modules complete; internal Markdown links and fences checked.")
+    print("Curriculum v2 OK: 16 modules, 9 required docs/module; internal Markdown links and fences checked.")

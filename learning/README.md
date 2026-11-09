@@ -19,6 +19,14 @@
 - [M15 — AI Maintenance Execution](week-15-maintenance-execution/README.md) ([teori](week-15-maintenance-execution/theory.md), [lab](week-15-maintenance-execution/lab-guide.md), [latihan](week-15-maintenance-execution/exercises.md), [simulasi](week-15-maintenance-execution/assessment.md))
 - [M16 — Assessment & Evidence Portfolio](week-16-assessment/README.md) ([teori](week-16-assessment/theory.md), [lab](week-16-assessment/lab-guide.md), [latihan](week-16-assessment/exercises.md), [simulasi](week-16-assessment/assessment.md))
 
+## Jalur belajar mendalam v2
+
+Setiap folder Week 01–16 memiliki empat berkas baru: `deep-dive.md`, `worked-examples.md`, `knowledge-check.md`, `study-contract.md`. Mulai dari README setiap modul untuk membaca versi lengkap, lalu lanjut ke lab setelah memahami konsep.
+
+Tiap contoh yang belum dieksekusi diberi konteks **ilustratif**. Ini materi untuk nanti dipraktikkan, bukan klaim telah selesai.
+
+Lihat [metode pembelajaran](../docs/instructional-design.md), [rubrik konten](../docs/content-quality-rubric.md), dan [standards watch](../docs/standards-watch.md).
+
 ## Pola tiap modul
 
 1. **theory.md**: pembahasan konsep, alasan teknis, dan risiko.

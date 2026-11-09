@@ -1,5 +1,8 @@
 # Week 08 — Database Entities & Relational Integrity
 
+> **Materi v2:** [Deep Dive](deep-dive.md) → [Worked Examples](worked-examples.md) → [Knowledge Check + pembahasan](knowledge-check.md) → [Learning Contract](study-contract.md). Setelah itu baru praktik memakai [Lab Guide](lab-guide.md). Dokumentasi tersedia **bukan berarti latihan peserta sudah selesai**.
+
+
 **Materi:** siap dibaca · **Praktik:** belum diimplementasikan/dijalankan · **Alokasi:** 8–10 jam
 
 **Unit acuan:** J.620100.007.01 — Mengimplementasikan Rancangan Entitas dan Keterkaitan Antar Entitas (verifikasi dokumen LSP terbaru sebelum asesmen).

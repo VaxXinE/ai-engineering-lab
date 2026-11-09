@@ -2,6 +2,13 @@
 
 **Materi belajar mandiri lengkap:** 16 modul. **As of:** 9 November 2026. **Bahasa:** Indonesia. **Target:** software engineer full-stack dengan pengalaman 2–3 tahun.
 
+## Jalur v2 — cara membaca modul mendalam
+
+Setiap README Week 01–16 kini memberi tautan:
+**Deep Dive** (alasan dan mekanisme) → **Worked Examples** (contoh lengkap beserta error) → **Knowledge Check** (soal dengan pembahasan) → **Learning Contract** (outcome dan evidence) → **Lab/Exercises/Assessment**.
+
+[Lihat prinsip desain pembelajaran](instructional-design.md), [rubrik kualitas](content-quality-rubric.md), [referensi riset](learning-science-references.md), dan [catatan SKKNI 2026](standards-watch.md).
+
 ## Pengertian status
 
 - **Materials only:** teori, panduan lab, latihan dan simulasi sudah ditulis; code, data praktikum, tests dan bukti tugas **belum** dibuat/dijalankan.

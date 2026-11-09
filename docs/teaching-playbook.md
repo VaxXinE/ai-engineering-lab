@@ -4,6 +4,12 @@
 
 Menjaga proses pembelajaran terukur, bertahap, dan benar-benar menghasilkan keterampilan. Materi dituntaskan terlebih dahulu untuk 16 modul, tetapi progress praktik ditentukan dari pekerjaan yang dilakukan sendiri.
 
+## Penerapan v2
+
+Gunakan metode **outcome → bukti → materi**, lalu kerja nyata dengan contoh yang sudah diselesaikan (*worked example*) dan bimbingan berkurang (*faded example*). Lakukan retrieval quiz tanpa melihat jawaban, beri feedback alasan, dan ulangi topik pada hari +1/+7/+21 sebagai usulan interval belajar.
+
+[Instructional design & sumber riset](instructional-design.md).
+
 ## Alur sesi per modul
 
 1. **Pre-check:** jelaskan konsep prasyarat tanpa membaca catatan, tentukan target pribadi.

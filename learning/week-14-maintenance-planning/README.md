@@ -1,5 +1,8 @@
 # Week 14 — Rencana Pemeliharaan Solusi AI
 
+> **Materi v2:** [Deep Dive](deep-dive.md) → [Worked Examples](worked-examples.md) → [Knowledge Check + pembahasan](knowledge-check.md) → [Learning Contract](study-contract.md). Setelah itu baru praktik memakai [Lab Guide](lab-guide.md). Dokumentasi tersedia **bukan berarti latihan peserta sudah selesai**.
+
+
 **Status materi:** siap dipelajari · **Status implementasi:** belum dikerjakan · **Estimasi:** 8–10 jam
 
 **Acuan unit:** J.62AIN00.016.1 — Merencanakan Perawatan Solusi AI. Kode unit dan KUK final memerlukan konfirmasi LSP.

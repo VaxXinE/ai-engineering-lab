@@ -1,5 +1,8 @@
 # Week 05 — Data Structures, Algorithms & Complexity
 
+> **Materi v2:** [Deep Dive](deep-dive.md) → [Worked Examples](worked-examples.md) → [Knowledge Check + pembahasan](knowledge-check.md) → [Learning Contract](study-contract.md). Setelah itu baru praktik memakai [Lab Guide](lab-guide.md). Dokumentasi tersedia **bukan berarti latihan peserta sudah selesai**.
+
+
 **Status materi: Siap dipelajari** · **Status praktik: Belum dikerjakan** · **Alokasi:** 8–10 jam
 
 > **Ruang lingkup unit pada daftar LSP yang terpublikasi:** J.620100.004.02 — Menggunakan Struktur Data. Kode/skema final harus diverifikasi kembali pada dokumen LSP terkini.

@@ -1,5 +1,8 @@
 # Modul 01 — AI Engineering Fundamentals
 
+> **Materi v2:** [Deep Dive](deep-dive.md) → [Worked Examples](worked-examples.md) → [Knowledge Check + pembahasan](knowledge-check.md) → [Learning Contract](study-contract.md). Setelah itu baru praktik memakai [Lab Guide](lab-guide.md). Dokumentasi tersedia **bukan berarti latihan peserta sudah selesai**.
+
+
 **Jalur belajar:** AI Aplikasi Perangkat Lunak + AI Proses Data  
 **Status:** Starter materi dan kode tersedia; kemampuan peserta belum dinilai.  
 **Estimasi belajar:** 8–10 jam  
