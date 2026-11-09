@@ -53,3 +53,7 @@ Browser (Next.js / TypeScript)
 - **Week 16:** demonstration and traceable certification portfolio.
 
 Do not claim the gates passed without evidence.
+
+## Week 01 foundation
+
+A standalone [synthetic message classification proof-of-concept](../../learning/week-01-ai-fundamentals/README.md) and [evaluation record](../../learning/week-01-ai-fundamentals/results/verification.md) are available as teaching artifacts. **Not yet integrated** with the planned full-stack capstone.

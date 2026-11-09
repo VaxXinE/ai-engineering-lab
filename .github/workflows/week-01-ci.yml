@@ -1,0 +1,41 @@
+name: Week 01 Python checks
+
+on:
+  push:
+    paths:
+      - 'learning/week-01-ai-fundamentals/**'
+      - '.github/workflows/week-01-ci.yml'
+  pull_request:
+    paths:
+      - 'learning/week-01-ai-fundamentals/**'
+      - '.github/workflows/week-01-ci.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  test-week-01:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    strategy:
+      fail-fast: false
+      matrix:
+        python-version: ['3.11', '3.13']
+    defaults:
+      run:
+        working-directory: learning/week-01-ai-fundamentals
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+      - name: Set up Python
+        uses: actions/setup-python@v7
+        with:
+          python-version: ${{ matrix.python-version }}
+      - name: Run unit tests
+        run: python -m unittest discover -s tests -v
+      - name: Run synthetic held-out evaluation
+        run: python -m week01 evaluate
+      - name: Compile module
+        run: python -m compileall -q week01

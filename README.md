@@ -22,7 +22,7 @@ A hands-on learning and portfolio repository for **AI Application Engineering** 
 | AI integration & operations | 11–15 | Model evaluation, integration, installation, maintenance |
 | Certification preparation | 16 | Evidence mapping, demonstration and mock assessment |
 
-**Start here:** [Learning roadmap](docs/learning-roadmap.md) · [Progress tracker](docs/progress-tracker.md) · [Week 01](learning/week-01-ai-fundamentals/README.md)
+**Start here:** [Learning roadmap](docs/learning-roadmap.md) · [Progress tracker](docs/progress-tracker.md) · [Week 01 (materi + kode + tests)](learning/week-01-ai-fundamentals/README.md)
 
 ## Capstone: AI Customer Intelligence Platform
 
@@ -45,6 +45,19 @@ certification/ai-data-processing/       Data processing competency reference
 certification/ai-software-application/  AI application competency reference
 certification/evidence-matrix.md        Traceable assessment evidence
 ```
+
+## Week 01 hands-on demo
+
+Modul pertama sudah menyediakan **synthetic text classifier** menggunakan Multinomial Naive Bayes, rule-based baseline, evaluasi metrik, 23 unit tests, dan panduan belajar. Kode telah diverifikasi lokal, tetapi **hasil belajar peserta dan workflow CI belum otomatis dinyatakan lulus**.
+
+~~~bash
+cd learning/week-01-ai-fundamentals
+python -m week01 evaluate
+python -m week01 predict --text "saya ingin membeli paket langganan"
+python -m unittest discover -s tests -v
+~~~
+
+Baca [materi Week 01](learning/week-01-ai-fundamentals/README.md) dan [hasil verifikasi](learning/week-01-ai-fundamentals/results/verification.md).
 
 ## Working agreement
 

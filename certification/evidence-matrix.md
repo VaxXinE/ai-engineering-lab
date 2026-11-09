@@ -29,3 +29,9 @@ For each area, record:
 4. Date of verification, assessor feedback (when available) and any unresolved gaps.
 
 **Do not assume automatic competency credit across LSP schemes.** The assessing LSP decides which evidence is acceptable. A formal scheme may add or revise units and performance criteria.
+
+## Week 01 — Supporting evidence (pre-assessment)
+
+The [Week 01 fundamentals lab](../learning/week-01-ai-fundamentals/README.md) supplies cross-cutting **training/evaluation literacy**, not a completed formal BNSP unit. Starter artifacts: [use-case scope](../learning/week-01-ai-fundamentals/use-case-spec.md), [classifier code](../learning/week-01-ai-fundamentals/week01/model.py), [tests](../learning/week-01-ai-fundamentals/tests), and [local verification record](../learning/week-01-ai-fundamentals/results/verification.md).
+
+**Evidence status:** instructor-authored demonstration verified locally; **participant competence and formal LSP acceptance not assessed**. The official rows above remain **No**.

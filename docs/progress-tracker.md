@@ -4,7 +4,7 @@
 
 | Week | Milestone | Completed | Evidence link |
 | --- | --- | --- | --- |
-| 01 | AI fundamentals | [ ] | TBD |
+| 01 | AI fundamentals | [ ] | [Starter + tests](../learning/week-01-ai-fundamentals/README.md); [hasil verifikasi kode](../learning/week-01-ai-fundamentals/results/verification.md) — **latihan peserta belum selesai** |
 | 02 | Technology assessment | [ ] | TBD |
 | 03 | Data ingestion | [ ] | TBD |
 | 04 | Data validation | [ ] | TBD |
@@ -28,4 +28,4 @@
 - [ ] AI integration and maintenance demonstrated (Week 15)
 - [ ] Evidence matrix reviewed and gaps addressed (Week 16)
 
-**Last reviewed:** not started. Replace `TBD` with specific files, PRs or commits when evidence exists.
+**Last reviewed:** 2026-11-09 — Week 01 starter code verified locally; personal exercise remains pending. Replace `TBD` with specific files, PRs or commits when evidence exists.
