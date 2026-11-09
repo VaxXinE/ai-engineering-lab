@@ -4,11 +4,11 @@
 
 ## 1. Contract-first integration
 
-Rancang request/response schema yang ketat sebelum menghubungkan UI, API dan model. Label hanya boleh normal/warning/fault/abstain; model version wajib disertakan. Status aplikasi seperti pending/inferred/reviewed bukan label AI. Pisahkan status agar proses bisnis tidak mengira prediksi sebagai keputusan final.
+Rancang request/response schema yang ketat sebelum menghubungkan UI, API dan model. Untuk capstone numerik, output harus memuat finite anomaly_score dalam kontrak 0–1, boolean flagged, dan model_version; label normal/warning/fault hanya digunakan pada latihan teks Modul 1. Status aplikasi seperti pending_scoring/reviewed bukan hasil model. Pisahkan status agar proses bisnis tidak mengira prediksi sebagai keputusan final.
 
 ## 2. Ports and adapters
 
-Definisikan antarmuka inference dengan method predict(text)->Prediction; implementasi lokal/hosted berada di adapter tersendiri. Ini memudahkan unit testing memakai fake adapter tanpa biaya provider, dan memungkinkan penggantian model setelah evaluasi. Jangan menaruh provider-specific behavior dalam domain service.
+Definisikan antarmuka scoring dengan method score(reading_features)->AnomalyResult; implementasi lokal/hosted berada di adapter tersendiri. Ini memudahkan unit testing memakai fake adapter tanpa biaya provider, dan memungkinkan penggantian model setelah evaluasi. Jangan menaruh provider-specific behavior dalam domain service.
 
 ## 3. Transaction and failure handling
 

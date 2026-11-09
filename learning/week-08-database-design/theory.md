@@ -1,10 +1,10 @@
 # Teori — Database Entities & Relational Integrity
 
-**Hasil belajar:** Merancang struktur data untuk pesan, prediksi AI, versi model, review, dan audit trail dengan integritas kuat.
+**Hasil belajar:** Merancang struktur data untuk site, meter, pembacaan energi, prediksi anomali, review, dan audit trail dengan integritas kuat.
 
 ## 1. Conceptual, logical dan physical modeling
 
-Mulai dari entity dan business rules, turunkan menjadi kolom dan relasi lalu implementasi tabel, index dan constraints. Jangan menduplikasi informasi seperti nama device pada setiap prediction jika relasi customer_id sudah ada; normalisasi mencegah update anomaly. Denormalisasi hanya dilakukan setelah kebutuhan performa terukur.
+Mulai dari entity dan business rules, turunkan menjadi kolom dan relasi lalu implementasi tabel, index dan constraints. Jangan menduplikasi metadata meter pada setiap anomaly_event jika relasi meter_id sudah tersedia; normalisasi mencegah update anomaly. Denormalisasi hanya dilakukan setelah kebutuhan performa terukur.
 
 ## 2. Keys dan cardinality
 

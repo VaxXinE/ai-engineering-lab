@@ -1,102 +1,65 @@
-# Teori — AI Engineering Fundamentals
+# Teori — AI Engineering Fundamentals untuk Monitoring Energi
 
-## 1. Apa itu AI, ML, DL, dan GenAI?
+## 1. AI, ML, DL, GenAI: apa bedanya?
 
-| Konsep | Makna | Contoh software |
+| Konsep | Definisi singkat | Contoh dalam domain energi |
 | --- | --- | --- |
-| AI | Istilah payung untuk sistem yang menunjukkan kemampuan menyelesaikan tugas cerdas | Pengelompokan pertanyaan device |
-| ML | Subbidang AI yang mempelajari pola dari contoh data | Text classifier yang dilatih dari contoh berlabel |
-| Deep Learning | Subbidang ML dengan jaringan saraf berlapis | Model text/image modern |
-| Generative AI | Model yang dapat menghasilkan konten baru | Ringkasan telemetri |
-| LLM | Model bahasa skala besar untuk memproses/menghasilkan teks | Chatbot, summarization, extraction |
-| Rule-based | Logika eksplisit buatan developer, tidak otomatis merupakan ML | Jika ada kata harga, arahkan ke normal |
+| Artificial Intelligence | Payung metode untuk tugas cerdas | Menandai pembacaan meter yang patut ditinjau |
+| Machine Learning | Parameter model dipelajari dari data | Klasifikasi catatan kejadian normal/warning/fault |
+| Deep Learning | Bagian ML menggunakan neural networks berlapis | Model deret waktu yang kompleks, bila data memadai |
+| Generative AI | Menghasilkan konten baru | Menyusun penjelasan tren untuk dibaca analis |
+| LLM | Model bahasa skala besar | Ringkasan laporan teknis, **bukan** penentu tunggal anomali |
+| Rule-based | Logika eksplisit pengembang | Jika catatan memuat `offline`, tandai fault untuk diperiksa |
 
-**Tidak semua solusi AI butuh LLM.** Untuk tugas yang sederhana dan terstruktur, aturan eksplisit atau model klasifikasi kecil dapat lebih murah, cepat, dapat diaudit, dan mudah dipelihara.
+Tidak setiap masalah AI memerlukan LLM. Baseline statistik/aturan sering lebih murah, dapat diaudit, dan cocok untuk memulai.
 
-## 2. Training, inference, dan evaluation
+## 2. Training, inference, evaluation dan deployment
 
-- **Training**: algoritma membaca 54 pesan berlabel dan mempelajari distribusi kata setiap kelas.
-- **Inference**: model menerima pesan baru lalu memperkirakan label berdasarkan parameter yang sudah dipelajari.
-- **Evaluation**: membandingkan prediksi dengan label sebenarnya pada **18 pesan terpisah**, bukan data yang dilatih.
-- **Deployment**: menjalankan model sebagai bagian dari aplikasi. Belum dilakukan pada modul ini.
+1. **Training:** Naive Bayes membaca 54 catatan perangkat sintetis yang sudah diberi label dan menghitung distribusi kata.
+2. **Inference:** menerima catatan baru, melakukan tokenisasi, menghitung skor tiap kelas lalu menghasilkan label atau `abstain`.
+3. **Evaluation:** menghitung accuracy, precision, recall, macro F1, dan confusion matrix pada 18 catatan held-out.
+4. **Deployment:** memasang model di lingkungan aplikasi, mengontrol akses, mencatat observability dan menangani kegagalan. **Belum dilakukan di Modul 1.**
 
-~~~mermaid
-flowchart TD
-    A[Pesan berlabel] --> B[Train dataset]
-    A --> C[Held-out test dataset]
-    B --> D[Latih model]
-    D --> E[Model terlatih]
-    E --> F[Prediksi test]
-    C --> G[Label asli]
-    F --> H[Hitung metrik]
-    G --> H
-~~~
-
-**Data leakage** terjadi ketika informasi dari data evaluasi ikut memengaruhi training atau keputusan pemilihan model. Contoh kita memeriksa overlap teks yang sama setelah normalisasi, tetapi **belum** mampu mendeteksi kalimat yang berbeda namun semantik hampir sama.
-
-## 3. Cara kerja Naive Bayes
-
-Input teks diubah menjadi **bag-of-words**, sehingga urutan kata diabaikan. Model menghitung jumlah dokumen per kelas dan frekuensi kata pada setiap kelas.
-
-Untuk setiap kata w dan kelas c, dipakai Laplace smoothing agar kata yang frekuensinya nol tidak mematikan seluruh skor:
-
-~~~text
-P(w | c) = (count(w,c) + 1) / (total_kata_di_c + ukuran_vocab)
-~~~
-
-Skor setiap kelas dihitung dengan log-probabilities supaya lebih stabil daripada mengalikan bilangan kecil. Label dengan skor tertinggi dipilih, kecuali semua token input tidak dikenal, yang menghasilkan **abstain**.
-
-Skor relatif bukan confidence yang terkalibrasi. Label dan skor bisa tampak meyakinkan tetapi tetap salah, terutama pada data yang berbeda dari data latihan.
-
-## 4. Rule-based vs Machine Learning
-
-Contoh: "berapa harga paket tahunan?"
-
-- **Rule-based**: developer mendefinisikan daftar kata seperti harga, paket, biaya. Tidak ada proses training.
-- **ML**: model mencari pola kata dalam data berlabel, lalu mengklasifikasikan contoh baru.
-- **LLM**: aplikasi dapat meminta model bahasa memahami intent lalu mengeluarkan label terstruktur, tetapi ada konsekuensi biaya, latency, privasi, dan validasi output.
-
-Minggu ini hanya menerapkan dua pendekatan pertama. Tidak ada API AI eksternal atau model deep learning.
-
-## 5. Accuracy, Precision, Recall, F1
-
-- **TP:** warning yang diprediksi sebagai warning.
-- **FP:** bukan warning tetapi diprediksi warning.
-- **FN:** warning tetapi diprediksi kategori lain, termasuk abstain.
-
-~~~text
-Precision = TP / (TP + FP)
-Recall    = TP / (TP + FN)
-F1        = 2 * Precision * Recall / (Precision + Recall)
-Accuracy  = Semua prediksi benar / Semua contoh uji
-Macro F1  = Rata-rata F1 dari tiga kelas
-~~~
-
-Confusion matrix membantu kita melihat kelas mana yang sering tertukar. Data berimbang dalam latihan ini **tidak mewakili** traffic aplikasi sungguhan. Accuracy tinggi pada data kecil tidak berarti model layak produksi.
-
-**Trade-off bisnis:** salah mengirim anomali ke normal dapat memperlambat warning; salah mengirim lead ke fault dapat menunda follow-up. Karena itu hasil AI memerlukan evaluasi berdasarkan dampak kesalahan dan jalur pemeriksaan manusia.
-
-## 6. Posisi AI dalam software full-stack
-
-~~~mermaid
+```mermaid
 flowchart LR
-    U[Operator dashboard] --> B[Backend API]
-    B --> V[Validasi input + authorization]
-    V --> M[AI inference]
-    M --> O[Validasi output]
-    O --> D[(Database)]
-    O --> H[Human review]
-~~~
+    T["54 synthetic event notes"] --> M["Train Naive Bayes"]
+    S["18 held-out event notes"] --> E["Evaluate"]
+    M --> E
+    S --> R["Rule baseline"]
+    R --> E
+    E --> F["Report metrics + errors"]
+```
 
-Diagram di atas merupakan **target rancangan** untuk modul berikutnya, bukan komponen yang sudah dibuat. Pada aplikasi nyata, API key dan logika authorization berada di server, bukan frontend.
+**Data leakage** muncul jika fitur/preprocessing menggunakan informasi test sewaktu training atau tuning. Hindari mengubah vocabulary agar cocok dengan 18 test lalu mengklaim generalisasi. Pemeriksaan overlap di repo hanya menolak normalized exact duplicate, belum semantic duplicate.
 
-## 7. Batasan keamanan dan kualitas
+## 3. Cara kerja text classifier Week 01
 
-1. Pakai **data sintetis**; jangan kirim percakapan/device records asli.
-2. Jangan membocorkan rahasia, API key, atau data pribadi melalui prompt/log.
-3. Validasi input dan output; perlakukan model sebagai komponen yang dapat salah.
-4. Pantau kemungkinan data leakage, typo, slang, bahasa campuran, dan perubahan distribusi data.
-5. Jangan percaya relative_score sebagai tingkat keyakinan yang akurat.
-6. Gunakan human review untuk tindakan berisiko dan jangan pakai model pembelajaran untuk routing production.
+Teks `"sensor offline tidak mengirim data"` diubah menjadi token. Naive Bayes mempelajari hitungan kata untuk masing-masing `normal`, `warning`, dan `fault`. Laplace smoothing menghindari probabilitas nol, lalu log-score dibandingkan antarlabel.
 
-Bacaan: [Google ML Crash Course](https://developers.google.com/machine-learning/crash-course) · [scikit-learn evaluation](https://scikit-learn.org/stable/modules/model_evaluation.html) · [NIST AI RMF](https://www.nist.gov/itl/ai-risk-management-framework).
+Model **tidak membaca angka kWh**. Capstone akan memerlukan model numeric anomaly detection yang dipelajari pada Modul 11–12. Jangan menyimpulkan kondisi listrik nyata dari label teks demo.
+
+## 4. Metrik yang harus dipahami
+
+- **Accuracy:** proporsi prediksi benar dari seluruh contoh, termasuk `abstain` sebagai tidak benar.
+- **Precision fault:** dari semua yang diprediksi fault, proporsi yang benar-benar fault pada data berlabel.
+- **Recall fault:** dari semua catatan fault sebenarnya, proporsi yang dikenali sebagai fault.
+- **F1:** harmonic mean precision dan recall. **Macro F1:** rata-rata F1 tiga kelas.
+- **Confusion matrix:** melihat pola kesalahan antar kelas, bukan hanya satu skor.
+- **Relative score:** tidak otomatis terkalibrasi sebagai probabilitas benar.
+
+False normal dari status fault lebih berisiko daripada menandai status normal sebagai warning. Namun semua data di sini **sintetis** sehingga dampaknya baru skenario desain, bukan kejadian lapangan.
+
+## 5. Secure by design
+
+Gunakan data fiktif, validasi input panjang/label, cegah test leakage, simpan secret di luar repo, dan validasi output model. Jangan membiarkan keluaran AI mengaktifkan atau menonaktifkan perangkat listrik. Data pengukuran yang benar tetap perlu dipertahankan ketika model gagal.
+
+## 6. Hubungan dengan aplikasi final
+
+- Modul 1: klasifikasi catatan kejadian **teks**.
+- Modul 3–4: ingest dan quality validation pembacaan meter **numerik**.
+- Modul 11–12: scoring **kandidat anomali** pada nilai kWh per interval.
+- Modul 13–15: deployment, pemantauan, dan perawatan model.
+
+Lihat [casebook](../../docs/domain-casebook.md), [worked examples](worked-examples.md), dan [model evaluation](../../docs/learning-roadmap.md).
+
+Referensi: [Google ML Crash Course](https://developers.google.com/machine-learning/crash-course), [scikit-learn Naive Bayes](https://scikit-learn.org/stable/modules/naive_bayes.html), [NIST AI RMF](https://www.nist.gov/itl/ai-risk-management-framework).

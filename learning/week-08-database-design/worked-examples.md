@@ -1,60 +1,40 @@
-# Worked Examples — Model data yang mencegah kehilangan historis prediksi dan celah akses
+# Worked Examples — Database Energi, Integritas dan Izin Akses
 
-Contoh **ilustratif** untuk pemahaman dan code review. Cuplikan kode tidak otomatis sudah dieksekusi di repository; saat praktikum jalankan unit/integration tests sebelum memberi status passed.
+> Potongan SQL berikut ilustratif, belum migration yang dijalankan.
 
-## Contoh 1: Skema SQL minimal dengan constraint
-
-**Masalah:** Satu tenant tidak boleh punya dua event dengan source_event_id sama.
-
-**Solusi bertahap:**
-
-1. Contoh SQL ilustratif (bukan migration yang sudah dijalankan):
+## Contoh 1 — Meter readings dengan constraint dan idempotency
 
 ```sql
-CREATE TABLE meter readings (
-  id bigint GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
-  tenant_id uuid NOT NULL,
-  source_event_id text NOT NULL,
-  event_note text NOT NULL CHECK (char_length(event_note) BETWEEN 1 AND 500),
-  created_at timestamptz NOT NULL DEFAULT now(),
-  UNIQUE (tenant_id, source_event_id)
+CREATE TABLE meter_readings (
+  id BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+  site_id TEXT NOT NULL,
+  meter_id TEXT NOT NULL,
+  source_event_id TEXT NOT NULL,
+  measured_at TIMESTAMPTZ NOT NULL,
+  energy_kwh NUMERIC(12, 4) NOT NULL CHECK (energy_kwh >= 0),
+  voltage_v NUMERIC(8, 2),
+  current_a NUMERIC(8, 2),
+  UNIQUE (meter_id, source_event_id)
 );
 ```
 
-2. Buat dua row dengan source_event_id sama dalam tenant sama → database menolak yang kedua.
+1. `energy_kwh` adalah konsumsi **per interval**, bukan kW sesaat.
+2. `source_event_id` mencegah import berulang menciptakan rows baru untuk meter yang sama.
+3. `site_id` mendukung query scoping. **Tabel ini belum memuat FK site/meter**; pada implementasi final, tambahkan referential constraints sesuai model master.
+4. Pencarian readings harus memverifikasi `site_id` dari context pengguna di API, bukan menggunakan parameter site bebas dari browser.
 
-3. Buat source_event_id sama dengan tenant berbeda → unik gabungan masih terpenuhi.
+**Kesalahan:** hanya memakai uuid acak dan menganggap user tidak bisa menebak ID—itu bukan object-level authorization.
 
-4. Jika tenant_id harus valid secara relasional, tambahkan FK yang mengarah tenants(id), bukan mengandalkan UUID.
+## Contoh 2 — Review kandidat anomali secara aman
 
-**Kesalahan yang harus dihindari:** Unique(source_event_id) tanpa tenant_id bisa salah menolak event antarorganisasi yang ID sumbernya sama.
+1. Operator A dan B membaca anomaly_event dengan `version=3`.
+2. A membuat review event dan update status menggunakan kondisi `WHERE version=3`; transaksi commit menaikkan version=4.
+3. B mengirim update lama dengan version=3; affected rows=0. Backend mengembalikan conflict (misalnya HTTP 409).
+4. UI mempertahankan draft komentar B dan meminta reload, bukan mengganti keputusan A diam-diam.
+5. Audit menyimpan model_version, anomaly_score, label review manusia, waktu dan actor.
 
-**Teach-back:** jelaskan mengapa langkah 1→2→3 menghasilkan solusi dan bagaimana kegagalannya diuji.
+**Anti-pattern:** mengganti raw `energy_kwh` atau menghapus skor lama setiap kali reviewer menekan simpan. Data sumber dan keputusan manusia harus dibedakan.
 
-## Contoh 2: Optimistic lock saat dua operator mengedit
+## Latihan
 
-**Masalah:** Operator A dan B membaca row version=3; A menyimpan dahulu, B menyimpan dengan data lama.
-
-**Solusi bertahap:**
-
-1. Saat A update: UPDATE meter readings SET status='reviewed', version=4 WHERE id=? AND version=3; affected 1.
-
-2. B mencoba WHERE version=3 setelah A commit; affected 0, artinya konflik, bukan sukses.
-
-3. Backend mengirim HTTP 409 dan UI menawarkan refresh serta mempertahankan alasan review yang belum disimpan.
-
-4. Simpan ReviewEvent dalam transaksi yang sama dengan status update supaya audit history tidak hilang.
-
-**Kesalahan yang harus dihindari:** Last-write-wins diam-diam menghilangkan keputusan A atau B dan membuat audit tidak akurat.
-
-**Teach-back:** jelaskan mengapa langkah 1→2→3 menghasilkan solusi dan bagaimana kegagalannya diuji.
-
-
-## Latihan dengan scaffolding berkurang
-
-1. **Worked:** baca contoh lengkap dan hitung/trace secara manual.
-2. **Faded:** ulangi dengan satu langkah kosong dan isi reasoning sendiri.
-3. **Independent:** ganti constraint (volume, concurrency, tenant, outage) dan susun solusi baru.
-4. **Evidence:** rekam hasil test nyata dan dampak trade-off di dalam PR.
-
-[Lihat latihan](exercises.md)
+Rancang FK site/meter, index pada `(site_id,meter_id,measured_at)`, skema `anomaly_events` dan `review_events`, lalu uji integritas dan cross-site IDOR dalam environment test.

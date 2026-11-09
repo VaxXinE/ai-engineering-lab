@@ -51,7 +51,7 @@ def main(argv: list[str] | None = None) -> int:
             print(json.dumps(results, ensure_ascii=False, indent=2))
         return 0
     except (OSError, ValueError) as exc:
-        # Do not echo raw customer text or whole rows in errors.
+        # Do not echo raw device event text or whole rows in errors.
         print(f"Validation or file error: {exc}", file=sys.stderr)
         return 2
 

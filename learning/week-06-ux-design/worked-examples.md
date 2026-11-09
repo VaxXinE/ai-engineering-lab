@@ -1,49 +1,37 @@
-# Worked Examples — UX AI: mengurangi kesalahan keputusan manusia, bukan sekadar membuat dashboard rapi
+# Worked Examples — UX untuk Dashboard Anomali Energi
 
-Contoh **ilustratif** untuk pemahaman dan code review. Cuplikan kode tidak otomatis sudah dieksekusi di repository; saat praktikum jalankan unit/integration tests sebelum memberi status passed.
+Semua skenario ini **ilustratif**; UI belum diimplementasikan.
 
-## Contoh 1: Salah label dan audit state
+## Contoh 1 — Pengukuran kWh tidak biasa
 
-**Masalah:** Pesan 'tidak bisa tarik laporan' diprediksi normal, operator mengubah menjadi warning.
+**Masalah:** pembacaan MTR-001 pada interval 00.30 menunjukkan 5.9 kWh, sedangkan dua interval sebelumnya 1.40 dan 1.48 kWh. Sistem menandai kandidat anomali, tetapi belum mengetahui apakah hal itu benar-benar kesalahan.
 
-**Solusi bertahap:**
+1. Tabel menampilkan meter, timestamp, kWh interval, status **candidate anomaly**, dan versi model.
+2. Operator memilih meter dan melihat grafik interval sebelum/sesudah serta catatan kualitas data.
+3. Operator boleh memilih `confirmed`, `expected_variation`, atau `needs_investigation`, dengan alasan.
+4. Sistem menyimpan review event **tanpa menimpa** nilai pembacaan asli atau prediksi awal.
+5. Jika API menolak perubahan, alasan dan pilihan di form tetap ada sehingga operator dapat memperbaiki kesalahan.
 
-1. Inbox menampilkan chip 'Prediksi: normal — belum ditinjau', bukan 'Device adalah normal'.
+**Anti-pattern:** menampilkan 'Sensor rusak' hanya karena satu interval melampaui angka threshold. Nilai tinggi dapat mencerminkan perubahan beban yang valid.
 
-2. Detail view menampilkan pesan dan pilihan warning/fault/normal, tombol 'Simpan koreksi' dengan alasan.
+## Contoh 2 — Missing interval dan model timeout
 
-3. Setelah API success, status menjadi 'Ditinjau: warning' sambil mempertahankan prediksi awal di riwayat.
+**Masalah:** tidak ada pembacaan 00.45 dan service anomaly scoring tidak tersedia.
 
-4. Jika API error atau permission ditolak, draft alasan tidak hilang dan user mendapat feedback.
+1. Grafik membedakan **missing data** dari nilai energi **0 kWh**. Jangan otomatis menggambar garis nol untuk interval hilang.
+2. Dashboard menampilkan badge `Scoring unavailable` dan riwayat meter tetap bisa dilihat.
+3. Review queue manual tetap dapat digunakan untuk pembacaan yang sudah diterima.
+4. Retry dibatasi dan tidak membuat event duplikat; pending action memiliki feedback jelas.
+5. Uji keyboard navigation, focus, label, empty/error states dan alur pembatalan.
 
-**Kesalahan yang harus dihindari:** Jika UI langsung mengganti predicted_label tanpa audit, data evaluasi model hilang.
+**Anti-pattern:** mengubah missing interval menjadi nol bisa membuat agregasi konsumsi energi dan model anomali menghasilkan kesimpulan palsu.
 
-**Teach-back:** jelaskan mengapa langkah 1→2→3 menghasilkan solusi dan bagaimana kegagalannya diuji.
+## Faded example
 
-## Contoh 2: Desain abstain dan kegagalan API
+Ganti interval 15 menit menjadi satu jam. Jelaskan perubahan pada unit data, agregasi, tooltip, dan perbandingan baseline—tanpa langsung mengganti kWh menjadi kW.
 
-**Masalah:** Model tidak mengenali pesan berbahasa campuran, lalu hasil abstain; sesaat kemudian layanan inference timeout.
+## Independent exercise
 
-**Solusi bertahap:**
+Rancang tiga layar: tren site, detail meter, dan review kandidat anomali. Sertakan status loading, missing data, API outage, unauthorized access dan review conflict.
 
-1. Untuk abstain, tampilkan 'Belum dapat diklasifikasikan' dan arahkan ke review queue manusia.
-
-2. Untuk timeout, tampilkan 'Klasifikasi otomatis belum tersedia'; meter reading tetap bisa dibuka.
-
-3. Jangan tampilkan tombol retry agresif yang menciptakan duplikasi; server tetap memvalidasi idempotency.
-
-4. Uji dengan keyboard: tab ke field kategori, pilih nilai, kirim, periksa fokus dan pesan konfirmasi.
-
-**Kesalahan yang harus dihindari:** Menyamakan abstain dengan fault akan merusak perhitungan kualitas model dan pengalaman warning.
-
-**Teach-back:** jelaskan mengapa langkah 1→2→3 menghasilkan solusi dan bagaimana kegagalannya diuji.
-
-
-## Latihan dengan scaffolding berkurang
-
-1. **Worked:** baca contoh lengkap dan hitung/trace secara manual.
-2. **Faded:** ulangi dengan satu langkah kosong dan isi reasoning sendiri.
-3. **Independent:** ganti constraint (volume, concurrency, tenant, outage) dan susun solusi baru.
-4. **Evidence:** rekam hasil test nyata dan dampak trade-off di dalam PR.
-
-[Lihat latihan](exercises.md)
+[Deep dive](deep-dive.md) · [Latihan UX](exercises.md).

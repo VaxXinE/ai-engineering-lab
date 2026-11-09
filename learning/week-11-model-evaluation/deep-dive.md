@@ -1,42 +1,55 @@
-# Deep Dive — Eksperimen AI yang menolak angka bagus tanpa bukti generalisasi
+# Deep Dive — Mengevaluasi Numeric Energy Anomaly Detection
 
-## Apa yang dapat dibuktikan setelah mempelajari modul?
+**Unit pembelajaran pengayaan:** model selection dan evaluation untuk capstone AI Smart Energy Monitoring. Belum ada model numerik yang dijalankan.
 
-1. Membedakan train, validation, test dan cross-validation.
-2. Menghitung macro F1 dan memahami efek class imbalance.
-3. Membuat error taxonomy serta model card.
-4. Mendesain quality gate sebelum model diintegrasikan ke API.
+## Learning outcomes
 
-## Prinsip desain, mekanisme dan konsekuensi
+1. Mendefinisikan **apa itu kandidat anomali** pada kWh per interval tanpa menganggap nilai tinggi selalu salah.
+2. Membandingkan baseline deterministik (misalnya rolling median + IQR) dengan kandidat ML seperti Isolation Forest.
+3. Menghindari data leakage ketika data berupa time-series.
+4. Menjelaskan perbedaan unsupervised score dan supervised ground truth, serta menulis model card.
 
-### 1. Evaluation loop yang disiplin
+## 1. Problem dan variabel
 
-Definisikan target use case dan risk cost dulu. Train untuk fitting; validation untuk tuning parameter; test untuk evaluasi final. Jangan mencoba banyak model pada test sampai memilih yang paling tinggi, karena test menjadi validation tersembunyi. Gunakan cross-validation jika dataset train kecil, dengan group/time split bila ada hubungan antar device atau urutan waktu.
+Pada site sintetis, setiap meter mengirim `energy_kwh` (konsumsi **per interval**) dan timestamp UTC. Model mencari interval yang tidak biasa dibanding pola pemakaian meter tersebut. Tetapi energi tinggi bisa mencerminkan aktivitas normal, sehingga **anomaly flag bukan bukti kerusakan**.
 
-### 2. Label policy dan inter-annotator quality
+Sebelum modeling tetapkan frekuensi interval, holiday/workday simulation, missing data handling, dan apakah setiap meter punya baseline sendiri. Jika data berasal dari rentang interval berbeda, normalisasikan berdasarkan durasi sebelum membandingkan.
 
-Ground truth tidak otomatis benar. Pesan 'Saya mau beli tapi login gagal' mengandung multi-intent; tentukan aturan label: satu priority label atau multi-label output. Dokumentasikan label definitions, contoh borderline, disagreement resolution dan missing context. Data sintetis dapat terlalu bersih dibanding real-world slang dan code switching. Buat taxonomy kesalahan sebelum mencoba fitur tambahan.
+## 2. Baseline terlebih dahulu
 
-### 3. Precision, recall, F1, macro vs weighted
+Baseline sederhana: median consumption pada periode historis sesuai jam dan kondisi, lalu tentukan seberapa jauh pengamatan dari distribusi tersebut. IQR (Q3−Q1) atau robust z-score berguna untuk demonstrasi tetapi threshold harus diuji. Jangan sekadar memasang `kWh > 5` secara universal untuk semua meter tanpa konteks.
 
-Accuracy tertipu class imbalance. Pada 95% fault messages, model yang selalu menjawab fault tampak 95% akurat namun gagal menemukan normal/warning. Macro F1 memberi bobot sama ke setiap kelas, weighted F1 memberi bobot berdasarkan warning. Ukur per-class recall, precision, confusion matrix dan abstain. Pilih metrik berdasarkan dampak false negative/positive di operasi.
+## 3. Kandidat ML
 
-### 4. Probability calibration dan threshold
+Isolation Forest dapat menjadi contoh unsupervised anomaly detection numerik, tetapi **skor anomali bukan probabilitas suatu meter rusak**. ML membutuhkan fitur yang benar, kontrol terhadap data hilang/NaN, serta split waktu yang tidak membocorkan masa depan. Feature engineering dapat mencakup jam, hari, rolling averages **berbasis data sebelumnya**, dan perubahan dibanding baseline.
 
-Normalized scores dari classifier atau softmax tidak selalu menyatakan peluang kebenaran empiris. Perlu calibration curve/reliability diagram dan data validation terpisah. Threshold untuk auto-route/human review harus dievaluasi sebagai coverage vs selective risk, bukan ditentukan dari angka intuitif 0.8 saja.
+## 4. Train/validation/test untuk time-series
 
-### 5. Artifact safety dan provenance
+Gunakan split kronologis train → validation → test. Jangan menghitung rolling statistic pada seluruh set sebelum split jika memanfaatkan periode masa depan. Hindari scaling yang di-fit pada test. Jika banyak meter memiliki profil berbeda, dokumentasikan apakah evaluasi per-meter, per-site, atau cross-site.
 
-Model version, data version, feature schema, code commit, dependency lock serta hash artifact harus dapat ditelusuri. Jangan load pickle/joblib dari sumber tidak dipercaya karena deserialization dapat menjalankan kode. Data poisoning dari contoh berlabel salah perlu diwaspadai; review dataset, protected pipeline, dan evaluation monitoring membantu.
+## 5. Bagaimana menilai model?
 
-## Checklist penalaran
+Jika dataset sintetis menyertakan label anomali yang disisipkan generator, boleh hitung precision/recall/F1 berdasarkan **label sintetis itu**. Namun angka tersebut mengukur kemampuan menemukan pola injeksi simulasi, bukan akurasi deteksi kerusakan nyata. Tanpa label, gunakan metrik unsupervised dan expert review yang relevan, serta hindari menyebut F1 secara sembarangan.
 
-Ketika suatu solusi terlihat bekerja, tanyakan: (1) apakah hasil benar terhadap kontrak? (2) apakah tetap benar pada data berbeda? (3) apa yang terjadi bila dependency mati? (4) siapa yang berhak melihat/mengubah datanya? (5) bagaimana sistem membuktikan hasil pengujian? Jawab dengan contoh konkret, bukan sekadar kata "best practice".
+Metrik operasional mencakup alert volume, false review burden, data-quality rejection, P95 latency, dan model abstention/unavailable rate.
 
-## Sumber teknis primer
+## 6. Model card dan security
 
-- https://scikit-learn.org/stable/modules/model_evaluation.html
-- https://scikit-learn.org/stable/common_pitfalls.html
-- https://scikit-learn.org/stable/modules/calibration.html
+Simpan:
+- schema dan unit `energy_kwh` (interval),
+- versi generator dan seed,
+- split strategy,
+- model/feature versions,
+- hasil evaluasi per dataset,
+- asumsi yang tidak diuji,
+- batas penggunaan dan risiko false alerts.
 
-[Worked examples](worked-examples.md) · [Lab](lab-guide.md)
+Jangan mengunduh model artifacts yang tidak dipercaya kemudian membuka pickle/joblib tanpa evaluasi provenance—format deserialisasi dapat mengeksekusi kode.
+
+## 7. Transfer ke keputusan engineering
+
+Jika model memberikan skor anomali tinggi untuk satu periode, UI perlu menampilkan kWh, pembanding historis, kualitas data, dan tombol review, **bukan instruksi mengubah perangkat listrik**. Saat model offline, data meter tetap harus tersedia.
+
+[Worked examples](worked-examples.md) · [Casebook](../../docs/domain-casebook.md).
+
+Referensi: [scikit-learn anomaly detection](https://scikit-learn.org/stable/modules/outlier_detection.html), [time-series split](https://scikit-learn.org/stable/modules/generated/sklearn.model_selection.TimeSeriesSplit.html), [NIST AI RMF](https://www.nist.gov/itl/ai-risk-management-framework).

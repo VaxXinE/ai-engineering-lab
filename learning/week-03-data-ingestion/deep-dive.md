@@ -13,7 +13,7 @@
 
 ### 1. Definisikan sumber dan data contract sebelum coding
 
-Dataset telemetri memiliki source, event ID, tenant ID, event_note, received_at, dan consent status. Tentukan field wajib, tipe, encoding, range panjang, dan pemilik data. Source lineage menyimpan asal input, schema_version dan timestamp import agar kesalahan bisa diusut. Tanpa kontrak, perubahan kolom mendadak dapat diam-diam memindahkan data yang salah ke tabel yang tampak valid.
+Dataset telemetri numerik memiliki site_id, meter_id, source_event_id, timestamp UTC, energy_kwh per interval, voltage_v, dan current_a. Data dictionary harus menjelaskan satuan, frekuensi, serta rentang simulasi. Tentukan field wajib, tipe, encoding, range panjang, dan pemilik data. Source lineage menyimpan asal input, schema_version dan timestamp import agar kesalahan bisa diusut. Tanpa kontrak, perubahan kolom mendadak dapat diam-diam memindahkan data yang salah ke tabel yang tampak valid.
 
 ### 2. ETL versus ELT dan staging
 

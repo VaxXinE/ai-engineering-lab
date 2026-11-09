@@ -13,7 +13,7 @@
 
 ### 1. Mulai dari keputusan bisnis, bukan pemilihan model
 
-Bayangkan 100 pesan masuk lewat telemetri meter tiap jam. Tujuan bisnisnya bukan 'memakai AI', melainkan menekan waktu triase tanpa mengorbankan device yang butuh warning. Identifikasi input (teks pesan), output (normal/warning/fault atau abstain), aktor (operator), biaya kesalahan, dan cara membandingkan dengan proses manual. Klasifikasi otomatis bisa saja tidak layak jika volume terlalu kecil atau kelas ambigu. Jika masalah selesai dengan tiga aturan yang stabil dan mudah diaudit, AI/ML bukan kewajiban teknis. Sebelum memilih model, tulis baseline business KPI dan error budget yang bisa diterima.
+Bayangkan simulator menghasilkan 100 catatan kejadian meter per jam. Tujuannya mengelompokkan deskripsi status normal/warning/fault, bukan memutuskan tindakan kelistrikan. Identifikasi input teks, label hasil, aktor analis, biaya salah klasifikasi, dan kebijakan human review. Klasifikasi otomatis bisa saja tidak layak jika volume terlalu kecil atau kelas ambigu. Jika masalah selesai dengan tiga aturan yang stabil dan mudah diaudit, AI/ML bukan kewajiban teknis. Sebelum memilih model, tulis baseline business KPI dan error budget yang bisa diterima.
 
 ### 2. AI, ML, Deep Learning, LLM dan relasinya
 

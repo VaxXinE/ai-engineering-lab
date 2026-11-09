@@ -1,43 +1,42 @@
-# Worked Examples — Membuat keputusan teknologi yang bisa diuji dan dipertanggungjawabkan
+# Worked Examples — Memilih Pendekatan Anomaly Detection Energi
 
-Contoh ini diselesaikan langkah demi langkah. Bacalah **sebelum** mengerjakan latihan, lalu tutup dokumen dan ulangi reasoning dari awal. Tidak ada klaim eksekusi kode/tes baru pada file ini.
+## Contoh 1 — Weighted decision matrix
 
-## Contoh 1: Contoh weighted decision matrix yang transparan
+**Masalah:** data meter interval 15 menit harus dianalisis, dataset masih sintetis, belum punya banyak label anomali.
 
-**Masalah:** Tiga opsi: A rule-based, B ML lokal, C hosted LLM. Bobot: privacy 30, quality 30, cost 20, ease 20 (jumlah 100). Skor asumsi 1–5: A=[5,2,5,5], B=[5,4,4,3], C=[2,5,2,4].
+Bandingkan:
+- **A: IQR/rolling baseline** — mudah dijelaskan, rendah kompleksitas, threshold perlu dijaga.
+- **B: Isolation Forest** — dapat belajar kombinasi fitur, butuh data training dan evaluasi lebih hati-hati.
+- **C: Hosted LLM** — tidak cocok sebagai scorer utama angka timeseries dalam problem ini; latency, privacy, dan biaya tambahan.
 
-**Solusi dan reasoning:**
+Bobot ilustratif: interpretabilitas 35%, kualitas potensial 30%, biaya 20%, kemudahan operasi 15%. Skor asumsi 1–5:
 
-1. A = 0.30*5 + 0.30*2 + 0.20*5 + 0.20*5 = 4.10.
-2. B = 0.30*5 + 0.30*4 + 0.20*4 + 0.20*3 = 4.10.
-3. C = 0.30*2 + 0.30*5 + 0.20*2 + 0.20*4 = 3.30.
-4. A dan B seri berdasarkan asumsi; pilih eksperimen terukur untuk memisahkan keduanya. Jika privacy adalah hard constraint yang melarang transfer data, opsi C gugur sebelum scoring.
+| Kriteria | Bobot | A | B | C |
+| --- | ---: | ---: | ---: | ---: |
+| Interpretabilitas | 35% | 5 | 3 | 2 |
+| Kualitas potensial | 30% | 3 | 4 | 2 |
+| Biaya | 20% | 5 | 4 | 2 |
+| Operasional | 15% | 5 | 3 | 2 |
 
-**Counterexample / failure mode:** Jangan mencatat skor sebagai fakta pasar. Angka di atas adalah simulasi metode evaluasi dan perlu bukti teknis.
+Hitung:
+- A = 0.35×5 + 0.30×3 + 0.20×5 + 0.15×5 = **4.40**.
+- B = 0.35×3 + 0.30×4 + 0.20×4 + 0.15×3 = **3.50**.
+- C = 0.35×2 + 0.30×2 + 0.20×2 + 0.15×2 = **2.00**.
 
-**Self-explanation:** Mengapa langkah kedua diperlukan? Apa konsekuensi jika constraint-nya berubah?
+**Keputusan sementara:** baseline IQR untuk MVP, lalu bandingkan dengan model ML. Ini **simulasi skor**, bukan hasil benchmark nyata.
 
-## Contoh 2: ADR pendek untuk model local-first
+## Contoh 2 — ADR local-first
 
-**Masalah:** Sebuah dashboard energi perlu energy anomaly scoring, tanpa mengirim data telemetri ke pihak luar. Tentukan keputusan yang masuk akal.
+**Context:** semua data sintetis; ingin mengurangi dependency eksternal, menjelaskan keputusan model dan memudahkan evaluasi offline.
 
-**Solusi dan reasoning:**
+**Options:** heuristik statistik, Isolation Forest, hosted model.
 
-1. Context: data policy melarang data raw keluar; 30–50 req/menit; tiga kategori dan budget rendah.
-2. Options: rules, local ML, hosted LLM. Hosted LLM tidak memenuhi hard constraint, sehingga tidak layak.
-3. Decision: mulai model lokal sebagai baseline; rule-based tetap jadi comparator; bukan klaim final paling akurat.
-4. Verification: held-out macro F1, warning recall, p95 latency, monitoring drift dan ability to rollback; if thresholds fail, evaluasi opsi lain yang memenuhi privacy.
+**Decision:** bangun heuristik statistik sebagai baseline awal, lalu uji ML bila data memadai.
 
-**Counterexample / failure mode:** ADR buruk hanya menulis 'pakai FastAPI karena cepat dan populer' tanpa constraint, trade-off, atau bukti.
+**Validation plan:** held-out time split, precision/recall pada injected labels sintetis, alert rate, latency, dan cost. Simpan keputusan revisi jika model baru menunjukkan peningkatan yang valid.
 
-**Self-explanation:** Mengapa langkah kedua diperlukan? Apa konsekuensi jika constraint-nya berubah?
+**Anti-pattern:** memilih deep learning karena populer tanpa dataset, metric, atau kebutuhan yang mendukung.
 
+## Transfer exercise
 
-## Progressive practice
-
-- **Guided:** ulangi kedua solusi dan cek nilai/langkah satu per satu.
-- **Faded:** ubah satu input atau constraint sendiri, lalu hitung atau rancang ulang solusi.
-- **Independent:** terapkan pola pada kasus baru dan catat alternatif serta risiko yang belum tertutup.
-- **Verification:** untuk kode, jalankan test sendiri; untuk hitungan, cek ulang dengan perhitungan independen.
-
-[Lanjut knowledge check](knowledge-check.md) · [Latihan utama](exercises.md)
+Jika meter berubah dari interval 15 menit ke 60 menit, revisi kriteria perbandingan dan jelaskan mengapa energy_kwh dan kW tidak dapat langsung disamakan.
