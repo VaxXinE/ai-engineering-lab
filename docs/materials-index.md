@@ -60,3 +60,13 @@ Setiap README Week 01–16 kini memberi tautan:
 ## Apa yang belum dilakukan
 
 Belum ada implementasi maupun test software untuk Week 02–16. Template dokumen, teori dan rencana lab tidak membuktikan working full-stack application. Belajar dan menjalankan praktik berikutnya adalah tahap tersendiri.
+
+
+## Pembaruan Fase 3
+
+- [Laporan audit 16 modul](audits/phase-3-2026-11-09.md)
+- [Kontrak data dan API energi](architecture/energy-data-contract.md)
+- [Threat model](architecture/threat-model.md)
+- [Quality gates 16 modul](architecture/energy-learning-gates.md)
+
+Setiap README modul juga menautkan `energy-case-study.md` yang berbeda sesuai kompetensinya. Seluruh worked case bersifat **ilustratif** sampai peserta mengimplementasikan dan menguji praktik sendiri.

@@ -20,7 +20,7 @@ projects/ai-energy-intelligence/
 | 01 | Klasifikasi catatan kejadian perangkat sintetis untuk AI fundamentals | CLI, train/test, metrics, tests |
 | 02 | Pilihan stack dan strategi deteksi anomali: heuristik vs ML | Decision matrix + ADR |
 | 03 | Generator meter sintetis, CSV import, stable event ID | Ingestion summary + idempotency tests |
-| 04 | Timestamp interval, numeric unit/finite-range validation, data quality | Quality report + negative tests |
+| 04 | Interval start UTC, explicit 15-minute duration, finite-range validation, data quality | Quality report + negative tests |
 | 05 | Time-series grouping, dedup, aggregations, streaming | Complexity and test evidence |
 | 06–07 | Dashboard penggunaan energi dan status review | UX walkthrough, accessibility, UI tests |
 | 08–09 | ERD meter/site/reading/anomaly/review, API boundaries | Migrations + IDOR tests |

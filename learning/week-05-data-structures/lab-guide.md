@@ -1,52 +1,44 @@
-# Praktikum — Week 05: Data Structures, Algorithms & Complexity
+# Praktikum Terstruktur — Sliding window dan agregasi per meter
 
-**Status:** rancangan latihan. Belum ada klaim bahwa langkah di bawah berhasil dijalankan.
+**Status:** tugas **direncanakan**; implementasi Week 03–12 belum dijalankan. Semua input, site, meter dan timeseries adalah sintetis.
 
-## Konteks
+## Problem dan konteks profesional
 
-100.000 ID: memeriksa setiap ID dengan 'id in list' berulang memiliki biaya yang tumbuh jauh lebih cepat daripada menyimpan ID yang sudah terlihat dalam set. Namun set memakai memori lebih dan tidak menyimpan frekuensi; Counter lebih tepat untuk kebutuhan agregasi.
+1.000 interval 15 menit dari beberapa meter harus dikelompokkan per site/meter, dihitung total kWh, dan dinilai kandidat outlier tanpa membaca masa depan.
 
-**Prasyarat:** Modul 3–4; Python collection types dan dasar fungsi.  
-**Dataset:** data sintetis dari capstone; jangan memakai data perusahaan atau kredensial sungguhan.
+**Single source of truth:** [kontrak domain](../../docs/architecture/energy-data-contract.md) · [threat model](../../docs/architecture/threat-model.md). Jangan mencampur kontrak klasifikasi log teks Week 01 dengan data anomaly scoring numerik Week 11–12.
 
-## Langkah kerja
+## Langkah yang akan diimplementasikan saat sesi praktik
 
-1. Definisikan kontrak fungsi deduplicate(records), group_by_label(records), dan summarize(records).
+1. Pilih struktur data: dict[(site_id,meter_id)] → list/iterator readings terurut waktu; set keys untuk dedup; deque untuk rolling window.
 
-2. Implementasikan versi naif list-based dan versi yang menggunakan set/dict; jangan gunakan dataset pribadi.
+2. Definisikan invariant bahwa setiap record valid masuk satu kelompok dan semua timestamps dalam kelompok urut naik; gunakan deterministic tie policy.
 
-3. Buat generator pesan sintetis dengan seed tetap untuk 100, 1000, dan 10000 record.
+3. Buat moving baseline dari **N pembacaan sebelumnya**, bukan termasuk target saat scoring bila itu berpotensi leakage.
 
-4. Jalankan benchmark menggunakan time.perf_counter di mesin yang sama dan catat spesifikasi serta variasi run.
+4. Tulis fungsi agregasi total_energy_kwh=sum(energy_kwh). Bila butuh daya rata-rata, bagi total energi dengan durasi jam yang benar; jangan campur slot missing tanpa coverage.
 
-5. Tambahkan tests untuk empty list, duplicate ID, unknown class, dan stable output ordering.
+5. Bandingkan memory O(n) untuk seluruh readings vs streaming O(window) per meter, catat trade-off urutan data dan buffering.
 
-6. Analisis trade-off memory dan complexity tanpa menyebut benchmark lokal sebagai jaminan performa produksi.
+6. Test empty input, duplicate ID, out-of-order timestamp, missing interval, all-zero valid input, dan boundary N pertama.
 
-## Test plan minimal
+## Acceptance criteria (belum dicentang)
 
-1. Empty collection menghasilkan output valid.
-2. Duplikasi deterministik tanpa kehilangan ID berbeda.
-3. Group count per label sama dengan total record diterima.
-4. Output yang sama untuk input yang sama.
+- [ ] Total energi pada grup sesuai manual sum.
+- [ ] Rolling feature tidak menggunakan timestamp > target.
+- [ ] Missing interval tidak otomatis menjadi 0.
+- [ ] ID grup site+meter tidak tercampur.
 
-## Acceptance criteria
+## Evidence yang harus dibuat
 
-- [ ] Implementasi menyimpan satu item per unique ID dan punya aturan 'first wins' atau 'last wins' jelas.
-- [ ] Semua input edge case diuji.
-- [ ] Analisis Big O dan memory trade-off ditulis.
-- [ ] Benchmark menyertakan lingkungan, jumlah record, dan metode.
+Algorithm spec, unit tests, complexity analysis, sample aggregation output.
 
-## Bukti yang disimpan setelah praktik
+Saat praktik: catat input sintetis, expected behavior, actual output, command+versi runtime, error/negative tests, keamanan, dan link commit. Jangan mengarang skor model, latency, atau status passed.
 
-1. Source code / artefak desain serta alasan keputusan yang dibuat sendiri.
-2. Cara menjalankan atau mereproduksi hasil (versi environment dan perintah aktual).
-3. Test report: perintah, hasil sesungguhnya, sampel negatif dan edge cases.
-4. Analisis risiko keamanan, privasi, performa, serta keterbatasan yang belum ditangani.
-5. Link PR/commit ke [matriks bukti](../../certification/evidence-matrix.md).
+## Pertanyaan transfer
 
-## Syarat selesai
+Bagaimana desain streaming berubah jika reading dari beberapa meter datang tak berurutan?
 
-**Belum selesai** hanya dengan membaca dokumen ini. Tandai selesai setelah implementasi diverifikasi dan evidence tersimpan; uji kompetensi BNSP tetap dilakukan oleh LSP yang berwenang.
+**Definition of done:** seluruh acceptance criteria diverifikasi dengan artefak sendiri, bukan sekadar dokumentasi ini; status BNSP tetap memerlukan asesmen resmi LSP.
 
-[Latihan tambahan](exercises.md) · [Simulasi asesmen](assessment.md)
+[Latihan](exercises.md) · [Knowledge check](knowledge-check.md) · [Evidence matrix](../../certification/evidence-matrix.md)

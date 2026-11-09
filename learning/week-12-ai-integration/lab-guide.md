@@ -1,39 +1,44 @@
-# Panduan Hands-on — Integrasi Komponen Solusi AI
+# Praktikum Terstruktur — Scoring API dan review tanpa kehilangan data
 
-**Praktik:** belum dieksekusi. Jangan menulis angka kinerja atau status passed tanpa pengujian.
+**Status:** tugas **direncanakan**; implementasi Week 03–12 belum dijalankan. Semua input, site, meter dan timeseries adalah sintetis.
 
-## Masalah yang dikerjakan
+## Problem dan konteks profesional
 
-Aplikasi dashboard energi menerima meter reading baru. Service memvalidasi input dan izin, menyimpan record, meminta prediksi melalui inference adapter, memvalidasi label hasil, lalu menampilkan status review. Inference dapat gagal atau memilih abstain.
+Backend menerima reading valid, tetapi model mengeluarkan NaN atau timeout. Sistem harus tetap menyimpan reading dan menandai scoring unavailable.
 
-## Langkah terurut
+**Single source of truth:** [kontrak domain](../../docs/architecture/energy-data-contract.md) · [threat model](../../docs/architecture/threat-model.md). Jangan mencampur kontrak klasifikasi log teks Week 01 dengan data anomaly scoring numerik Week 11–12.
 
-1. Definisikan Pydantic/TypeScript schema untuk InquiryCreate, PredictionResult dan ReviewAction, lengkap dengan batas field.
+## Langkah yang akan diimplementasikan saat sesi praktik
 
-2. Buat adapter lokal yang memanggil model baseline dari Week 11 di backend; tandai model version pada respons.
+1. Definisikan contract `AnomalyResult`: finite score [0,1], bool flagged, model_version nonempty, reason_codes dan scoring_status.
 
-3. Implementasikan endpoint create meter reading dan classify dengan authorization dan idempotency policy yang jelas.
+2. Implementasikan adapter `score(reading_features)` di boundary AI; model output tidak menentukan site_id, user_id atau permissions.
 
-4. Pastikan hasil classifier divalidasi against label enum, bukan ditulis mentah ke database.
+3. Buat ingestion→persist reading→score as a separate step, dengan status pending_scoring/scored/scoring_unavailable.
 
-5. Sambungkan UI: hasil normal, abstain, invalid output, timeout, dan human override harus memiliki state berbeda.
+4. Tolak NaN, infinity, skor negatif atau >1 dan model_version kosong; jangan coerce skor invalid menjadi normal.
 
-6. Jalankan unit, integration dan negative tests; catat response status, latency baseline dan failure-path evidence.
+5. Wire UI human review dengan decisions confirmed_anomaly/expected_variation/needs_investigation; simpan audit history.
 
-## Acceptance criteria
+6. Test fake adapter (success/timeout/malformed), retry idempotent, cross-site review IDOR, resource limits dan logs redacted.
 
-- [ ] Prediksi yang tersimpan selalu mempunyai model_version dan valid label.
-- [ ] Data meter reading tidak hilang ketika AI gagal.
-- [ ] Izin akses dites untuk resource berbeda dan tenant lain.
-- [ ] UI dapat menerima hasil normal, abstain, timeout dan invalid model output.
-- [ ] Ada bukti tests yang dijalankan, bukan screenshot tanpa reproduksi.
+## Acceptance criteria (belum dicentang)
 
-## Test & evidence protocol
+- [ ] Sensor readings tetap tersimpan pada timeout.
+- [ ] Anomaly score harus valid/finite dan terbatas.
+- [ ] Cross-site unauthorized review ditolak.
+- [ ] Model tidak dapat mengaktifkan/menonaktifkan peralatan listrik.
 
-1. Catat environment serta versi runtime dan tools yang benar-benar digunakan.
-2. Rekam command/aksi, input sintetis, output, error path dan test results aktual.
-3. Jangan menggunakan production data, kredensial atau system perusahaan.
-4. Tautkan diagram, source code, logs teredaksi, commits dan evaluasi ke [evidence matrix](../../certification/evidence-matrix.md).
-5. Tulis residual risk dan pekerjaan yang belum teruji sebagai catatan eksplisit.
+## Evidence yang harus dibuat
 
-[Latihan tambahan](exercises.md) · [Asesmen simulasi](assessment.md).
+Typed API adapter and contract tests, error taxonomy, mock integration trace, audit samples.
+
+Saat praktik: catat input sintetis, expected behavior, actual output, command+versi runtime, error/negative tests, keamanan, dan link commit. Jangan mengarang skor model, latency, atau status passed.
+
+## Pertanyaan transfer
+
+Kenapa HTTP 200 dari model tidak cukup untuk menjamin output valid?
+
+**Definition of done:** seluruh acceptance criteria diverifikasi dengan artefak sendiri, bukan sekadar dokumentasi ini; status BNSP tetap memerlukan asesmen resmi LSP.
+
+[Latihan](exercises.md) · [Knowledge check](knowledge-check.md) · [Evidence matrix](../../certification/evidence-matrix.md)

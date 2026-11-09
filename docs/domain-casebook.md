@@ -9,18 +9,18 @@ Dataset meter yang tidak terkontrol bisa memuat timestamp hilang/duplikat, nilai
 ### Definisi teknis
 
 - `energy_kwh` = energi digunakan **selama interval tertentu**; tidak sama dengan daya sesaat `kW`.
-- `timestamp` = awal interval dalam UTC. Interval harus diketahui (misalnya 15 menit).
+- `interval_start_utc` = awal interval UTC dan `interval_minutes=15` dalam v1.
 - `site_id` + `meter_id` = pembatas akses dan identitas meter sintetis.
-- `source_event_id` = identitas sumber untuk mencegah duplicate ingest.
+- `source_event_id` = unik dalam (site_id,meter_id), untuk idempotent ingest.
 - `voltage_v` dan `current_a` adalah fitur simulasi, bukan verifikasi kualitas suplai listrik nyata.
 
 ### Contoh data input sintetis
 
 ```csv
-site_id,meter_id,source_event_id,timestamp,energy_kwh,voltage_v,current_a
-SITE-A,MTR-001,E-1001,2026-01-01T00:00:00Z,1.40,230.0,6.0
-SITE-A,MTR-001,E-1002,2026-01-01T00:15:00Z,1.48,230.5,6.3
-SITE-A,MTR-001,E-1003,2026-01-01T00:30:00Z,5.90,228.7,8.2
+site_id,meter_id,source_event_id,interval_start_utc,interval_minutes,energy_kwh,voltage_v,current_a
+SITE-A,MTR-001,E-1001,2026-01-01T00:00:00Z,15,1.40,230.0,6.0
+SITE-A,MTR-001,E-1002,2026-01-01T00:15:00Z,15,1.48,230.5,6.3
+SITE-A,MTR-001,E-1003,2026-01-01T00:30:00Z,15,5.90,228.7,8.2
 ```
 
 **Catatan:** Baris ketiga mempunyai nilai energi lebih tinggi, tetapi **belum bisa dipastikan sebagai anomali** tanpa baseline musiman/konteks serta ground truth. Jangan mencampur data interval 15 menit dengan 1 jam tanpa normalisasi.
@@ -59,3 +59,5 @@ SITE-A,MTR-001,E-1003,2026-01-01T00:30:00Z,5.90,228.7,8.2
 - Metrik seperti F1 hanya bermakna bila tersedia label ground truth yang jelas, walaupun sintetis.
 
 **Status:** domain casebook siap; fitur numerik belum diimplementasikan. Semua tests harus dijalankan selama praktikum sebelum status berubah.
+
+**Canonical schema dan API:** [Kontrak domain energi](architecture/energy-data-contract.md) · [Threat model](architecture/threat-model.md).

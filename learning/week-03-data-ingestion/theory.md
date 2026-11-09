@@ -1,46 +1,31 @@
-# Teori — Week 03: Data Ingestion & ETL
+# Teori — Data Ingestion Meter Listrik (Week 03)
 
-**Tujuan:** Memindahkan dataset catatan kejadian perangkat sintetis ke storage secara konsisten, audit-able, dan aman diulang.
+**Outcome:** mampu merancang ingestion idempotent untuk pembacaan kWh per 15 menit, lengkap dengan schema, transaction boundaries, dan rekonsiliasi batch. Baca [kontrak domain](../../docs/architecture/energy-data-contract.md) sebelum melihat contoh SQL.
 
-## Konsep dan keputusan engineering
+## 1. Kontrak input
 
-### 1. Data contract dan lineage
+Setiap row adalah **satu pengukuran satu meter dalam satu interval**, bukan pesan teks. Delapan kolom: `site_id,meter_id,source_event_id,interval_start_utc,interval_minutes,energy_kwh,voltage_v,current_a`. Tipe, satuan, durasi dan UTC wajib dipastikan saat import. Versi skema yang berubah harus dicatat.
 
-Sebelum mengimpor data, definisikan sumber, pemilik, timestamp, tipe kolom, allowed values, unique identifier, dan aturan retensi. Kontrak input merupakan batas kompatibilitas. Data lineage menjawab dari file mana record berasal, siapa/apa yang memproses, dan transformasi apa yang diterapkan.
+## 2. ETL vs ELT
 
-### 2. ETL versus ELT
+ETL: validasi dan transform sebelum masuk tabel target. ELT: simpan dulu ke staging dengan akses dan retensi terkendali lalu transform. Untuk latihan, ETL dengan ringkasan reject cukup. Staging bermanfaat untuk forensic/replay tetapi memperbesar permukaan penyimpanan data yang belum tervalidasi.
 
-ETL membersihkan dan mentransformasikan sebelum load; ELT memuat data ke staging terkontrol lalu mentransformasikan. Untuk dashboard energi kecil, ETL sederhana cukup; untuk volume lebih besar, staging membantu audit dan reprocessing. Hindari menyimpan data invalid ke tabel produksi tanpa status dan guard.
+## 3. Event identity vs measurement time
 
-### 3. Idempotency dan batch processing
+Kunci idempotency: **(site_id,meter_id,source_event_id)**. Dua site boleh memakai nama meter sama. File import dua kali seharusnya tidak menggandakan row. Payload duplikat dengan hash sama ⇒ skipped; payload berbeda pada key sama ⇒ **conflicting duplicate** yang perlu quarantine. Timestamp interval yang sama dengan source ID berbeda juga butuh kebijakan konflik (misalnya satu accepted reading per slot dengan history koreksi).
 
-Import yang sama dijalankan dua kali seharusnya menghasilkan kondisi data sama atau kegagalan yang jelas, bukan duplikasi. Pakai stable ID atau checksum, uniqueness constraint, dan conflict strategy yang ditentukan. Satu transaksi per batch menjaga konsistensi, tetapi batch besar mungkin perlu chunking dan checkpoint.
+## 4. Transactions dan concurrency
 
-### 4. CSV safety dan database transaction
+Gunakan parameterized SQL dan database constraint, bukan sekadar cek sebelum insert yang rentan race. Batch atomic lebih sederhana untuk dataset kecil; partial accept memerlukan log per-record dan rekonsiliasi `received = accepted + rejected + skipped`. Ketika worker crash setelah commit tetapi sebelum ack, retry harus konsisten.
 
-Validasi header, encoding UTF-8, file size, row length, dan karakter tak terduga. Saat hasil diekspor ke spreadsheet, awasi formula injection pada field yang dimulai =, +, -, @. Query harus memakai parameter binding. Jangan membangun SQL dengan concatenation input. Pada kegagalan batch, definisikan all-or-nothing atau partial-accept dengan log penerimaan.
+## 5. Security dan operasional
 
-### 5. Operational feedback
+Batasi ukuran berkas, jumlah row dan panjang cell; tolak kolom tak dikenal, nilai NaN/inf/negatif, encoding salah, atau path traversal pada upload. Ekspor CSV perlu mitigasi formula injection jika data berupa teks yang dapat dikontrol user. Catat batch ID, checksum, jumlah status dan alasan error **tanpa menuliskan kredensial**.
 
-Hasil import harus melaporkan accepted, rejected, skipped/duplicate, durasi, batch ID, alasan reject yang tidak membocorkan data sensitif, dan langkah pemulihan. Pengguna harus bisa memeriksa jumlah total input = accepted + rejected + skipped.
+## Worked reasoning
 
-## Studi kasus dalam capstone
+Jika ada 100 rows, 90 diterima, 7 ditolak dan 3 skipped, acceptance rate = 90/100 = 90%. Saat file sama dimasukkan ulang, row existing tetap; exact duplicates menjadi skipped. Jangan menebak 90 rows accepted pada percobaan kedua.
 
-CSV sintetis dengan kolom meter_reading_id, event_note, received_at, source. Dua baris punya meter_reading_id sama: loader menolak duplikasi atau melakukan upsert sesuai kebijakan yang terdokumentasi, tidak diam-diam menambah dua meter reading.
+[Worked examples](worked-examples.md) · [Praktikum](lab-guide.md) · [Kontrak energi](../../docs/architecture/energy-data-contract.md).
 
-## Kontrak kualitas dan keamanan
-
-- CSV valid dapat diproses dengan hasil terhitung.
-- Input invalid ditolak dan dilaporkan tanpa menyimpan record corrupt.
-- Menjalankan batch yang sama dua kali tidak menghasilkan duplikasi.
-- Query parameterized dan transaction behavior teruji.
-
-**Inti pembelajaran:** kompetensi dinilai dari alasan dan bukti keputusan, bukan hafalan istilah. Materi ini merupakan penjelasan praktis untuk belajar mandiri, bukan salinan KUK resmi.
-
-## Referensi primer
-
-- https://docs.python.org/3/library/csv.html
-- https://www.postgresql.org/docs/current/ddl-constraints.html
-- https://cheatsheetseries.owasp.org/cheatsheets/CSV_Injection_Prevention_Cheat_Sheet.html
-
-[Mulai praktikum](lab-guide.md) · [Latihan](exercises.md)
+Referensi: [Python CSV](https://docs.python.org/3/library/csv.html), [PostgreSQL constraints](https://www.postgresql.org/docs/current/ddl-constraints.html), [OWASP SQL injection](https://cheatsheetseries.owasp.org/cheatsheets/SQL_Injection_Prevention_Cheat_Sheet.html).

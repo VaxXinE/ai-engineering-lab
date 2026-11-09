@@ -1,44 +1,31 @@
-# Teori — Scalability, Performance & Reliability
+# Teori — Scalability for Meter Time-Series and AI Scoring (Week 10)
 
-**Hasil belajar:** Mengukur bottleneck frontend/backend/DB/inference dan merancang scaling serta failure protection berdasarkan data.
+**Outcome:** dapat mengestimasi volume, menganalisis bottleneck, merencanakan load test reproducible, dan membedakan latency dari throughput.
 
-## 1. Latency, throughput, utilization
+## 1. Dimensi volume
 
-Latency ialah durasi per request; throughput ialah jumlah pekerjaan per detik; concurrency ialah pekerjaan yang berlangsung bersamaan. P50 tidak cukup: P95/P99 menunjukkan tail latency pengguna. Throughput dan latency bisa memburuk cepat saat resource mendekati saturation.
+Dengan interval 15 menit, satu meter menghasilkan `24*4=96` readings per hari jika tidak ada gap. Seribu meter menghasilkan `96.000` readings/hari, sekitar `2.88 juta` dalam 30 hari, sebelum retention dan corrections. Nilai tersebut hanyalah perhitungan kapasitas, bukan benchmark database.
 
-## 2. Capacity planning
+## 2. SLI untuk pipeline
 
-Mulai dari workload: ukuran request, jumlah active users, arrivals/second, ratio read/write, kebutuhan CPU/memori, external API quota. Perhitungan konservatif contoh: 20 req/s * 250 ms service time ~ 5 concurrent in-flight requests pada kondisi stabil, belum termasuk bursts dan overhead. Jangan menganggap kapasitas = angka teoritis saja.
+Ukur ingest rows/sec, rejected/duplicate rates, P50/P95/P99 API latency, query time-range, scoring latency, queue backlog, CPU/memory dan disk usage. Grafik satu bulan memerlukan pagination/aggregation; query seluruh raw readings untuk setiap user bisa mahal. Index pada `(site_id,meter_id,interval_start_utc)` membantu pola query spesifik tetapi harus diuji EXPLAIN pada dataset yang sesuai.
 
-## 3. Reliability controls
+## 3. Average concurrency
 
-Timeout harus lebih pendek dari total request deadline; retry exponential backoff dengan jitter hanya untuk operasi aman/idempotent; circuit breaker membatasi chain failure; rate limiting mencegah abuse dan biaya tak terkendali. Bila model mahal, job queue dan bulkheads bisa memisahkan beban.
+Little's Law memperkirakan average in-flight = throughput × average response time dalam kondisi steady-state. Contoh 40 req/s × 0.25s = 10 in-flight, **bukan** bukti cukup 10 workers saat peak. P95 latency penting karena queueing dan resource saturation memengaruhi ekor distribusi.
 
-## 4. Caching, indexes, batching
+## 4. Safe load test
 
-Caching hasil inference punya risiko privasi dan stale model; key harus mempertimbangkan tenant, versi model, input normalized, expiry. Index mempercepat lookup tetapi overhead storage/write. Batching mengurangi per-item overhead tetapi memperpanjang antrian dan menambah kompleksitas error handling.
+Load testing hanya pada environment test yang dimiliki/diizinkan. Gunakan dataset sintetis dengan seed dan ukuran jelas, mencatat mesin, versi, concurrency, duration, response mix, error rate, P95, dan metode perhitungan. Jangan mengarang hasil sampai benchmark dijalankan.
 
-## 5. Load testing dan interpretasi
+## 5. Backpressure, cost dan cache
 
-Simulasikan pola realistis, warmup, bounded duration, request mix, error rate, dan latencies. Catat hardware, network, versi aplikasi, concurrency, dan ukuran data. Uji failure path, bukan hanya success throughput. Hasil lokal tidak boleh dipromosikan sebagai SLA production.
+Batasi ukuran request/batch, connection pools, retries/backoff+jitter, queue depth, per-site rate limits dan timeouts. Caching perlu key site+meter+range+model_version, kalau tidak ada risiko cross-site disclosure atau stale results. Retry pada import harus idempotent dengan composite event key.
 
-## Skenario rekayasa perangkat lunak
+## 6. Timeseries correctness under scale
 
-Traffic naik dari 5 menjadi 100 pesan/detik pada jam ramai. Inference eksternal punya rate limit dan lonjakan P95. Evaluasi queue dan fallback manual dibanding menaikkan CPU secara membabi buta.
+Aggregasi harus mempertahankan jumlah kWh dan coverage; missing interval bukan nol, dan perubahan interval duration harus ditangani eksplisit. Downsampling dapat menyimpan `sum(kWh)` dan `observed/expected slot count` agar grafik tidak menyamarkan kekosongan data.
 
-## Prinsip dan acceptance criteria
+[Perencanaan benchmark](lab-guide.md) · [Domain contract](../../docs/architecture/energy-data-contract.md).
 
-- Setiap hasil uji mencantumkan alat, mesin, durasi, concurrency, dan ukuran data.
-- Rekomendasi perubahan diturunkan dari bottleneck yang diobservasi.
-- Sistem menghindari retry tak berbatas dan uncontrolled external API consumption.
-- Terdapat error case dan timeout scenario dalam pengujian.
-
-## Dokumentasi primer untuk pendalaman
-
-- https://sre.google/sre-book/monitoring-distributed-systems/
-- https://www.postgresql.org/docs/current/indexes.html
-- https://docs.python.org/3/library/statistics.html
-
-Penjelasan ini mengaitkan materi praktik dengan unit yang dipublikasikan LSP. Ini bukan reproduksi KUK resmi dan tidak menentukan hasil asesmen.
-
-[Praktikum](lab-guide.md)
+Referensi: [Google SRE Monitoring](https://sre.google/sre-book/monitoring-distributed-systems/), [PostgreSQL indexes](https://www.postgresql.org/docs/current/indexes.html).

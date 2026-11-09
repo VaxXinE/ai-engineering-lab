@@ -1,43 +1,31 @@
-# Teori — Integrasi Komponen Solusi AI
+# Teori — Numerical Anomaly Scoring Integration (Week 12)
 
-**Tujuan:** Menyatukan model inference, service API, storage, review UI, dan pengujian end-to-end tanpa membuat AI menjadi single point of failure.
+**Outcome:** menghubungkan hasil scoring numerik ke API/dashboard dengan output validation, idempotency dan human review; tidak kehilangan data ketika dependency AI gagal.
 
-## 1. Contract-first integration
+## 1. Scoring versus text classification
 
-Rancang request/response schema yang ketat sebelum menghubungkan UI, API dan model. Untuk capstone numerik, output harus memuat finite anomaly_score dalam kontrak 0–1, boolean flagged, dan model_version; label normal/warning/fault hanya digunakan pada latihan teks Modul 1. Status aplikasi seperti pending_scoring/reviewed bukan hasil model. Pisahkan status agar proses bisnis tidak mengira prediksi sebagai keputusan final.
+Model numerik menerima `energy_kwh`, metadata meter/time yang valid, dan historical features. Kontrak output: finite `anomaly_score` [0,1] **setelah mapping yang didokumentasikan**, `flagged: bool`, `model_version`, `reason_codes`. Model classification `normal/warning/fault/abstain` Week 01 berbeda dan tidak menjadi schema endpoint numeric.
 
-## 2. Ports and adapters
+## 2. Data lifecycle
 
-Definisikan antarmuka scoring dengan method score(reading_features)->AnomalyResult; implementasi lokal/hosted berada di adapter tersendiri. Ini memudahkan unit testing memakai fake adapter tanpa biaya provider, dan memungkinkan penggantian model setelah evaluasi. Jangan menaruh provider-specific behavior dalam domain service.
+Import → validate → persist `MeterReading` → score → add append-only `AnomalyEvent` → human review. Status `pending_scoring/scored/scoring_unavailable/needs_review/reviewed` adalah state aplikasi, bukan class ML. Kegagalan inference tidak menghapus reading dan tidak boleh otomatis dipetakan menjadi 'normal'.
 
-## 3. Transaction and failure handling
+## 3. Ports/adapters
 
-Simpan meter reading secara konsisten, lalu lakukan inference dengan timeouts terkendali; jika provider gagal, jangan hilangkan pesan. Untuk pemrosesan asynchronous gunakan queue dan idempotency key. Status pending_manual_review lebih aman daripada menciptakan prediksi tebakan baru saat service tidak tersedia.
+Backend memanggil interface `score(features)->AnomalyResult`. Adapter memegang detail library/provider, timeouts, retry policy, model provenance, dan normalisasi skor. Input/output model tidak mengandung keputusan site permission, sehingga server tetap mengotorisasi setiap resource.
 
-## 4. Security boundary
+## 4. Output verification
 
-Authentication dan server-side object-level authorization wajib untuk endpoint review. Validasi payload panjang, label output model, dan safe logging; catatan kejadian perangkat tidak boleh dikirim ke eksternal tanpa otorisasi kebijakan dan data minimization. Prompt injection relevan bila nanti menggunakan LLM dengan tool atau retrieval.
+Tolak `NaN`, `inf`, nilai negatif atau lebih dari 1, versi kosong, unknown reason codes dan payload tak terduga. `HTTP 200` dari model tidak menjamin hasil valid. Jika score invalid, simpan failure state untuk review dan log error secara redacted.
 
-## 5. Test pyramid
+## 5. Reliability dan security
 
-Unit test inference adapter dan domain service, integration test API + database, contract tests untuk model response, serta end-to-end scenario UI. Test error 400/401/403/429/5xx dan timeout. Mock model behavior dalam test, bukan mengetes production API berulang.
+Gunakan rate/size limits, deadlines, bounded idempotent retries, fake adapters untuk tests success/timeout/malformed/unauthorized. Review endpoint memverifikasi site membership dan optimistic locking. Tidak ada actuator/pemadaman/perintah fisik dari anomaly score.
 
-## Studi kasus
+## 6. Verification
 
-Aplikasi dashboard energi menerima meter reading baru. Service memvalidasi input dan izin, menyimpan record, meminta prediksi melalui inference adapter, memvalidasi label hasil, lalu menampilkan status review. Inference dapat gagal atau memilih abstain.
+Unit: adapter parser dan score mapping; integration: persistence saat timeout, audit, valid review; E2E: UI displays missing vs scored; security: cross-site IDOR dan malicious input. Keberhasilan kode baru boleh dicatat setelah test benar-benar dijalankan.
 
-## Pertimbangan verifikasi
+[Canonical contract](../../docs/architecture/energy-data-contract.md) · [Worked example](worked-examples.md) · [Lab](lab-guide.md).
 
-- Prediksi yang tersimpan selalu mempunyai model_version dan valid label.
-- Data meter reading tidak hilang ketika AI gagal.
-- Izin akses dites untuk resource berbeda dan tenant lain.
-- UI dapat menerima hasil normal, abstain, timeout dan invalid model output.
-- Ada bukti tests yang dijalankan, bukan screenshot tanpa reproduksi.
-
-## Bacaan primer
-
-- https://fastapi.tiangolo.com/tutorial/
-- https://docs.pydantic.dev/latest/
-- https://owasp.org/www-project-api-security/
-
-Pelajari teori ini sebagai landasan praktik, bukan sebagai KUK atau pedoman asesmen resmi. [Lab](lab-guide.md).
+Referensi: [Pydantic models](https://docs.pydantic.dev/latest/concepts/models/), [FastAPI errors](https://fastapi.tiangolo.com/tutorial/handling-errors/), [OWASP GenAI](https://genai.owasp.org/llm-top-10/).

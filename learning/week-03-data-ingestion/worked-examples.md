@@ -1,43 +1,31 @@
-# Worked Examples — Data ingestion sebagai kontrak sistem yang idempotent
+# Worked Examples — Reliable Energy CSV Ingestion
 
-Contoh ini diselesaikan langkah demi langkah. Bacalah **sebelum** mengerjakan latihan, lalu tutup dokumen dan ulangi reasoning dari awal. Tidak ada klaim eksekusi kode/tes baru pada file ini.
+**Status:** worked reasoning, bukan bukti kode importer sudah dijalankan.
 
-## Contoh 1: Idempotent import di PostgreSQL
+## 1. Conflict-safe idempotent import
 
-**Masalah:** Ada dua event dengan ID sama dari source yang sama. Saat import ulang, row tidak boleh bertambah.
+**Data:** SITE-A/MTR-001 mengirim E-1001 pada 00.00 dengan `energy_kwh=1.40`.
 
-**Solusi dan reasoning:**
+1. Impor pertama: accepted 1, `UNIQUE(site_id,meter_id,source_event_id)` mencegah duplicate identity.
+2. Impor ulang **identik**: skipped 1, accepted 0, seluruh nilai asli tidak berubah.
+3. Impor ulang dengan E-1001 tetapi `energy_kwh=9.99`: **conflicting duplicate**, rejected/quarantined; jangan menimpa pembacaan asli.
+4. SITE-B/MTR-001/E-1001: identity lain, dapat diterima karena site berbeda.
+5. Database uniqueness harus ditegakkan dalam transaksi. Check-before-insert saja masih rentan race antara dua worker.
 
-1. Rancang UNIQUE(tenant_id, source_event_id) untuk mencegah duplikasi lintas worker.
-2. Contoh SQL ilustratif: INSERT INTO meter readings(tenant_id,source_event_id,event_note) VALUES ($1,$2,$3) ON CONFLICT (tenant_id,source_event_id) DO NOTHING;
-3. Jika hasil import pertama menerima 3 record berbeda dan kedua input sama, import kedua membuat 0 row baru; laporkan tiga skipped berdasarkan conflict handling yang benar-benar diukur.
-4. Negative test: dua tenant boleh memiliki source_event_id sama jika constraint mengikutkan tenant_id, tetapi satu tenant tak boleh duplikat.
+Contoh SQL ilustratif setelah skema dibuat:
 
-**Counterexample / failure mode:** Cek eksistensi lalu insert tanpa constraint tidak aman terhadap race condition dan dapat menghasilkan dua row.
+```sql
+INSERT INTO meter_readings (site_id,meter_id,source_event_id,interval_start_utc,interval_minutes,energy_kwh)
+VALUES ($1,$2,$3,$4,15,$5)
+ON CONFLICT (site_id,meter_id,source_event_id) DO NOTHING;
+```
 
-**Self-explanation:** Mengapa langkah kedua diperlukan? Apa konsekuensi jika constraint-nya berubah?
+**Catatan penting:** `DO NOTHING` sendiri **tidak** membedakan payload duplicate identik vs konflik; aplikasi harus membandingkan payload atau hash saat konflik dan melaporkan sesuai kebijakan.
 
-## Contoh 2: Rekonsiliasi partial-accept
+## 2. Rekonsiliasi batch
 
-**Masalah:** File berisi 100 event sintetis: 91 valid unik, 6 invalid, 3 duplicate.
+100 events: 91 accepted, 6 schema-invalid dan 3 exact duplicates ⇒ `91+6+3=100`. Acceptance 91%, reject 6%, skipped 3%. Bila row yang sama ditandai invalid **dan** duplicate, tentukan satu status final supaya total tidak dihitung ganda. Jika batch diulang, hasil accepted akan berubah meski total input tetap 100.
 
-**Solusi dan reasoning:**
+**Negative test:** NaN/inf/negative kWh dan timestamp tanpa timezone ditolak; string yang dikirim ke SQL tidak boleh di-concatenate.
 
-1. Klasifikasikan tiap record tepat satu status: accepted, rejected atau skipped.
-2. Total = 91 + 6 + 3 = 100; simpan summary dengan denominator 100.
-3. Hitung acceptance rate 91/100 = 91%; rejection rate 6/100 = 6%; skipped rate 3/100 = 3%.
-4. Kebijakan kualitas contoh: jika reject rate di atas toleransi proyek, tandai batch perlu review. Threshold bukan standar universal.
-
-**Counterexample / failure mode:** Kesalahan umum: menghitung duplikat sekaligus rejected sehingga jumlah status melebihi row yang benar-benar diterima.
-
-**Self-explanation:** Mengapa langkah kedua diperlukan? Apa konsekuensi jika constraint-nya berubah?
-
-
-## Progressive practice
-
-- **Guided:** ulangi kedua solusi dan cek nilai/langkah satu per satu.
-- **Faded:** ubah satu input atau constraint sendiri, lalu hitung atau rancang ulang solusi.
-- **Independent:** terapkan pola pada kasus baru dan catat alternatif serta risiko yang belum tertutup.
-- **Verification:** untuk kode, jalankan test sendiri; untuk hitungan, cek ulang dengan perhitungan independen.
-
-[Lanjut knowledge check](knowledge-check.md) · [Latihan utama](exercises.md)
+[Canonical CSV](../../docs/architecture/energy-data-contract.md) · [Praktikum](lab-guide.md).

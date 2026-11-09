@@ -5,7 +5,7 @@
 ## Pertanyaan
 
 1. Mengapa response AI perlu schema validation?
-2. Bolehkah AI menentukan tenant_id?
+2. Bolehkah anomaly scorer menentukan site_id atau permissions?
 3. Apa fallback aman ketika inference gagal?
 4. Bagaimana menguji provider tanpa biaya jaringan?
 5. Apa itu prompt injection pada kasus telemetri?
@@ -21,7 +21,7 @@
 
 **4.** Fake adapter deterministik plus contract/negative tests; provider integration test terpisah opsional.
 
-**5.** device event note berisi instruksi yang mencoba mengubah perilaku model dari task yang diperbolehkan.
+**5.** Jika suatu saat AI generatif memproses catatan perangkat, teks input yang mengandung instruksi berbahaya bisa membelokkan model; pada anomaly scorer numerik Week 12 risiko utama adalah output tidak valid, data leakage, dan penyalahgunaan API.
 
 **6.** Retry setelah timeout dapat memproses event yang sama berkali-kali tanpa key/constraint.
 

@@ -1,43 +1,25 @@
-# Worked Examples — Data quality sebagai penghalang sebelum AI, bukan cleanup kosmetik
+# Worked Examples — Time-series Data Validation
 
-Contoh ini diselesaikan langkah demi langkah. Bacalah **sebelum** mengerjakan latihan, lalu tutup dokumen dan ulangi reasoning dari awal. Tidak ada klaim eksekusi kode/tes baru pada file ini.
+## 1. Missing interval ≠ zero consumption
 
-## Contoh 1: Menghitung data quality per tahap
+Meter MTR-001 interval 15 menit: 00.00=1.40 kWh, 00.15=1.48 kWh, **00.30 hilang**, 00.45=0.00 kWh.
 
-**Masalah:** Dari 200 pesan sintetis, 16 event_note kosong, 4 duplikat event ID, 10 timestamp di luar rentang. Anggap ketiga kelompok tidak overlap.
+1. Expected slots=4; observed valid unique slots=3 → coverage `3/4=75%`.
+2. `00.30` harus direpresentasikan sebagai **missing**, bukan nilai nol.
+3. `00.45` memiliki pengukuran **0.00 kWh yang valid** bila field lainnya lulus validasi.
+4. Total recorded energy = 1.40+1.48+0 = 2.88 kWh **untuk tiga interval yang terukur**, bukan taksiran konsumsi keempat interval.
+5. Chart wajib menunjukkan gap dan label coverage.
 
-**Solusi dan reasoning:**
+## 2. Negative data quality tests
 
-1. Completeness event_note = (200-16)/200 = 92%.
-2. Jika validitas mensyaratkan ketiga aturan sekaligus, jumlah lolos = 200-16-4-10 = 170 = 85%.
-3. Jika kelompok ternyata overlap, jumlah lolos tidak bisa dihitung hanya dari penjumlahan; butuh pemeriksaan record-level.
-4. Laporan harus menyebut asumsi non-overlap, schema_version, dan denominator 200.
+Input: `energy_kwh=NaN`, `Infinity`, `-1`, `interval_minutes=60`, `timestamp='2026-01-01 00:00'`, duplicate `source_event_id`.
 
-**Counterexample / failure mode:** Tidak benar mengatakan 92% completeness sama dengan 92% overall data quality.
+- NaN/inf ditolak meskipun beberapa parser menerima format string-nya.
+- Negatif ditolak, kecuali nanti skema baru memodelkan produksi/net export secara eksplisit.
+- 60 menit ditolak dalam schema v1 15-menit; jangan membandingkan 1.5 kWh per 60m dengan 1.5 kWh per 15m sebagai daya sama.
+- Timestamp tanpa offset di-reject supaya tidak menebak zona waktu.
+- Duplicate identik di-skip; duplicate berubah payload adalah conflict yang harus diperiksa.
 
-**Self-explanation:** Mengapa langkah kedua diperlukan? Apa konsekuensi jika constraint-nya berubah?
+**Leakage counterexample:** rolling baseline untuk 00.30 tidak boleh menghitung data 00.45. Fitur untuk 00.30 hanya boleh memakai interval sebelum 00.30.
 
-## Contoh 2: Leakage akibat preprocessing sebelum split
-
-**Masalah:** Developer menghitung vocabulary dan IDF dari seluruh 1000 pesan, baru membagi 80% train/20% test.
-
-**Solusi dan reasoning:**
-
-1. Karena IDF bergantung frekuensi seluruh teks, statistik test ikut memengaruhi transformasi train.
-2. Perbaiki: split terlebih dahulu, fit tokenizer/vectorizer pada train saja, lalu transform validation/test tanpa refit.
-3. Jika device mengirim banyak pesan mirip, lakukan group split berdasarkan device agar semantic correlation tidak bocor.
-4. Catat limitation: pemeriksaan exact normalized overlap tidak menjamin bebas semantic leakage.
-
-**Counterexample / failure mode:** Menghapus teks yang sama persis saja tidak mencegah semua leakage; perlu mempertimbangkan fitur yang 'melihat masa depan'.
-
-**Self-explanation:** Mengapa langkah kedua diperlukan? Apa konsekuensi jika constraint-nya berubah?
-
-
-## Progressive practice
-
-- **Guided:** ulangi kedua solusi dan cek nilai/langkah satu per satu.
-- **Faded:** ubah satu input atau constraint sendiri, lalu hitung atau rancang ulang solusi.
-- **Independent:** terapkan pola pada kasus baru dan catat alternatif serta risiko yang belum tertutup.
-- **Verification:** untuk kode, jalankan test sendiri; untuk hitungan, cek ulang dengan perhitungan independen.
-
-[Lanjut knowledge check](knowledge-check.md) · [Latihan utama](exercises.md)
+[Domain contract](../../docs/architecture/energy-data-contract.md) · [Lab](lab-guide.md).

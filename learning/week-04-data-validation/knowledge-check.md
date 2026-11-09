@@ -5,10 +5,10 @@
 ## Retrieval questions
 
 1. Apa beda validity dan accuracy?
-2. Mengapa completeness event_note 92% tidak sama dengan valid rate total?
+2. Mengapa interval coverage 75% tidak berarti data konsumsi 100% lengkap?
 3. Kapan pipeline harus quarantine record?
 4. Mengapa fit scaler sebelum split salah?
-5. Apakah pesan PII-redacted otomatis aman dipublikasikan?
+5. Apakah identitas site yang sudah diganti otomatis aman dipublikasikan?
 6. Apa bukti quality gate efektif?
 
 ## Pembahasan / kunci untuk self-correction
@@ -17,9 +17,9 @@
 
 Validity adalah kesesuaian aturan; accuracy kesesuaian dengan keadaan benar yang perlu diverifikasi.
 
-**2. Mengapa completeness event_note 92% tidak sama dengan valid rate total?**
+**2. Mengapa interval coverage 75% tidak berarti data konsumsi 100% lengkap?**
 
-Kualitas total dipengaruhi duplikasi dan timestamp, dan himpunan error bisa overlap.
+Coverage 75% berarti 3 dari 4 interval diharapkan memiliki reading valid. Baris yang ada bisa 100% valid namun satu interval tetap hilang; missing bukan 0 kWh.
 
 **3. Kapan pipeline harus quarantine record?**
 

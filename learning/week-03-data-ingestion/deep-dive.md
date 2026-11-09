@@ -25,7 +25,7 @@ All-or-nothing transaction menggagalkan seluruh batch jika satu record invalid, 
 
 ### 4. Idempotency dan at-least-once delivery
 
-Worker / file importer bisa retry setelah timeout. Jika tidak ada idempotency, pesan yang sama masuk berkali-kali. Stable source_event_id dengan UNIQUE(tenant_id, source_event_id) dan upsert policy melindungi integritas. Check di aplikasi saja tidak cukup karena dua worker dapat membaca belum ada lalu insert serentak. Database constraint adalah garis pertahanan akhir.
+Saat ingestion worker mengalami timeout setelah database commit, event dapat dikirim ulang. Unique key yang benar adalah **(site_id,meter_id,source_event_id)**. Exact repeat dapat di-skip, tetapi ID sama dengan payload berbeda harus di-reject/quarantine agar pembacaan historis tidak diam-diam ditimpa. Concurrent writers tetap memerlukan UNIQUE constraint; check-before-insert saja tidak aman.
 
 ### 5. Parsing, encoding dan ancaman injection
 

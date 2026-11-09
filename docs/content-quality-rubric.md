@@ -20,3 +20,10 @@ Gunakan untuk menilai kekurangan konten sebelum diajarkan.
 - Week 01: sudah punya runnable example; tetap perlu teach-back, retrieval quiz, dan penjelasan lebih mendalam.
 - Week 02–16: kode capstone belum diimplementasikan; materi harus membedakan worked example **illustrative** dari executed lab.
 - Setiap unit: Elemen/KUK resmi belum dipetakan 1:1; tidak mengklaim siap dinilai.
+
+## Mandatory review after Phase 3
+
+- Every Week 01–16 includes a **distinct `energy-case-study.md`** with measurable task, worked reasoning, negative/security case and expected evidence.
+- All numerically focused lessons comply with [canonical energy contract](architecture/energy-data-contract.md): site/meter/source identity, explicit interval, UTC, finite nonnegative kWh, gap ≠ zero.
+- Week 01 is a text ML exercise, not an energy anomaly detector; Week 11–12 evaluate numerical time-series.
+- Only real test output may be called verified. Documentation coverage does not mean code coverage.

@@ -1,66 +1,43 @@
-# Worked Examples — Mengubah UX menjadi frontend state machine yang tepercaya
+# Worked Examples — Type-Safe Energy Monitoring UI
 
-Contoh **ilustratif** untuk pemahaman dan code review. Cuplikan kode tidak otomatis sudah dieksekusi di repository; saat praktikum jalankan unit/integration tests sebelum memberi status passed.
+## 1. State machine untuk grafik
 
-## Contoh 1: TypeScript discriminated union
-
-**Masalah:** Dashboard bisa idle/loading/success/error. Hindari kombinasi state tidak valid.
-
-**Solusi bertahap:**
-
-1. Definisikan satu field status untuk membedakan setiap variant.
-
-2. Contoh TypeScript ilustratif:
+Dalam TypeScript, jangan mengandalkan beberapa boolean yang bisa saling bertentangan:
 
 ```ts
-type MeterReading = { id: string; event_note: string };
-type Result =
-  | { status: 'idle' }
-  | { status: 'loading' }
-  | { status: 'success'; meter readings: MeterReading[] }
-  | { status: 'error'; event_note: string };
-function renderSummary(result: Result): string {
-  switch (result.status) {
+type Reading = { meterId: string; intervalStartUtc: string; energyKwh: number };
+type RemoteState =
+  | { kind: 'idle' }
+  | { kind: 'loading' }
+  | { kind: 'success'; readings: Reading[] }
+  | { kind: 'empty' }
+  | { kind: 'error'; message: string };
+
+function summary(state: RemoteState): string {
+  switch (state.kind) {
     case 'idle': return 'Siap';
     case 'loading': return 'Memuat';
-    case 'success': return `${result.meter readings.length} data`;
-    case 'error': return result.event_note;
+    case 'success': return state.readings.length + ' readings';
+    case 'empty': return 'Tidak ada pembacaan';
+    case 'error': return state.message;
   }
 }
 ```
 
-3. Pada branch success, compiler tahu meter readings tersedia; branch error tidak bisa keliru mengaksesnya.
+Saat `success`, data diurutkan berdasarkan timestamp UTC; buat **gap** untuk missing interval, bukan menampilkan `energyKwh=0`.
 
-4. Test setiap variant dan empty array (success tetapi tidak ada hasil).
+## 2. Response race saat filter site berubah
 
-**Kesalahan yang harus dihindari:** Menggunakan dua boolean isLoading dan hasError memungkinkan state kontradiktif yang sulit direproduksi.
+1. Operator memilih SITE-A; request A dimulai.
+2. Operator beralih ke SITE-B; request B dimulai.
+3. B selesai dahulu. UI mengaktifkan hasil SITE-B.
+4. A selesai belakangan; AbortController/request version mencegah hasil lama mengganti SITE-B.
+5. Server tetap membatasi data dengan auth membership site; cache key mencakup authorized site dan meter.
 
-**Teach-back:** jelaskan mengapa langkah 1→2→3 menghasilkan solusi dan bagaimana kegagalannya diuji.
+**Security pitfall:** menyembunyikan filter site di UI tidak mencegah IDOR. API harus memverifikasi hak akses ke site/meter sebelum mengembalikan data.
 
-## Contoh 2: Dua request filter datang tak berurutan
+## 3. Uncertain scores and review
 
-**Masalah:** User mengaktifkan filter warning, kemudian normal. Response warning datang setelah response normal.
+Jika `anomaly_score=0.93`, tampilkan 'skor anomali (ranking model)' **bukan** '93% alat rusak'. Saat timeout, tampilkan `scoring_unavailable` dan data tetap terlihat. Form review mempertahankan pilihan saat 409 atau 5xx.
 
-**Solusi bertahap:**
-
-1. Simpan AbortController untuk request aktif; ketika filter berubah, abort request lama.
-
-2. Gunakan request key / sequence id dan hanya update UI jika response cocok filter terbaru.
-
-3. Test dengan deferred promises: request kedua resolve lebih dulu; data pertama tidak boleh menimpa state normal.
-
-4. Backend tetap wajib membatasi hasil berdasarkan tenant; filter frontend tidak cukup untuk authorization.
-
-**Kesalahan yang harus dihindari:** Mengandalkan response order dari network adalah race condition, bukan asumsi yang aman.
-
-**Teach-back:** jelaskan mengapa langkah 1→2→3 menghasilkan solusi dan bagaimana kegagalannya diuji.
-
-
-## Latihan dengan scaffolding berkurang
-
-1. **Worked:** baca contoh lengkap dan hitung/trace secara manual.
-2. **Faded:** ulangi dengan satu langkah kosong dan isi reasoning sendiri.
-3. **Independent:** ganti constraint (volume, concurrency, tenant, outage) dan susun solusi baru.
-4. **Evidence:** rekam hasil test nyata dan dampak trade-off di dalam PR.
-
-[Lihat latihan](exercises.md)
+[Theoretical contract](../../docs/architecture/energy-data-contract.md) · [UX case](../week-06-ux-design/worked-examples.md).

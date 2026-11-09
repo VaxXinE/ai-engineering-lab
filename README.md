@@ -58,6 +58,16 @@ python -m unittest discover -s tests -v
 
 [Modul 1](learning/week-01-ai-fundamentals/README.md) • [Bukti CI dan hasil evaluasi sintetis](learning/week-01-ai-fundamentals/results/verification.md).
 
+## Fase 3 — Audit kualitas materi
+
+- [Audit lengkap 16 modul, temuan dan mitigasi](docs/audits/phase-3-2026-11-09.md)
+- [Canonical energy data/API contract](docs/architecture/energy-data-contract.md)
+- [Threat model](docs/architecture/threat-model.md)
+- [Cross-module engineering gates](docs/architecture/energy-learning-gates.md)
+- Setiap minggu punya `energy-case-study.md` dengan skenario domain, penalaran, risiko, dan latihan transfer.
+
+Dokumentasi kini memiliki pemeriksaan struktur, domain, dan contoh numerik di GitHub Actions. **Aplikasi capstone belum selesai dan keamanan production belum diuji.**
+
 ## Status implementasi
 
 - **Materi pembelajaran:** 16 modul tersedia.

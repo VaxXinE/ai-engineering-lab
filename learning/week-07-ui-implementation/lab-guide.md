@@ -1,48 +1,44 @@
-# Hands-on — Implementasi UI Dashboard AI
+# Praktikum Terstruktur — Frontend trend meter + anomaly review
 
-**Status:** panduan siap; langkah belum dieksekusi. Implementasi, metrik, dan bukti ditulis setelah praktikum.
+**Status:** tugas **direncanakan**; implementasi Week 03–12 belum dijalankan. Semua input, site, meter dan timeseries adalah sintetis.
 
-## Target
+## Problem dan konteks profesional
 
-Menerapkan wireframe Week 06 menjadi frontend yang responsif, aksesibel, dan aman menghadapi hasil AI yang tidak pasti.
+Build dashboard yang tetap benar ketika request filter site berubah, data terputus di interval tertentu, atau model scoring sedang unavailable.
 
-## Skenario
+**Single source of truth:** [kontrak domain](../../docs/architecture/energy-data-contract.md) · [threat model](../../docs/architecture/threat-model.md). Jangan mencampur kontrak klasifikasi log teks Week 01 dengan data anomaly scoring numerik Week 11–12.
 
-Untuk meter reading yang masuk dengan label 'warning', operator melihat prediksi lalu memilih 'normal'. UI menampilkan konfirmasi, menyimpan action, serta mengembalikan hasil audit. Request gagal tidak menghilangkan perubahan yang belum tersimpan.
+## Langkah yang akan diimplementasikan saat sesi praktik
 
-## Langkah implementasi
+1. Definisikan TypeScript types MeterReading, AnomalyEvent, ReviewDecision dan RemoteState (loading/success/empty/error).
 
-1. Review wireframe dari Week 06 dan definisikan type MeterReading, Prediction, ReviewStatus dengan union yang jelas.
+2. Bangun EnergyOverview dan MeterTrendChart dengan `energy_kwh` label per 15m dan timezone-aware timestamp.
 
-2. Bangun halaman Inbox dengan filter kategori dan review state serta empty/error/loading states.
+3. Bangun AnomalyTable yang memisahkan anomaly_score (not calibrated probability) dari review status dan model_version.
 
-3. Bangun detail view dan form override dengan alasan wajib, inline validation dan pending submit.
+4. Bangun ReviewForm dengan alasan, submit pending, error recovery dan optimistic concurrency pada event.
 
-4. Sediakan mocked API adapter lokal untuk latihan; dokumentasikan kontrak sebelum memakai backend nyata.
+5. Simulasikan dua request filter yang resolve out of order; gunakan AbortController/request key agar response stale tidak menimpa site terbaru.
 
-5. Uji keyboard navigation dan perbedaan state ketika AI mengeluarkan abstain atau timeout.
+6. Uji accessibility (label, focus, keyboard, error announcements), invalid output guard, no site leakage dalam client cache.
 
-6. Buat component tests untuk label, invalid form, pending submit, dan error recovery; dokumentasikan hasil nyata.
+## Acceptance criteria (belum dicentang)
 
-## Acceptance criteria
+- [ ] Graph gaps tidak diinterpolasi menjadi zero silently.
+- [ ] Site filter tidak memperlihatkan data site lain; backend tetap wajib authZ.
+- [ ] Invalid model score (NaN/inf/out-of-range) tidak ditampilkan sebagai valid.
+- [ ] Review action tetap bisa diperbaiki saat API gagal.
 
-- [ ] Semua state idle/loading/empty/success/error dapat direproduksi.
-- [ ] Label AI dan keputusan manusia ditampilkan berbeda.
-- [ ] Aksi double-submit tertahan di UI dan direncanakan juga dicegah di server.
-- [ ] Komponen kritis dapat digunakan dengan keyboard.
+## Evidence yang harus dibuat
 
-## Rencana verifikasi
+React components (belum dibuat), TypeScript contracts, unit/UI tests, screenshot estados.
 
-1. Buat skenario bukti untuk: Semua state idle/loading/empty/success/error dapat direproduksi.
-2. Buat skenario bukti untuk: Label AI dan keputusan manusia ditampilkan berbeda.
-3. Buat skenario bukti untuk: Aksi double-submit tertahan di UI dan direncanakan juga dicegah di server.
-4. Buat skenario bukti untuk: Komponen kritis dapat digunakan dengan keyboard.
+Saat praktik: catat input sintetis, expected behavior, actual output, command+versi runtime, error/negative tests, keamanan, dan link commit. Jangan mengarang skor model, latency, atau status passed.
 
-## Dokumentasi hasil
+## Pertanyaan transfer
 
-- Catat perintah, dependency/runtime, input sintetis, output aktual, dan edge case yang diuji.
-- Catat source code atau desain beserta commit/PR.
-- Tuliskan threat dan asumsi tersisa. Jangan menyatakan 'passed' sebelum menjalankan test.
-- Kaitkan hasil dengan [evidence matrix](../../certification/evidence-matrix.md).
+Bagaimana memisahkan cache key berdasarkan authenticated site dan rentang waktu?
 
-[Latihan](exercises.md) · [Simulasi](assessment.md)
+**Definition of done:** seluruh acceptance criteria diverifikasi dengan artefak sendiri, bukan sekadar dokumentasi ini; status BNSP tetap memerlukan asesmen resmi LSP.
+
+[Latihan](exercises.md) · [Knowledge check](knowledge-check.md) · [Evidence matrix](../../certification/evidence-matrix.md)

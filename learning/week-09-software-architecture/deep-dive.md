@@ -11,7 +11,7 @@
 
 ### 1. Tentukan boundary dari kebutuhan, bukan nama framework
 
-Uraikan aktor operator, tenant, supervisor, browser, backend, database dan AI inference. Trust boundary memisahkan browser yang tidak dipercaya dari backend, dan komponen AI dari business logic. Data telemetri user harus divalidasi pada batas masuk; respons AI juga dianggap tidak dipercaya. Diagram C4 Context menjelaskan aktor dan hubungan; Container menjelaskan deployment-level units; Component menjelaskan modul internal. Gunakan kedalaman yang membantu pengambilan keputusan.
+Aktor: energy analyst, facility operator, maintainer; komponen: browser, authenticated API, ingestion/validation, site-scoped database, anomaly scorer, review audit, observability. Browser dan CSV tidak dipercaya; output model juga tidak dipercaya. C4 context/container/component dan sequence diagrams perlu menampilkan trust boundaries serta jalur fallback saat scorer gagal.
 
 ### 2. Modular monolith adalah pilihan sadar
 
@@ -19,15 +19,15 @@ Monolith modular memiliki deployment sederhana, transaksi DB lebih mudah, latenc
 
 ### 3. Ports and adapters untuk vendor-independent AI
 
-Domain service bergantung pada port interface: classify(event_note)->Prediction. Adapter lokal bisa Naive Bayes, remote adapter bisa hosted LLM; keduanya harus validasi output yang sama. Jangan meletakkan prompt, SDK, API key, atau aturan retry provider di controller bisnis. Tujuannya bukan overengineering, melainkan memisahkan risiko perubahan model/provider dari proses review device.
+Domain energy scoring bergantung pada `score(reading_features)->AnomalyResult`, bukan `classify(event_note)`. Adapter dapat menjalankan IQR baseline atau numeric anomaly model. Return harus finite normalized score, flagged, reason_codes, model_version. Raw scores tidak otomatis probability. Perubahan provider/model tidak mengubah route atau permission policy.
 
 ### 4. Consistency dan asynchronous workflows
 
-Synchronous inference dapat menambah latency endpoint create; asynchronous pattern menyimpan meter reading dahulu dan memproses inference kemudian. Jika database commit berhasil tetapi queue publish gagal, outbox pattern bisa membantu konsistensi; di skala kecil, status pending dan retry reconciler mungkin cukup. Rancang idempotency agar pesan tidak duplikat saat retry. Setiap strategi punya operational cost.
+Simpan valid `MeterReading` lebih dahulu, kemudian kirim job scoring yang idempotent. Jika queue gagal setelah DB commit, status pending dan reconciler atau transactional outbox dapat memulihkan. Pada timeout, buat `scoring_unavailable`, jangan menghapus pembacaan atau menandainya normal. Retry dibatasi agar tidak menciptakan duplicate AnomalyEvent.
 
 ### 5. Security dan abuse controls
 
-AuthN memverifikasi identitas; AuthZ menentukan akses per tenant/meter reading; input validation memastikan bentuk data; output encoding mencegah XSS; secrets tidak boleh masuk frontend atau logs. Model tidak punya hak memutuskan kepemilikan object. Gunakan least privilege untuk worker, DB dan provider, serta rate limiting untuk penggunaan mahal. Threat model menyebut asset, entry point, trust boundaries, possible attacker dan mitigasi.
+AuthN dan site-scoped AuthZ dilakukan server; SQL parameterized, object access pada site+meter, strict CSV and model output schemas, encrypted secrets dan bounded resource usage. Model tidak memiliki akses mengendalikan perangkat listrik. Lakukan negative tests cross-site IDOR dan malformed AI response.
 
 ## Checklist penalaran
 

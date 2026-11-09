@@ -1,44 +1,31 @@
-# Teori — Database Entities & Relational Integrity
+# Teori — Database Time-Series, Anomaly dan Audit (Week 08)
 
-**Hasil belajar:** Merancang struktur data untuk site, meter, pembacaan energi, prediksi anomali, review, dan audit trail dengan integritas kuat.
+**Outcome:** membuat model data per site dan meter yang konsisten, idempotent, audit-friendly, dan aman terhadap IDOR/BOLA.
 
-## 1. Conceptual, logical dan physical modeling
+## 1. Logical entities
 
-Mulai dari entity dan business rules, turunkan menjadi kolom dan relasi lalu implementasi tabel, index dan constraints. Jangan menduplikasi metadata meter pada setiap anomaly_event jika relasi meter_id sudah tersedia; normalisasi mencegah update anomaly. Denormalisasi hanya dilakukan setelah kebutuhan performa terukur.
+`Site` memiliki banyak `Meter`; setiap `Meter` menghasilkan `MeterReading`; setiap reading dapat dinilai beberapa kali sehingga mempunyai banyak `AnomalyEvent` berdasarkan `ModelVersion`. `ReviewEvent` menyimpan keputusan manusia atas kandidat anomali. `IngestionBatch` melacak proses import. Keputusan review **bukan** atribut yang mengganti nilai energi.
 
-## 2. Keys dan cardinality
+## 2. Key dan constraints
 
-Device memiliki banyak MeterReading; satu MeterReading dapat memiliki beberapa Prediction per model version, lalu review berbeda. Gunakan primary key, foreign key, uniqueness untuk idempotent event, dan check constraints untuk enum/rentang sah. Tentukan perilaku ON DELETE secara eksplisit, tidak hanya mengandalkan default.
+Kunci pembacaan: `(site_id,meter_id,source_event_id)`. Jika meter_id hanya unik dalam site, FK perlu komposit `(site_id,meter_id)`. Data `energy_kwh` adalah finite dan >=0, `interval_minutes=15` untuk v1, UTC dan aligned; parsers harus menolak NaN/inf sebelum persist. `UNIQUE` mencegah concurrency race; application validation memberikan error feedback yang lebih jelas.
 
-## 3. Auditability
+## 3. Query scoping
 
-Prediksi AI dan hasil review sebaiknya menjadi event yang dipertahankan, bukan satu kolom yang ditimpa. Dengan itu engineer bisa menilai kualitas model, waktu perubahan dan siapa reviewer. Hindari menyimpan metadata sensitif yang tidak perlu. Catat model_version agar prediksi lama bisa dijelaskan.
+`GET /api/v1/sites/{site_id}/meters/{meter_id}/readings` wajib memeriksa bahwa authenticated principal punya membership pada site, dan meter memang berada dalam site tersebut. Jangan membangun authorization dari `site_id` yang dikirim client tanpa verifikasi. Negative test: user Site-A mengetahui meter ID Site-B tetap tidak boleh melihat data.
 
-## 4. Transactions dan concurrency
+## 4. Transactions dan audit
 
-Dua operator dapat memperbarui meter reading yang sama. Gunakan optimistic concurrency (version column), unique event keys, dan transaction boundary. Race condition tetap mungkin walau frontend sudah men-disable tombol, sehingga integritas perlu ditegakkan oleh database dan backend.
+Simpan perubahan status review dan `ReviewEvent` dalam satu transaction. Pakai optimistic locking jika dua operator menyunting review bersamaan: `WHERE version=?`, dan saat affected_rows=0 tampilkan conflict. Audit harus append-only untuk mempertahankan skor, model_version, siapa dan kapan keputusan dibuat.
 
-## 5. Authorization dan tenancy
+## 5. Index dan performance
 
-ID bukan bukti hak akses. Semua query untuk data privat harus dibatasi scope user/org dan diuji dengan setidaknya dua tenant sintetis. Gunakan indexing untuk query yang sering dipakai tanpa mengindeks semua kolom secara membabi buta; indeks mempercepat read namun memperlambat write dan memakan storage.
+Query grafik sering memakai filter site,meter,interval_start_utc. Pertimbangkan index `(site_id,meter_id,interval_start_utc)` dan uji via EXPLAIN pada data sintetis, bukan indeks semua kolom. Retention dan downsampling perlu menjaga arti kWh per interval dan tidak menghilangkan audit penting.
 
-## Skenario rekayasa perangkat lunak
+## 6. Safe migration
 
-MeterReading dibuat pada 09.00 dengan model v1, lalu direview ulang oleh operator. Model v2 dipasang minggu berikutnya. Riwayat harus tetap bisa menunjukkan prediksi v1 dan tindakan operator tanpa menghapus data historis.
+Migration harus versioned, diuji di database isolated, dan menjaga backward compatibility saat rollback. Backup dan restore memerlukan uji integritas data, bukan sekadar status proses selesai.
 
-## Prinsip dan acceptance criteria
+[ERD contract](../../docs/architecture/energy-data-contract.md) · [SQL worked example](worked-examples.md) · [Lab](lab-guide.md).
 
-- Setiap prediction memiliki model_version dan meter_reading_id yang valid.
-- Foreign key menolak orphan record; rollback transaksi menjaga konsistensi.
-- Akses tenant A tidak dapat membaca atau mengubah record tenant B.
-- Re-running migration dan duplicate event ditangani sesuai rencana.
-
-## Dokumentasi primer untuk pendalaman
-
-- https://www.postgresql.org/docs/current/ddl-constraints.html
-- https://www.postgresql.org/docs/current/tutorial-transactions.html
-- https://owasp.org/API-Security/editions/2023/en/0xa1-broken-object-level-authorization/
-
-Penjelasan ini mengaitkan materi praktik dengan unit yang dipublikasikan LSP. Ini bukan reproduksi KUK resmi dan tidak menentukan hasil asesmen.
-
-[Praktikum](lab-guide.md)
+Referensi: [PostgreSQL constraints](https://www.postgresql.org/docs/current/ddl-constraints.html), [PostgreSQL transactions](https://www.postgresql.org/docs/current/tutorial-transactions.html), [OWASP BOLA](https://owasp.org/API-Security/editions/2023/en/0xa1-broken-object-level-authorization/).

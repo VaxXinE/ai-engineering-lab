@@ -11,7 +11,7 @@
 
 ### 1. Workload model sebelum benchmark
 
-Tulis volume pesan per menit, peak bursts, ukuran pesan, persentase inference lokal vs remote, read/write ratio, dan kebutuhan tenant. Beban 100 req/s dengan 2 KB payload berbeda total biaya dari 100 req/s dengan 100 KB payload. Query latency tergantung data cardinality dan indexing; model inference cost tergantung token atau artifact CPU. Spesifikasi hasil harus mencantumkan environment.
+Dengan slot 15 menit: 96 readings/meter/hari dan 96.000 readings/hari untuk 1000 meter. Ukur insert rows/sec, query p95 berdasarkan site/meter/rentang, bytes/reading, aggregation cost, scoring latency dan queue depth. Lebih banyak meter bukan otomatis lebih banyak browser RPS; pisahkan ingest workload dari dashboard read workload.
 
 ### 2. Latency, throughput, concurrency
 
@@ -19,11 +19,11 @@ Latency adalah durasi respons; throughput adalah laju requests selesai; concurre
 
 ### 3. Scaling bottleneck end-to-end
 
-Cek komponen yang melambat: browser rendering, API CPU, DB connections, index, inference serialization, provider network atau rate limit. Horizontal scaling API tak membantu jika DB satu-satunya bottleneck. Caching dapat membantu read tetapi risiko cross-tenant leak dan stale model outputs; cache key perlu tenant, input hash dan model version saat relevan.
+Bottleneck bisa terjadi pada file parser, DB index, time-range query, aggregation, model scorer, atau browser chart. Horizontal scaling API tidak mengatasi DB contention. Cache key harus memasukkan authorized site/meter/time window/model version; hindari menyimpan readings site lain dalam client cache.
 
 ### 4. Backpressure dan cost safety
 
-Rate limit, concurrency semaphore, bounded queue, timeout dan circuit breaker mencegah satu dependency menghabiskan sumber daya. Retry exponential backoff + jitter hanya untuk idempotent operations; unbounded retry dapat menciptakan retry storm dan biaya tinggi. Dalam LLM usage, batas token, request quotas dan cost monitoring sama penting dengan latency.
+Batasi ukuran CSV/batch, concurrent scoring, queue depth, request timeouts dan retries. Untuk angka time-series, downsampling perlu menyimpan `sum(energy_kwh)` dan coverage; missing slot tidak boleh disamakan dengan energi nol. Stress test jangan diarahkan ke layanan eksternal tanpa izin.
 
 ### 5. Benchmark methodology
 

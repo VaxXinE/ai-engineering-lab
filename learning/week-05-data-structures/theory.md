@@ -1,46 +1,36 @@
-# Teori — Week 05: Data Structures, Algorithms & Complexity
+# Teori — Struktur Data untuk Telemetri Energi (Week 05)
 
-**Tujuan:** Memilih struktur data agar pipeline dan API tidak berubah menjadi bottleneck saat record bertambah.
+**Outcome:** memilih struktur data sesuai operasi dan menguji agregasi time-series tanpa duplikasi atau future leakage.
 
-## Konsep dan keputusan engineering
+## 1. Tentukan operasi
 
-### 1. Pemilihan struktur data
+- `list`: preserve order, cocok untuk satu meter dengan interval berurutan.
+- `dict[(site_id,meter_id)]`: kelompokkan meter, average dictionary lookup O(1) dalam kondisi lazim.
+- `set[(site_id,meter_id,source_event_id)]`: membership/duplicate detection di satu proses; bukan pengganti UNIQUE database.
+- `deque(maxlen=N)`: mempertahankan rolling window N **pembacaan sebelumnya**, efisien append/popleft.
+- `Counter`: agregasi jumlah event per site / status quality.
 
-List mempertahankan urutan, cocok untuk sequential traversal; dict memberi lookup keyed rata-rata O(1) pada kasus lazim; set cocok untuk membership/dedup; deque untuk queue FIFO. Pemilihan harus mempertimbangkan memory, order, key uniqueness, dan kebutuhan concurrency.
+## 2. Complexity
 
-### 2. Complexity analysis
+Nested scan duplikat lazimnya O(n²) untuk n rows. Scan dengan set memberi average O(n), tetapi memakai O(n) memory. Untuk file besar, pertimbangkan streaming dan dedup lewat DB constraint. Benchmark aktual memerlukan ukuran data, seed, hardware, runtime dan perintah, bukan angka perkiraan.
 
-Big O mengukur tingkat pertumbuhan resource terhadap input, bukan durasi absolut. Lookup berulang pada list menghasilkan O(n²) untuk nested scans; memindahkan lookup ke set sering memangkasnya mendekati O(n), dengan trade-off memori tambahan. Ukur juga data-skew dan worst cases.
+## 3. Aggregation yang menjaga satuan
 
-### 3. Data aggregation
+`total_energy_kwh = sum(valid_interval.energy_kwh)`. Untuk slot 15 menit dan coverage lengkap, `average_power_kw = total_energy_kwh / (slot_count * 15/60)`. Jika sebagian slot hilang, jangan membuat kesimpulan total konsumsi seluruh rentang tanpa menjelaskan coverage. Menjumlah kW sesaat seolah energi adalah salah satuan.
 
-Untuk klasifikasi pesan, diperlukan grouping by category, penghitungan statistik, dan dedup per meter_reading_id. Hindari mengubah collection saat iterasi, serta pikirkan stable ordering agar hasil deterministik dalam testing. Streaming/chunking mengurangi penggunaan memori untuk file besar.
+## 4. Sliding window untuk anomaly baseline
 
-### 4. Determinism dan testability
+Hitung median atau statistik dari interval **sebelum t**, baru skor interval t. Setelah scoring, masukkan nilai t ke window untuk interval berikutnya. Kalau memasukkan t dahulu, lonjakan bisa memengaruhi baseline dirinya sendiri.
 
-Pakai input/output yang jelas dan fungsi murni untuk logic pengolahan data. Test properti sederhana (unique IDs, counts konsisten) lebih kuat daripada hanya contoh happy path. Pertimbangkan Unicode normalization saat membandingkan teks untuk duplicate detection.
+## 5. Tests dan failure modes
 
-### 5. Security pada data structures
+- Empty input menghasilkan total 0 dan coverage 0 dengan pembagi aman.
+- Duplicate input tidak terhitung dua kali.
+- SITE-A/MTR-001 terpisah dari SITE-B/MTR-001.
+- Out-of-order data diurutkan dengan kebijakan jelas, atau dibuffer/reject.
+- Missing interval tidak otomatis dijadikan `0 kWh`.
+- Batas N dan ukuran batch mencegah memory exhaustion.
 
-Resource exhaustion terjadi saat input tak dibatasi. Validasi ukuran batch, panjang teks, dan jumlah key; jangan menyimpan semua data besar dalam memori jika chunked processing cukup. Pilih struktur data berdasarkan karakteristik beban nyata.
+[Lihat praktikum](lab-guide.md) · [Worked examples](worked-examples.md) · [Kontrak domain](../../docs/architecture/energy-data-contract.md).
 
-## Studi kasus dalam capstone
-
-100.000 ID: memeriksa setiap ID dengan 'id in list' berulang memiliki biaya yang tumbuh jauh lebih cepat daripada menyimpan ID yang sudah terlihat dalam set. Namun set memakai memori lebih dan tidak menyimpan frekuensi; Counter lebih tepat untuk kebutuhan agregasi.
-
-## Kontrak kualitas dan keamanan
-
-- Implementasi menyimpan satu item per unique ID dan punya aturan 'first wins' atau 'last wins' jelas.
-- Semua input edge case diuji.
-- Analisis Big O dan memory trade-off ditulis.
-- Benchmark menyertakan lingkungan, jumlah record, dan metode.
-
-**Inti pembelajaran:** kompetensi dinilai dari alasan dan bukti keputusan, bukan hafalan istilah. Materi ini merupakan penjelasan praktis untuk belajar mandiri, bukan salinan KUK resmi.
-
-## Referensi primer
-
-- https://docs.python.org/3/tutorial/datastructures.html
-- https://docs.python.org/3/library/collections.html
-- https://docs.python.org/3/library/time.html
-
-[Mulai praktikum](lab-guide.md) · [Latihan](exercises.md)
+Referensi: [Python collections](https://docs.python.org/3/library/collections.html), [Python data structures](https://docs.python.org/3/tutorial/datastructures.html).

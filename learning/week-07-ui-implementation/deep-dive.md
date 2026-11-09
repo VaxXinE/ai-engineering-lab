@@ -13,15 +13,15 @@
 
 ### 1. Komponen berdasarkan tanggung jawab
 
-Pecah layar menjadi InquiryList, InquiryDetail, PredictionBadge, ReviewForm, dan ErrorNotice. Hindari satu component yang memiliki fetching, transformasi, business logic, dan styling sekaligus. React hooks perlu dependency yang benar agar tidak memakai stale state; api client dan domain types berada pada modul terpisah. Tidak semua state butuh global store.
+Frontend membagi `EnergyOverview`, `MeterTrendChart`, `AnomalyTable`, `ReviewForm`, dan `StatusNotice`. Data fetching terpisah dari rendering; type safety membantu mencegah kecampuran measurement, scored candidate, dan human review. Gunakan caching per authorized site/meter/time-range dan component boundaries sesuai kebutuhan, bukan abstraction berlebihan.
 
 ### 2. Representasi asynchronous state
 
-Boolean isLoading + error + data dapat memunculkan kombinasi mustahil (misal loading true tetapi data error). Discriminated union menjamin state eksklusif dengan union TypeScript: idle, loading, success(data), error(event_note). Ini membantu rendering dan pengujian. Untuk optimistic update, simpan snapshot sebelum request dan rollback jika API menolak; hindari menyembunyikan konflik.
+Gunakan TypeScript discriminated union (`idle`, `loading`, `success`, `empty`, `error`) sehingga state saling eksklusif. `success` dengan array kosong berbeda secara semantik dari `scoring_unavailable`. Review form yang gagal harus mempertahankan draft; invalid model output tidak ditampilkan sebagai angka valid.
 
 ### 3. Request race, idempotency dan cancellation
 
-Jika user memilih filter A lalu B cepat, response A bisa datang belakangan dan menimpa B. Gunakan AbortController atau request sequence guard dan cache keys yang memasukkan tenant/filter. Disabled submit mengurangi klik ganda tetapi network retry maupun double tab tetap memerlukan server-side idempotency key.
+Saat filter berubah dari SITE-A ke SITE-B, request lama bisa selesai belakangan; AbortController atau sequence keys mencegah stale results. Cache harus terpartisi berdasarkan site yang terotorisasi, meter, dan window. Disabled submit bukan pengganti server-side idempotency/optimistic version checks.
 
 ### 4. Rendering aman dan data sensitif
 
@@ -29,7 +29,7 @@ React secara default meng-escape text nodes, tetapi raw HTML injection tetap ber
 
 ### 5. AI confidence dan human review di UI
 
-Prediksi perlu status, label, model_version, action history. Relative score pada Week 01 bukan probabilitas yang dapat dipahami user; jika menampilkan angka, beri konteks dan hindari angka palsu. Tombol override perlu reason dan submit confirmation; error server harus menjaga draft. Review by user hanya berhasil jika API mengonfirmasi.
+Tampilkan `anomaly_score` sebagai skor/ranking model dan model_version, bukan 93% 'alat rusak'. Human decision disimpan terpisah dari anomaly flag. Jika AI belum memberi skor, readings tetap ada; UI menampilkan `pending_scoring` atau `scoring_unavailable` alih-alih label 'normal' palsu.
 
 ## Aplikasi dalam AI Smart Energy Monitoring
 

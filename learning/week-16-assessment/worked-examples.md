@@ -1,48 +1,26 @@
-# Worked Examples — Mengubah proyek menjadi bukti kompetensi yang dapat diuji
+# Worked Examples — Bukti untuk Asesmen Dua Skema
 
-Semua langkah berikut adalah **contoh pembelajaran**, bukan laporan pelaksanaan. Uji ulang dengan alat yang tersedia saat fase praktik.
+**Ini latihan nonresmi, bukan metode penilaian atau soal resmi BNSP.**
 
-## Contoh 1: Evidence mapping untuk unit AI integration
+## 1. Mengumpulkan bukti unit AI Integration
 
-**Problem:** Peserta punya FastAPI endpoint yang memanggil classifier, tetapi tak ada tes timeout maupun izin akses.
+**Konteks:** capstone AI Smart Energy Monitoring mempunyai anomaly scoring API dengan input numeric dan output terverifikasi.
 
-1. Catat unit Published: Mengintegrasikan Komponen Solusi AI (kode sementara berdasarkan halaman LSP).
+1. **Klaim kemampuan:** mampu mengintegrasikan komponen AI secara aman ke aplikasi, termasuk fallback.
+2. **Evidence utama:** kontrak API dan code adapter yang telah diimplementasikan; link commit dan penjelasan kontribusi sendiri.
+3. **Evidence pengujian:** negative tests NaN/inf score, inference timeout, cross-site IDOR, dan idempotent retry, jika benar-benar telah dieksekusi.
+4. **Gap saat ini:** backend capstone belum dibuat, jadi bukti di atas adalah **rencana**, bukan evidence yang telah dimiliki.
+5. **Asesmen:** setelah memperoleh unit/elemen/KUK final dari LSP, petakan bukti aktual ke tiap tuntutan. Jangan mengklaim unit selesai berdasarkan dokumen ini.
 
-2. Evidence awal: link ke implementation commit dan API schema; status implemented, not verified.
+## 2. Draft presentasi demonstrasi internal
 
-3. Gap: missing timeout path, invalid model output, cross-tenant authorization tests.
+- Menit 0–3: problem dan measurement units (kWh per 15 menit).
+- 3–6: synthetic CSV, data dictionary, ingestion/validation dan missing-slot report.
+- 6–10: data model, site-scoped API dan dashboard.
+- 10–14: baseline IQR vs anomaly model, output score validation, human review.
+- 14–18: fault injection scoring timeout dan restore drill (hanya jika sudah diimplementasikan dan diuji).
+- 18–20: mapping evidence, trade-offs, security risks dan pekerjaan yang masih belum selesai.
 
-4. Rencana: tambah negative integration tests dan simpan output aktual; kemudian review dengan elemen/KUK yang diberikan LSP.
+Waktu hanya target latihan pribadi, **bukan aturan BNSP**. Bila demo belum berjalan, sebut status sebenarnya dan gunakan gap register.
 
-5. Jangan menandai kompeten hanya karena endpoint mengembalikan 200 pada satu contoh.
-
-**Common failure:** Mengubah status unit menjadi verified berdasarkan README saja menghilangkan nilai matriks bukti.
-
-**Why-question:** kenapa langkah sebelumnya mencegah risiko tersebut dan test apa yang membuktikannya?
-
-## Contoh 2: Draft demo 20 menit nonresmi
-
-**Problem:** Mempresentasikan capstone dengan fokus dua skema, bukan menampilkan semua file repo.
-
-1. Menit 0–3: use case dan requirement; Menit 3–6: ingestion, validation, data quality.
-
-2. Menit 6–10: UI/API/DB architecture, authorization dan model selection.
-
-3. Menit 10–14: inferensi dan human review; tunjukkan satu false prediction atau abstain.
-
-4. Menit 14–18: test outage/rollback atau maintenance drill yang sudah dijalankan; Menit 18–20: bukti commit/tests, risiko dan hal belum siap.
-
-5. Waktu di atas sekadar latihan komunikasi; ikuti metode penilaian resmi yang diminta asesor.
-
-**Common failure:** Demo yang hanya menunjukkan UI cantik tanpa testing/maintenance kurang membuktikan dua skema.
-
-**Why-question:** kenapa langkah sebelumnya mencegah risiko tersebut dan test apa yang membuktikannya?
-
-## Latihan bertahap
-
-- **Fully worked:** ulas reasoning semua langkah.
-- **Faded:** ulang tanpa melihat langkah kedua.
-- **Independent:** pindahkan solusi ke studi kasus baru dan buat test plan.
-- **Reflection:** catat apa yang belum bisa dijamin dari evidence yang tersedia.
-
-[Latihan mandiri](exercises.md)
+[Kontrak domain](../../docs/architecture/energy-data-contract.md) · [Evidence matrix](../../certification/evidence-matrix.md) · [Standards watch](../../docs/standards-watch.md).

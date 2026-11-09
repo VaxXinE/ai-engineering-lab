@@ -13,15 +13,15 @@
 
 ### 1. Mulai dari pekerjaan pengguna
 
-Operator ingin memproses pesan cepat tetapi tak ingin salah route. Supervisor ingin tahu mana pesan salah dan apakah koreksi diikuti. Developer butuh observability, bukan menambahkan segala grafik pada layar operator. Buat task decomposition: buka inbox → pahami konteks → lihat usulan AI → terima/tolak → konfirmasi perubahan → lanjut. Aksi paling penting harus jelas, sedangkan model version dan confidence teknis dapat masuk detail yang dapat dibuka (progressive disclosure).
+Energy analyst perlu menemukan pola konsumsi, operator perlu memeriksa kandidat anomali, maintainer memeriksa ingestion dan scoring availability. Flow utama: pilih site/meter → lihat tren `energy_kwh` per 15 menit → lihat konteks missing data → review anomaly candidate → konfirmasi keputusan → lihat audit history. Kualitas UX diukur dari kesalahan membaca satuan, waktu menemukan interval, keberhasilan review dan apakah status model dapat dibedakan dari keputusan manusia.
 
 ### 2. AI output dan ketidakpastian
 
-Label 'warning' dari classifier adalah saran, bukan fakta. Tampilkan sumbernya seperti 'Prediksi otomatis' serta status 'Belum ditinjau'. Jika abstain, gunakan 'Perlu klasifikasi manual', bukan 'Tidak ada masalah'. Hindari progress bar 98% karena relative_score bisa tidak terkalibrasi. Jika organisasi memakai confidence empiris, jelaskan metrik kalibrasi dan threshold decision yang didasarkan validasi.
+Numeric `anomaly_score` dalam rentang [0,1] adalah ranking yang didefinisikan model, **bukan** peluang kerusakan. Tampilkan candidate flag, model_version, pembanding historis dan quality flags. Jika `scoring_unavailable`, jangan tampilkan 'normal'. Jika interval hilang, tampilkan gap, bukan 0 kWh.
 
 ### 3. Human review sebagai control
 
-Human-in-the-loop efektif jika reviewer punya konteks dan waktu cukup. Jangan merancang tombol override tersembunyi atau hanya dapat diakses supervisor jika agen punya kewajiban mengecek prediksi. Saat override, catat label awal, label baru, alasan, actor, timestamp dan model_version; izin akses ditentukan server. Jika dua agen mengubah record bersamaan, berikan conflict resolution UX.
+Operator dapat memilih `confirmed_anomaly`, `expected_variation`, atau `needs_investigation`, dengan alasan. Simpan raw reading, anomaly score, dan review event secara terpisah. Jika dua operator mengedit event yang sama, tampilkan 409 conflict/reload sambil mempertahankan draft. Hindari tombol otomatis yang memutus listrik atau menyatakan kondisi berbahaya hanya dari skor.
 
 ### 4. UX states dan loss prevention
 
@@ -29,7 +29,7 @@ Loading, empty, error, unauthorized, stale data, konflik edit, dan network offli
 
 ### 5. Uji usability yang observable
 
-Definisikan task test: menemukan meter reading tidak terbaca, memperbaiki label salah, memulihkan pekerjaan setelah AI timeout. Catat success/assistance/error count, bukan hanya 'UI terasa nyaman'. Empat partisipan latihan tidak membuktikan fault usability; catat keterbatasan sampel. Uji screen reader dengan alat nyata ketika implementasi tersedia.
+Tugas uji: temukan meter MTR-001, jelaskan apakah titik 00.30 (5.9 kWh) berpotensi outlier, bedakan slot hilang dengan 0, lakukan review dan pulihkan draft setelah error. Ukur task success, salah baca unit, bantuan yang diperlukan, serta keyboard navigation. Sampel kecil memberi insight awal, bukan bukti usability universal.
 
 ## Aplikasi dalam AI Smart Energy Monitoring
 

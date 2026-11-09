@@ -1,59 +1,36 @@
-# Worked Examples — Struktur Data: memilih berdasarkan operasi dan beban
+# Worked Examples — Data Structures untuk Meter Readings
 
-Contoh **ilustratif** untuk pemahaman dan code review. Cuplikan kode tidak otomatis sudah dieksekusi di repository; saat praktikum jalankan unit/integration tests sebelum memberi status passed.
+## 1. Deduplikasi composite event identity
 
-## Contoh 1: Deduplikasi list vs set
-
-**Masalah:** Input sintetis IDs ['a','b','a','c','b']. Kebutuhan: 'first event wins' dan output tetap sesuai urutan pertama.
-
-**Solusi bertahap:**
-
-1. Solusi naïf: untuk setiap row, cari ID di daftar output; semakin besar n, worst case mendekati O(n²).
-
-2. Solusi terarah: siapkan seen=set() dan result=[]; jika id not in seen, tambahkan ke keduanya.
-
-3. Jalankan manual: 'a' masuk; 'b' masuk; 'a' skip; 'c' masuk; 'b' skip. Hasil ['a','b','c'].
-
-4. Kode ilustratif Python:
+Input: `[('A','M1','E1'),('A','M1','E2'),('A','M1','E1'),('B','M1','E1')]`.
 
 ```python
-rows = ['a', 'b', 'a', 'c', 'b']
-seen, unique = set(), []
-for key in rows:
-    if key not in seen:
-        seen.add(key)
-        unique.append(key)
-assert unique == ['a', 'b', 'c']
+rows = [('A','M1','E1'), ('A','M1','E2'), ('A','M1','E1'), ('B','M1','E1')]
+seen, output = set(), []
+for row in rows:
+    if row not in seen:
+        seen.add(row)
+        output.append(row)
+assert output == [('A','M1','E1'), ('A','M1','E2'), ('B','M1','E1')]
 ```
 
-**Kesalahan yang harus dihindari:** Mengubah seen menjadi penyimpanan nama device saja dapat menyatukan dua perangkat dengan nama sama; gunakan stable event ID.
+Dengan set, average runtime O(n) dengan tambahan memory O(n). Tanpa `site_id`, event SITE-B akan tertolak keliru. Kode ini **hanya untuk pembelajaran**; database UNIQUE tetap dibutuhkan pada sistem multi-worker.
 
-**Teach-back:** jelaskan mengapa langkah 1→2→3 menghasilkan solusi dan bagaimana kegagalannya diuji.
+## 2. Rolling window tanpa membaca masa depan
 
-## Contoh 2: Batch 1 juta event — memory versus streaming
+Data M1: kWh interval `[1.0, 1.1, 5.9, 1.2]`. Saat memberi skor untuk nilai 5.9 pada slot ketiga, gunakan history `[1.0,1.1]`; nilai 5.9 **jangan dimasukkan terlebih dahulu** ke window. Setelah memberi skor, window dapat diperbarui untuk interval berikutnya.
 
-**Masalah:** Dataset input 1.000.000 event_note, dengan batas memory kecil dan hanya perlu count per label.
+Contoh pseudocode:
 
-**Solusi bertahap:**
+```python
+from collections import deque
+history = deque(maxlen=2)
+for kwh in [1.0, 1.1, 5.9, 1.2]:
+    baseline = sum(history) / len(history) if history else None
+    print(kwh, baseline)  # illustrative; not a deployed detector
+    history.append(kwh)
+```
 
-1. Tidak perlu menyimpan semua row: iterasi satu record, validasi lalu perbarui Counter[label].
+**Batas:** jumlah slot, bukan waktu jika ada gap. Untuk rolling berbasis waktu, validasi kontinuitas timestamp; data terlambat dan out-of-order harus ditangani.
 
-2. Bila ada tiga label, memory aggregation mendekati konstan terhadap jumlah pesan (selain streaming buffers).
-
-3. Tetap terapkan batas ukuran satu field dan rate, karena satu record sangat besar dapat menghabiskan memory.
-
-4. Untuk dedup global per event ID, seen set O(n) memory; jika terlalu besar pindahkan uniqueness ke database dengan index.
-
-**Kesalahan yang harus dihindari:** Streaming tidak menghapus seluruh kebutuhan memory: parsing, buffering, dan ID set bisa tetap besar.
-
-**Teach-back:** jelaskan mengapa langkah 1→2→3 menghasilkan solusi dan bagaimana kegagalannya diuji.
-
-
-## Latihan dengan scaffolding berkurang
-
-1. **Worked:** baca contoh lengkap dan hitung/trace secara manual.
-2. **Faded:** ulangi dengan satu langkah kosong dan isi reasoning sendiri.
-3. **Independent:** ganti constraint (volume, concurrency, tenant, outage) dan susun solusi baru.
-4. **Evidence:** rekam hasil test nyata dan dampak trade-off di dalam PR.
-
-[Lihat latihan](exercises.md)
+[Data contract](../../docs/architecture/energy-data-contract.md) · [Latihan](exercises.md).

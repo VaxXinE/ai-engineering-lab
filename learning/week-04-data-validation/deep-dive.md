@@ -13,23 +13,23 @@
 
 ### 1. Dimensi kualitas data dan pengukuran
 
-Completeness menghitung kehadiran nilai wajib; validity memeriksa kesesuaian format/rentang; accuracy memerlukan pembandingan dengan fakta eksternal; consistency memastikan tidak bertentangan antar-field/sumber; uniqueness mengukur duplikat; timeliness mengukur kesegaran terhadap kebutuhan. Field email 'abc@example.test' mungkin valid sintaks tetapi belum tentu alamat nyata. Jangan menyimpulkan semua data berkualitas hanya dari valid rows yang lulus schema.
+Completeness untuk data meter adalah proporsi slot 15 menit yang benar-benar memiliki reading valid; validity memeriksa numerik finite, nonnegatif, timestamp timezone-aware serta durasi; consistency memeriksa meter/site dan satuan; uniqueness menolak kunci event ganda; timeliness memeriksa latency dari interval ke ingestion; accuracy memerlukan pembandingan dengan referensi yang dipercaya. **0 kWh valid berbeda dari missing interval**. Format yang dapat diparse bukan jaminan nilainya benar secara fisik.
 
 ### 2. Schema, semantic rules dan normalization
 
-Schema memeriksa tipe dan struktur; semantic rule menghubungkan data dengan konteks bisnis. received_at di masa depan bisa lolos parser ISO 8601 tetapi melanggar kebijakan platform. Tenant ID bisa berupa UUID valid namun tidak sah di organisasi tersebut; validasi authorization terpisah wajib. Normalisasi whitespace/case bermanfaat untuk dedup tetapi jangan mengubah raw text tanpa alasan karena bisa menghapus makna bahasa.
+Schema v1 memerlukan site_id,meter_id,source_event_id,interval_start_utc,interval_minutes,energy_kwh,voltage_v,current_a. Validasi semantik memastikan interval 15 menit, timestamp UTC/offset-aware dan aligned, nilai finite/nonnegatif serta meter terdaftar di site. Jangan menyamakan API authorization dengan validasi struktur; site membership tetap diverifikasi server-side.
 
 ### 3. Validation boundary dan fail-safe defaults
 
-Validasi paling awal dilakukan saat data masuk; aturan kritis juga ditegakkan di database dan pada output model. Return error yang dapat ditindaklanjuti per field, tetapi jangan membocorkan full event_note atau detail internal ke log. Untuk pipeline dengan data sebagian invalid, kebijakan quarantine atau reject dapat lebih aman daripada silent coercion (misalnya mengubah tanggal yang tak dapat diparse menjadi hari ini).
+Pisahkan parser CSV, schema validator, business rule dan database constraint. `NaN` dan `Infinity` harus ditolak secara eksplisit; nilai negatif bukan kWh konsumsi pada definisi v1. Jangan mengganti timestamp gagal parse dengan jam sekarang. Error report cukup row number dan error code; jangan mem-publish lokasi atau data asli.
 
 ### 4. Profiling dan quality gate
 
-Data profiling menghitung null, distribution per channel/label, panjang teks, jumlah duplikat, dan outliers. Gunakan per-metric numerator/denominator serta baseline. Reject rate 2% bukan selalu buruk dan 0% bukan selalu baik; mungkin filter terlalu permisif. Quality gate menggabungkan threshold, konsekuensi, exception workflow dan owner; hasilnya harus bisa direproduksi.
+Profile expected vs observed time slots, invalid numeric count, duplikat source_event_id, konflik payload, data arrival lateness dan missing intervals per meter. Quality gate memiliki threshold hipotesis, owner, dan tindakan reject/quarantine; bukan klaim benchmark resmi. Missing reading adalah data-quality issue, bukan anomali konsumsi `0`.
 
 ### 5. Data leakage dalam machine learning
 
-Leakage bukan hanya duplikat teks persis. Dataset bisa bocor jika preprocessing belajar statistik dari seluruh data sebelum split, data dari device yang sama tersebar di train dan test, atau fitur mengandung informasi tentang label masa depan. Split berdasarkan group atau waktu ketika relevan. Jangan terus tuning menggunakan test set karena ia berubah menjadi sumber keputusan model.
+Karena meter menghasilkan deret waktu, evaluasi perlu split kronologis (train→validation→test). Fit scaler/threshold pada train/validation saja, dan rolling feature untuk interval t hanya boleh memakai interval sebelum t. Jangan memakai pola label anomali masa depan untuk memutuskan fitur saat training.
 
 ### 6. Privasi, anonymization dan retention
 

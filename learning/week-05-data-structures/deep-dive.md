@@ -21,11 +21,11 @@ Big-O berbicara tentang pertumbuhan, bukan benchmark detik. Deduplikasi nested-l
 
 ### 3. Aggregation tanpa memori berlebih
 
-Record bisa diproses streaming menggunakan iterator ketika file besar. Untuk ringkasan count per kelas, gunakan Counter tanpa menyimpan semua event_note. Namun jika perlu audit full row, catat storage persisten yang sesuai dan retention, bukan memori proses. Chunk processing harus menjaga consistency boundary dan checksum serta mampu resume dari checkpoint.
+Untuk agregasi energi gunakan dict keyed (site_id,meter_id) dan sum(energy_kwh) atas readings valid, serta deque untuk sliding windows berdasarkan waktu. Count per kelas text classifier bukan fitur inti modul ini. Streaming mengurangi memory, tetapi out-of-order timestamps memerlukan kebijakan buffering atau sorting. Semua agregasi wajib melaporkan coverage ketika ada missing intervals.
 
 ### 4. Unicode dan normalization
 
-Casefold lebih kuat daripada lower untuk beberapa teks, tetapi normalisasi tidak boleh diam-diam membuang makna. Misal 'refund' dan 'refund?' dapat dianggap setara untuk dedup tertentu, tetapi angka transaksi mungkin penting. Selalu bedakan identitas record (event_id) dari kemiripan isi pesan; dua perangkat mengirim teks yang sama bukan berarti event yang sama.
+Identity untuk meter reading adalah (site_id,meter_id,source_event_id), bukan kesamaan teks, nama, atau nilai kWh. Dua site bisa memiliki meter_id yang sama; source_event_id yang sama tapi payload berbeda harus menjadi conflict. Normalisasi ID harus didefinisikan pada source contract, jangan otomatis menghapus karakter penting.
 
 ### 5. Concurrency dan security
 

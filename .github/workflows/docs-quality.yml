@@ -5,11 +5,17 @@ on:
     paths:
       - '**/*.md'
       - 'scripts/check_curriculum.py'
+      - 'scripts/check_use_case.py'
+      - 'scripts/check_energy_integrity.py'
+      - 'tests/**'
       - '.github/workflows/docs-quality.yml'
   pull_request:
     paths:
       - '**/*.md'
       - 'scripts/check_curriculum.py'
+      - 'scripts/check_use_case.py'
+      - 'scripts/check_energy_integrity.py'
+      - 'tests/**'
       - '.github/workflows/docs-quality.yml'
 
 permissions:
@@ -30,5 +36,9 @@ jobs:
           python-version: '3.13'
       - name: Check curriculum structure and links
         run: python scripts/check_curriculum.py
-      - name: Check use-case consistency
+      - name: Check legacy domain references
         run: python scripts/check_use_case.py
+      - name: Check energy data/schema integrity
+        run: python scripts/check_energy_integrity.py
+      - name: Run numeric-documentation QA tests
+        run: python -m unittest discover -s tests -v

@@ -13,23 +13,23 @@
 
 ### 1. Model konseptual → fisik
 
-Entitas inti: Tenant, User, MeterReading, Prediction, ModelVersion, ReviewEvent dan IngestionBatch. One-to-many: Tenant→MeterReading, MeterReading→Prediction, MeterReading→ReviewEvent. Prediction mengacu ModelVersion supaya hasil historis dapat ditelusuri setelah upgrade. Tentukan arti status dan owned_by. Jangan menggabungkan semua entitas ke satu tabel dengan banyak nullable columns karena mempersulit integrity.
+Entitas utama: Site, Meter, MeterReading, IngestionBatch, ModelVersion, AnomalyEvent, ReviewEvent, dan ReviewerMembership. Site→Meter; Meter→MeterReading; MeterReading→AnomalyEvent; AnomalyEvent→ReviewEvent. ModelVersion melekat pada AnomalyEvent agar skor tetap dapat diaudit saat model berubah. Review tidak boleh mengubah `energy_kwh` asli.
 
 ### 2. Constraints sebagai kontrak bisnis
 
-Primary key mengidentifikasi baris; foreign key memastikan relasi sah; UNIQUE(tenant_id, source_event_id) melindungi idempotency; CHECK dapat memvalidasi status dan rentang; NOT NULL menjaga field wajib. Validasi aplikasi memberi feedback cepat, sedangkan DB constraint melindungi dari bug/race dan jalur import lain. Gunakan migration version supaya perubahan schema repeatable.
+Kunci unik ingestion: `UNIQUE(site_id,meter_id,source_event_id)`; meter_id boleh berulang antar-site. Foreign key perlu memastikan meter berada pada site yang dirujuk, `energy_kwh>=0`, `interval_minutes=15` serta waktu UTC pada layer parsing. DB tidak menggantikan pemeriksaan `NaN`/infinity secara eksplisit. Gunakan migration untuk schema evolution dan FK constraints sebagai garis pertahanan race.
 
 ### 3. Isolation dan lost update
 
-Dua operator dapat mengambil meter reading yang sama. Tanpa version checking, penyimpanan kedua menimpa perubahan pertama. Optimistic lock menambah row version dan update WHERE id=? AND version=?; jika affected_rows=0, return conflict dan tawarkan reload/merge. Transaction memastikan review event dan perubahan status terjadi atomik.
+Dua operator mungkin review AnomalyEvent yang sama, bukan mengedit reading mentah. Gunakan optimistic version pada review state dan insert ReviewEvent dalam transaksi atomik. Jika UPDATE WHERE version=? tidak mengubah baris, balas conflict dan pertahankan draft operator.
 
 ### 4. Object-level authorization dan multi-tenancy
 
-Endpoint /meter readings/{id} harus membatasi WHERE id = ? AND tenant_id = authorized_tenant, bukan hanya memeriksa user login. Gunakan least-privilege DB credentials dan separate permission untuk worker versus operator. Test silang tenant dengan dua organisasi sintetis; jangan menganggap UUID acak sebagai security control.
+Route `/api/v1/sites/{site_id}/meters/{meter_id}/readings` memerlukan authenticated site membership dan verifikasi meter dalam site. Query by-ID juga harus scope by site; UUID tidak menggantikan authorization. Uji SITE-A tidak dapat membaca atau mengubah anomali SITE-B.
 
 ### 5. Query performance dan indexing
 
-Index tenant_id + created_at mempercepat inbox filter per tenant; indeks semua kolom justru menambah write cost. EXPLAIN dan benchmark perlu data representatif; untuk lab ukur pada sintetis dengan keterbatasan. Simpan query plan dan catat cardinality.
+Untuk time-series, index komposit `(site_id,meter_id,interval_start_utc)` mendukung query rentang waktu per meter; EXPLAIN dan benchmark diperlukan dengan data sintetis representatif. Jangan mengindeks semua kolom tanpa alasan; setiap index meningkatkan biaya storage dan write.
 
 ### 6. Backup dan migration evolution
 

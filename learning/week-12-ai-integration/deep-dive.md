@@ -11,7 +11,7 @@
 
 ### 1. Tentukan dua kontrak berbeda
 
-Kontrak inference menerima validated event_note dan menghasilkan PredictedLabel + model_version + diagnostic metadata. Kontrak review menerima keputusan operator untuk object tertentu dengan identity/permission. Jangan membiarkan model menghasilkan user_id, tenant_id, atau access control decision. Output LLM ataupun model lokal harus divalidasi terhadap enum, batas panjang dan tipe; invalid output bukan kesalahan user.
+Numerical scoring menerima verified meter reading features + history, mengembalikan finite normalized `anomaly_score` [0,1], `flagged`, `model_version`, dan reason codes. Review API menerima keputusan operator atas AnomalyEvent. Auth context/site membership berasal dari backend; AI **tidak** boleh mengembalikan user/site permissions. Week 01 `normal/warning/fault` adalah text-lab terpisah.
 
 ### 2. Model API sebagai dependency yang bisa gagal
 
@@ -19,15 +19,15 @@ Provider bisa timeout, 429, 5xx, response berubah, version deprecated, atau toke
 
 ### 3. Simpan input dahulu, prediksi kemudian
 
-Jika pesan diterima sebelum inference, persist meter reading dengan status pending. Setelah hasil valid, tambahkan prediction event dan status review. Saat inference gagal, meter reading tetap ditampilkan di manual review. Jika background worker digunakan, idempotency dan outbox atau reconciliation menjadi isu penting agar tidak ada double event setelah retry.
+Ingestion menyimpan valid `MeterReading` dengan `pending_scoring`. Scoring berhasil menambah `AnomalyEvent` append-only; timeout atau invalid response menghasilkan `scoring_unavailable` tanpa menghapus sumber. Bounded retry/queue didesain idempotent; human review tetap tersedia.
 
 ### 4. Boundary security dan injection
 
-Teks device adalah untrusted data; jika dimasukkan sebagai prompt LLM, ia dapat mengandung instruksi malicious yang meminta model mengabaikan aturan. Jangan menjadikan system prompt sebagai authorization; tools hanya boleh memiliki izin minimal dan tidak boleh mengambil data tenant lain. Secrets tetap di server. Sebelum menyimpan keluaran, lakukan output parsing, business validation dan escaping di UI.
+CSV dan model output dianggap untrusted. Validasi NaN/infinity, allowed score range, model_version, source identity dan role/site authorization; jangan memberi skor kemampuan mengubah izin atau mengendalikan listrik. Jika suatu saat memakai LLM untuk merangkum analisis, prompt injection ditangani sebagai risiko tambahan tanpa menukar authorization dengan system prompt.
 
 ### 5. Testing contracts dan observed behavior
 
-Lakukan contract tests untuk normal label, abstain, invalid enum, unexpected nesting, missing model_version, timeout dan rate limit. Gunakan fake adapter agar tests deterministik dan tidak bergantung biaya/provider. API tests juga harus memverifikasi akses tenant cross-user dan tidak kehilangan meter reading saat model outage.
+Contract tests: valid finite score, NaN/inf, <0/>1, missing model_version, malformed structure, timeout/429/5xx. Integration tests juga memverifikasi object-scoped authorization, accepted reading tetap tersimpan, review audit append-only, dan tidak ada duplikat pada retry.
 
 ## Checklist penalaran
 

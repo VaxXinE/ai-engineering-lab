@@ -11,7 +11,7 @@
 
 ### 1. Service health bukan model quality
 
-HTTP availability 99.9% hanya berarti endpoint banyak berhasil melayani request, bukan kategorinya benar. Untuk AI device triage, ukur API error, p95 latency, queue backlog, abstention, disagreement dari human review dan per-class misrouting setelah label diverifikasi. Jangan memakai unverified review sebagai ground truth tanpa aturan; perubahan perilaku reviewer dapat menipu quality signal.
+Endpoint bisa 200 walau kandidat anomali keliru. Pantau API error, P95 latency, import reject rate, missing-slot coverage, `scoring_unavailable`, alert volume dan review decisions yang telah diverifikasi. Jangan menyamakan operator override ratio dengan ground-truth error rate tanpa label policy.
 
 ### 2. SLI, SLO dan SLA
 
@@ -19,7 +19,7 @@ SLI adalah metrik operasional, misalnya jumlah request valid yang sukses / reque
 
 ### 3. Drift dan feedback loop
 
-Data drift adalah perubahan distribusi input; concept drift adalah perubahan hubungan fitur dengan target. Kata baru dalam catatan kejadian perangkat adalah potensi drift, tetapi belum membuktikan penurunan kualitas model. Teliti label policy, per-class metrics dan sampel baru yang representatif sebelum memutuskan retrain. Retraining otomatis dapat memperburuk model dan memasukkan feedback bias.
+Data drift bisa berupa perubahan musiman, pola per meter, durasi interval, distribusi kWh, atau missing rate; concept drift adalah hubungan fitur-label berubah. Kenaikan flagged events tidak membuktikan model memburuk tanpa audit label dan input quality. Threshold harus dinilai dari data dan per-meter context, bukan langsung retrain otomatis.
 
 ### 4. Risk-oriented maintenance calendar
 

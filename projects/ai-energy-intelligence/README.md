@@ -25,14 +25,14 @@ Menggabungkan dua kelompok kemampuan BNSP:
 | Field | Contoh | Validasi |
 | --- | --- | --- |
 | meter_id | MTR-001 | ID alat terdaftar pada site simulasi |
-| timestamp | 2026-01-01T00:00:00Z | Format timezone-aware dan interval jelas |
+| interval_start_utc | 2026-01-01T00:00:00Z | Awal interval UTC, offset-aware dan aligned |\n| interval_minutes | 15 | Durasi 15 menit untuk schema v1 |
 | energy_kwh | 1.42 | Angka finite dan tidak negatif; kebijakan nilai batas sesuai dataset |
 | voltage_v | 229.5 | Angka finite, range simulasi didefinisikan di data dictionary |
 | current_a | 6.2 | Angka finite dan tidak negatif |
 | site_id | SITE-A | Scope akses data yang sah |
-| source_event_id | E-00001 | Idempotency key per meter dan sumber |
+| source_event_id | E-00001 | Identitas unik per (site_id,meter_id) |
 
-Catatan: `energy_kwh` diasumsikan **konsumsi per interval**, bukan nilai kumulatif meter. Jangan membandingkan dua definisi pengukuran yang berbeda tanpa normalisasi.
+Catatan: schema v1 memiliki **8 kolom** menurut [kontrak domain](../../docs/architecture/energy-data-contract.md); `energy_kwh` diasumsikan **konsumsi per interval**, bukan nilai kumulatif meter. Jangan membandingkan dua definisi pengukuran yang berbeda tanpa normalisasi.
 
 ## Fitur wajib (rencana)
 
@@ -43,7 +43,7 @@ Catatan: `energy_kwh` diasumsikan **konsumsi per interval**, bukan nilai kumulat
 5. Dashboard grafik kWh, perbandingan periode, kualitas data, dan filter meter.
 6. AI **anomaly candidate detection** untuk interval penggunaan tidak biasa; bandingkan dengan baseline deterministik.
 7. Penjelasan anomali: meter, waktu, nilai, model_version, dan kondisi kualitas data.
-8. Human review: valid anomaly / expected variation / insufficient data, beserta audit trail.
+8. Human review: confirmed_anomaly / expected_variation / needs_investigation, beserta audit trail.
 9. Safe fallback ketika model offline; **pembacaan valid tidak hilang** dan tidak dibuat alert palsu.
 10. Automated tests, service health, safe logs, deployment lokal, backup dan restore rehearsal.
 

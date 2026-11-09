@@ -5,7 +5,7 @@
 
 **Status materi:** siap dipelajari · **Status implementasi:** belum dikerjakan · **Estimasi:** 8–10 jam
 
-**Acuan unit:** Konsolidasi bukti dua skema terpisah; bukan unit kompetensi tersendiri.. Kode unit dan KUK final memerlukan konfirmasi LSP.
+**Acuan unit:** Konsolidasi bukti dua skema terpisah; bukan unit kompetensi tersendiri. Kode unit dan KUK final memerlukan konfirmasi LSP.
 
 **Tujuan:** Menyiapkan evidence matrix yang akurat, demonstrasi sistem, wawancara teknis, dan gap analysis untuk asesor LSP.
 

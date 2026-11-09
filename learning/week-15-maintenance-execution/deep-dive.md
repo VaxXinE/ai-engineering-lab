@@ -19,7 +19,7 @@ Gunakan request_id yang aman untuk menelusuri browser→API→inference→DB. Lo
 
 ### 3. Human fallback and containment
 
-Jika model hasilnya tidak tepercaya, hentikan auto-route dan tampilkan manual review untuk pesan baru. Jangan menghapus meter readings yang sedang menunggu. Untuk kemungkinan credential leak, containment mencakup revoke/rotate dengan prosedur yang benar, audit access dan komunikasi; jangan mem-push contoh token ke issue publik.
+Ketika anomaly scorer tidak tersedia atau tidak tepercaya, hentikan penandaan otomatis dan gunakan `scoring_unavailable` dengan manual review. **Reading valid tetap tersimpan.** Jika model memberi skor tinggi, itu bukan alasan menjalankan perintah kelistrikan. Saat credential bocor, lakukan containment/revocation melalui prosedur yang tepat dan jangan membagikan token pada issue publik.
 
 ### 4. Restore di environment berbeda
 
@@ -27,7 +27,7 @@ Jalankan restore snapshot ke isolated DB, verifikasi schema, row count, sample r
 
 ### 5. Model rollback dan regression
 
-Pilih model release sebelumnya dengan fingerprint dan feature schema kompatibel. Jalankan held-out test untuk correctness dan smoke test untuk connectivity. Perbedaan score/label bisa berasal data drift bukan binary deployment, sehingga catat semuanya. Pastikan rollback tidak menghapus audit history hasil model baru.
+Rollback memilih model artifact versi sebelumnya dengan schema/feature mapping yang kompatibel. Jalankan held-out numeric anomaly evaluation, smoke tests, dan cross-site access checks. Review history dan `energy_kwh` asli tidak dihapus. Kenaikan alert bukan otomatis bukti drift; diagnosis diperlukan.
 
 ### 6. Postmortem dan technical debt
 

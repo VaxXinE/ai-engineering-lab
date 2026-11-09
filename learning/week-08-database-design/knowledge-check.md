@@ -5,7 +5,7 @@ Jawab tanpa melihat teori. Setelah itu bandingkan dengan pembahasan; jawab *meng
 ## Pertanyaan
 
 1. Mengapa prediction perlu model_version?
-2. Apa fungsi UNIQUE(tenant_id, source_event_id)?
+2. Apa fungsi UNIQUE(site_id,meter_id,source_event_id)?
 3. Apa yang terjadi jika optimistic lock UPDATE affected 0?
 4. Mengapa FK tidak bisa diganti sekadar validasi frontend?
 5. Bagaimana mencegah IDOR?
@@ -15,13 +15,13 @@ Jawab tanpa melihat teori. Setelah itu bandingkan dengan pembahasan; jawab *meng
 
 **1.** Agar hasil dapat dijelaskan dan direproduksi menurut model yang dipakai saat itu.
 
-**2.** Mencegah duplikat event pada tenant yang sama tanpa membatasi tenant lain.
+**2.** Mencegah duplikat event per site dan meter; ID meter boleh berulang antar-site, sedangkan payload konflik pada identity sama perlu ditolak.
 
 **3.** Konflik atau row tidak ada; backend harus membedakan authorization/not found/conflict secara aman.
 
 **4.** Frontend bisa dilewati dan concurrent writer dapat melanggar integritas.
 
-**5.** Server memeriksa izin object dan tenant pada query serta menguji cross-tenant access.
+**5.** Server memeriksa izin object dan site pada query serta menguji cross-tenant access.
 
 **6.** Untuk menjaga historical traceability, review quality dan investigasi incident.
 

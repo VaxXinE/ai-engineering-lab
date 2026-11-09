@@ -1,44 +1,33 @@
-# Teori — Model Evaluation, Error Analysis & AI Quality Gates
+# Teori — Evaluation of Numeric Energy Anomaly Detectors (Week 11)
 
-**Hasil belajar:** Mengembangkan baseline text classifier dan mengukur kualitas hasil secara disiplin sebelum mengintegrasikannya ke API.
+**Outcome:** mengevaluasi baseline robust statistik dan kandidat anomaly model numerik secara time-aware, tanpa mencampurnya dengan text classifier.
 
-## 1. Model lifecycle dan baseline
+## 1. Definisikan anomali secara operasional
 
-Mulai dari rule-based dan Naive Bayes Week 01 sebagai baseline. Model baru dinilai lebih baik jika melampaui baseline pada metrik yang relevan dan biaya yang dapat diterima. Jangan memperumit dengan deep learning atau LLM tanpa evidence; evaluasi penggunaan pretrained model versus training ulang berdasarkan data yang tersedia.
+Anomali adalah interval yang **tidak biasa relatif terhadap pola pembanding**, bukan bukti pencurian, kerusakan atau bahaya listrik. Contoh 5.90 kWh pada 00:30 bisa wajar jika mesin tertentu mulai bekerja. Kriteria harus didasarkan distribusi historis per meter, weekday/hour patterns dan data quality.
 
-## 2. Data splitting dan experimental discipline
+## 2. Baseline vs model
 
-Pisahkan train/validation/test: train untuk fitting, validation untuk hyperparameter selection, test sebagai evaluasi final. Data kecil mudah overfit dan noisy; gunakan cross-validation pada train/validation, lalu satu held-out evaluation. Group split diperlukan bila pesan dari device yang sama berkorelasi; time split bila perilaku berubah dari waktu ke waktu.
+Bandingkan rolling median/IQR yang mudah dijelaskan dengan Isolation Forest, yang menghasilkan ranking berdasarkan isolation-path. **Raw `decision_function` bukan probabilitas**, dan tidak otomatis bisa disamakan dengan skor [0,1]. Adapter harus mendokumentasikan mapping atau gunakan raw score terpisah. LLM teks bukan default scorer untuk angka kWh time-series.
 
-## 3. Metrics beyond accuracy
+## 3. Time-aware split
 
-Pada tiga kelas, lihat precision dan recall per class, macro F1, confusion matrix serta abstention/rejection rate. Cost-sensitive decisions bisa memprioritaskan warning recall jika salah menyalurkan anomali mahal. Calibration dibutuhkan bila skor akan ditampilkan sebagai probabilitas; jangan mengubah softmax score menjadi jaminan.
+Split chronologically train→validation→held-out test. Fitur rolling pada waktu `t` hanya boleh memakai pengamatan sebelumnya; scaler/model fit di train, threshold dipilih validation, test hanya evaluasi final. Bila meter/situs memiliki perilaku berbeda, evaluasi per-meter dan per-site serta coverage—jangan membiarkan satu kelompok dominan menyamarkan kesalahan.
 
-## 4. Error taxonomy dan model card
+## 4. Metrik sesuai tugas
 
-Kelompokkan kesalahan menjadi keyword ambiguity, typos, novel vocabulary, mixed intent, label noise, dan drift. Simpan model version, data source, split method, metric, limitations dan intended use. Hindari menyimpan example text sensitif dalam artifact publik.
+Jika generator menyisipkan spike dan memberikan label sintetis secara jelas, evaluasi binary anomaly precision, recall, F1, confusion matrix dan alert rate. Tanpa labels, jangan klaim supervised accuracy atau F1 dari ranking unsupervised. Hasil numerik pada simulasi hanya mengukur kemampuan menemukan pola injeksi generator, bukan generalisasi ke sensor lapangan.
 
-## 5. Safety dan model artifact provenance
+## 5. Feature integrity
 
-Data poisoning dapat muncul dari data tidak tepercaya. Jangan deserialize pickle/joblib dari sumber asing di production tanpa trust; format ini dapat menjalankan kode. Validasi provenance model artifact, dependency version, file hash dan permission storage. Benchmark kualitas tanpa threat model belum cukup untuk deploy.
+Validasi `energy_kwh`, `interval_minutes`, UTC, missing slots, outliers, dan duplicate IDs. Jangan imputasi missing menjadi 0 tanpa alasan: bisa membuat model mendeteksi anomali palsu. `voltage_v` dan `current_a` juga contoh simulasi; jangan menyimpulkan keselamatan dengan rumus V×A sederhana.
 
-## Skenario rekayasa perangkat lunak
+## 6. Model card dan keamanan
 
-Model Week 01 menghasilkan 77.78% accuracy pada hanya 18 sampel sintetis. Evaluasi lanjutan perlu memperluas data dan memisahkan validation dari test, bukan mengulang banyak perubahan sampai 18 sampel tersebut cocok.
+Catat generator seed/version, schema, train/validation/test periods, fitur, baseline, hyperparameter, thresholds, quality metrics, failure cases, artifact hash dan dependency versions. Jangan memuat pickle/joblib yang tidak dipercaya. Kualitas model perlu re-evaluasi ketika data distribution berubah.
 
-## Prinsip dan acceptance criteria
+**Pemisahan:** Week 01 = supervised klasifikasi catatan teks `normal/warning/fault`; Week 11 = numerical time-series anomaly detection. Keduanya hanya berbagi prinsip evaluasi, bukan label/output model yang sama.
 
-- Model dievaluasi pada set yang tidak digunakan untuk train/tuning.
-- Metrik yang dipilih berhubungan dengan dampak bisnis salah klasifikasi.
-- Semua hasil yang dilaporkan benar-benar diukur dan dapat direproduksi.
-- Model card menyebut limitasi data sintetis dan risiko domain shift.
+[Numeric deep dive](deep-dive.md) · [Worked examples](worked-examples.md) · [Lab](lab-guide.md).
 
-## Dokumentasi primer untuk pendalaman
-
-- https://scikit-learn.org/stable/modules/cross_validation.html
-- https://scikit-learn.org/stable/modules/model_evaluation.html
-- https://scikit-learn.org/stable/common_pitfalls.html
-
-Penjelasan ini mengaitkan materi praktik dengan unit yang dipublikasikan LSP. Ini bukan reproduksi KUK resmi dan tidak menentukan hasil asesmen.
-
-[Praktikum](lab-guide.md)
+Referensi: [scikit-learn outlier detection](https://scikit-learn.org/stable/modules/outlier_detection.html), [time-series split](https://scikit-learn.org/stable/modules/generated/sklearn.model_selection.TimeSeriesSplit.html).

@@ -1,52 +1,44 @@
-# Praktikum — Week 06: User Experience for AI-Assisted Workflows
+# Praktikum Terstruktur — UX analis energi dan review kandidat anomali
 
-**Status:** rancangan latihan. Belum ada klaim bahwa langkah di bawah berhasil dijalankan.
+**Status:** tugas **direncanakan**; implementasi Week 03–12 belum dijalankan. Semua input, site, meter dan timeseries adalah sintetis.
 
-## Konteks
+## Problem dan konteks profesional
 
-Jika prediksi 'warning' salah dan operator memilih 'normal', tampilkan 'Label diperbarui' plus riwayat audit. Jangan diam-diam menghilangkan prediksi awal: itu merusak ability to evaluate model.
+Pada 00:30 meter MTR-001 mencatat 5.90 kWh, jauh lebih tinggi dari dua interval sebelumnya, tetapi belum ada bukti kerusakan. Operator perlu konteks dan jalur review.
 
-**Prasyarat:** Use-case Week 01 dan acceptance criteria capstone.  
-**Dataset:** data sintetis dari capstone; jangan memakai data perusahaan atau kredensial sungguhan.
+**Single source of truth:** [kontrak domain](../../docs/architecture/energy-data-contract.md) · [threat model](../../docs/architecture/threat-model.md). Jangan mencampur kontrak klasifikasi log teks Week 01 dengan data anomaly scoring numerik Week 11–12.
 
-## Langkah kerja
+## Langkah yang akan diimplementasikan saat sesi praktik
 
-1. Buat dua persona singkat: operator dan supervisor, termasuk pain points dan hak akses.
+1. Petakan persona energy analyst/operator dan tugas: melihat tren, memilih site/meter, membaca kandidat anomali, memeriksa data quality, membuat keputusan review.
 
-2. Petakan journey dari incoming meter reading, AI prediction, review, override, submit, dan audit trail.
+2. Gambar empat layar: Overview Energy, Meter Detail Chart, Anomaly Review Queue, dan Review History; bukan inbox pesan.
 
-3. Gambar wireframe Inbox, Detail, Review Queue, dan Empty/Error state memakai alat pilihan.
+3. Pada chart, visualisasikan data kWh per 15 menit; tooltips berisi satuan, rentang waktu, source quality, dan versi model.
 
-4. Prototipe alur ketika prediksi abstain dan ketika inference service timeout.
+4. Bedakan status missing interval (gap) dari 0 kWh; bedakan anomaly candidate dari confirmed anomaly.
 
-5. Buat kriteria usability (dapat menemukan unread meter readings, review tanpa kehilangan draft, melihat status model) dan tiga task test.
+5. Rancang review decisions confirmed_anomaly/expected_variation/needs_investigation dan display audit append-only.
 
-6. Evaluasi minimum keyboard navigation, label controls, semantic alerts, dan keterbacaan.
+6. Uji task flow menggunakan keyboard; desain state loading, empty, scoring_unavailable, conflict/403 dan error retry tanpa hilang draft.
 
-## Test plan minimal
+## Acceptance criteria (belum dicentang)
 
-1. Operator bisa menemukan 1 meter reading tanpa tersesat.
-2. Pada timeout AI, data pesan tetap terlihat dan aksi manual tersedia.
-3. Semua input punya label yang jelas dan fokus keyboard terurut.
-4. Status 'abstain' tidak keliru ditampilkan sebagai kepastian.
+- [ ] Analis dapat menemukan meter dan anomali tanpa salah membaca satuan.
+- [ ] Prediksi model tidak diperlakukan sebagai fakta listrik atau instruksi pengendalian.
+- [ ] Missing slot dan zero-value jelas berbeda.
+- [ ] UI dapat dipakai tanpa mouse untuk task inti.
 
-## Acceptance criteria
+## Evidence yang harus dibuat
 
-- [ ] Journey memuat alur sukses, error, dan manual override.
-- [ ] Prediksi AI dibedakan dari keputusan manusia.
-- [ ] Wireframe mencakup loading/empty/error state dan aksesibilitas.
-- [ ] Ada minimal tiga task usability dengan success criteria.
+Persona, user journey, wireframes, task-based UX checklist, accessibility review.
 
-## Bukti yang disimpan setelah praktik
+Saat praktik: catat input sintetis, expected behavior, actual output, command+versi runtime, error/negative tests, keamanan, dan link commit. Jangan mengarang skor model, latency, atau status passed.
 
-1. Source code / artefak desain serta alasan keputusan yang dibuat sendiri.
-2. Cara menjalankan atau mereproduksi hasil (versi environment dan perintah aktual).
-3. Test report: perintah, hasil sesungguhnya, sampel negatif dan edge cases.
-4. Analisis risiko keamanan, privasi, performa, serta keterbatasan yang belum ditangani.
-5. Link PR/commit ke [matriks bukti](../../certification/evidence-matrix.md).
+## Pertanyaan transfer
 
-## Syarat selesai
+Kenapa status kandidat anomali tidak boleh langsung ditampilkan sebagai 'meter rusak'?
 
-**Belum selesai** hanya dengan membaca dokumen ini. Tandai selesai setelah implementasi diverifikasi dan evidence tersimpan; uji kompetensi BNSP tetap dilakukan oleh LSP yang berwenang.
+**Definition of done:** seluruh acceptance criteria diverifikasi dengan artefak sendiri, bukan sekadar dokumentasi ini; status BNSP tetap memerlukan asesmen resmi LSP.
 
-[Latihan tambahan](exercises.md) · [Simulasi asesmen](assessment.md)
+[Latihan](exercises.md) · [Knowledge check](knowledge-check.md) · [Evidence matrix](../../certification/evidence-matrix.md)

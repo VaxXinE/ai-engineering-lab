@@ -1,65 +1,37 @@
-# Worked Examples — Arsitektur AI yang isolasi kegagalan dan tanggung jawabnya jelas
+# Worked Examples — Failure Containment dan Scoring Port
 
-**Semua cuplikan/angka adalah demonstrasi edukatif**, bukan bukti sudah diimplementasikan atau dideploy pada capstone. Jalankan dan catat hasil sebenarnya ketika masuk sesi praktikum.
+## 1. Score-independent reading persistence
 
-## Solusi 1: Alur error AI pada modular monolith
+**Skenario:** `POST /api/v1/import-batches` menerima reading valid, tetapi anomaly scorer timeout.
 
-**Masalah:** Create meter reading sukses menyimpan data, tetapi inference timeout.
+1. Authenticated import checks site membership and schema.
+2. DB commits `MeterReading` with `pending_scoring`, including UTC interval and kWh.
+3. Scorer adapter times out; system marks `scoring_unavailable` and retains the accepted reading.
+4. Operator sees time-series with reading present; review queue can handle missing scoring.
+5. Test fake scorer timeout and assert reading count unchanged; verify no false `normal` label was fabricated.
 
-**Tahapan pemecahan:**
+**Anti-pattern:** holding a DB transaction open during a long external inference call or deleting readings when the model fails.
 
-1. Browser mengirim POST /meter readings dengan autentikasi; backend memvalidasi tenant dan payload.
-
-2. Database menyimpan meter reading status=pending_inference dan commit. Model dipanggil lewat interface dengan timeout.
-
-3. Saat timeout, backend tidak menghapus meter reading; status pending_manual_review atau pending_retry sesuai kebijakan.
-
-4. Operator dashboard tetap menampilkan pesan dan memungkinkan review manual. Correlation ID membantu tracing.
-
-5. Skenario diuji dengan fake adapter yang selalu timeout, bukan mematikan provider produksi.
-
-**Anti-pattern:** Buruk: transaksi DB dibuka selama menunggu model remote lama, lalu timeout mengunci resource atau menghilangkan pesan.
-
-**Explain-back:** bagaimana cara membuat negative test untuk membuktikan anti-pattern tersebut?
-
-## Solusi 2: Merancang port aplikasi dengan code contract
-
-**Masalah:** Model lokal akan diganti model API, tetapi UI dan domain business rules tak boleh berubah.
-
-**Tahapan pemecahan:**
-
-1. Contoh Python interface ilustratif:
+## 2. Stable port for model substitution
 
 ```python
-from typing import Protocol, Literal
+from typing import Protocol
 from dataclasses import dataclass
 
-Label = Literal['normal','warning','fault','abstain']
-
 @dataclass(frozen=True)
-class Prediction:
-    label: Label
+class AnomalyResult:
+    anomaly_score: float  # finite, normalized [0,1]; validate at adapter boundary
+    flagged: bool
     model_version: str
 
-class Classifier(Protocol):
-    def predict(self, text: str) -> Prediction: ...
+class AnomalyScorer(Protocol):
+    def score(self, history: list[float], current_kwh: float) -> AnomalyResult: ...
 ```
 
-2. Domain memanggil Classifier, bukan sdk.telemetri.completions.create secara langsung.
+Pilih rule baseline atau ML adapter tanpa mengubah review API. Sebelum menyimpan output, enforce finite score, model version, dan site-scoped authorization di backend.
 
-3. Adapter baru wajib lulus contract test label enum, model_version, input limits dan timeout behavior.
+## 3. Trust boundary checklist
 
-4. UX tidak perlu tahu provider model; output tetap kontrak domain yang sama.
+Browser cannot authorize itself. CSV is untrusted. Model output is untrusted. DB is source of record for site/meter permissions. No model output can trigger electrical actuation. Draw success and timeout sequence diagrams and attach actual test outcomes after implementation.
 
-**Anti-pattern:** Jika provider-specific JSON tersebar di controller dan frontend, migrasi provider menyebabkan breaking change luas.
-
-**Explain-back:** bagaimana cara membuat negative test untuk membuktikan anti-pattern tersebut?
-
-## Progressive practice
-
-- **Demonstrate:** trace contoh dengan input dan output yang diketahui.
-- **Faded:** ganti satu parameter dan isi satu langkah yang sengaja dihilangkan sendiri.
-- **Independent:** rancang kasus lain yang menuntut trade-off berbeda.
-- **Verify:** jalankan test, simpan version/command/output aktual; jangan mengarang benchmark.
-
-[Quiz dengan feedback](knowledge-check.md)
+[Domain contract](../../docs/architecture/energy-data-contract.md) · [Threat model](../../docs/architecture/threat-model.md).

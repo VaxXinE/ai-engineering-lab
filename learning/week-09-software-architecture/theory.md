@@ -1,44 +1,31 @@
-# Teori — Software Architecture for AI-Enabled Applications
+# Teori — Arsitektur AI Smart Energy Monitoring (Week 09)
 
-**Hasil belajar:** Merancang batas komponen, contract API, alur data, failure handling dan desain yang tetap fleksibel saat model AI berubah.
+**Outcome:** merancang API, domain service, inference adapter dan storage yang mempertahankan data meter saat model gagal, dengan trust boundaries jelas.
 
-## 1. Modular monolith as baseline
+## 1. Modular monolith first
 
-Arsitektur tidak selalu harus microservices. Modular monolith bisa cukup untuk lab dan MVP: pisahkan API endpoints, domain service, repository, dan inference adapter. Kurangi distributed failure dan kompleksitas deployment; tetap dokumentasikan kriteria pemisahan service jika load atau ownership berkembang.
+Untuk capstone, frontend Next.js + backend FastAPI + PostgreSQL bisa menjadi modular monolith yang mudah diuji. Backend memisahkan import/validation, site authorization, readings service, scoring adapter, review/audit, dan metrics. Microservices baru dipertimbangkan jika isolation, ownership dan independent scaling dibuktikan, bukan karena AI harus microservices.
 
-## 2. Contracts and separation of concerns
+## 2. API boundaries yang konsisten
 
-Frontend mengenali REST/JSON contract, backend mengenali domain service, inference adapter mengenali model input/output. Jangan menyisipkan HTTP provider calls ke domain business logic. Dengan interface infer(text)->Prediction, model lokal dan hosted provider dapat berganti tanpa merombak API.
+Gunakan route acuan: `POST /api/v1/import-batches`, `GET /api/v1/sites/{site_id}/meters/{meter_id}/readings`, `GET /api/v1/sites/{site_id}/anomaly-events`, dan endpoint review. Field `site_id` harus berasal dari resource dan dikonfirmasi authorized membership, bukan dari output model. Kode HTTP 400/401/403/404/409/422/429/5xx dipilih sesuai failure semantics dan security posture.
 
-## 3. Trust boundaries dan data flow
+## 3. Adapter bukan domain logic
 
-Klasifikasi AI dan input pengguna sama-sama tidak tepercaya. Sebelum model: auth, object permission, validation dan redaction. Sesudah model: output schema validation, allowed labels, bounded score range, fallback. Diagram harus menunjukkan jalur secret/config dan privacy-safe logs.
+Antarmuka `score(features)->AnomalyResult` menerima fitur numerik valid (kWh interval, history, time features), menghasilkan finite `anomaly_score` [0,1], `flagged`, `model_version` dan alasan. Raw IsolationForest score tidak otomatis [0,1]; adapter bertanggung jawab mapping yang terdokumentasi. Text classifier Week 01 menggunakan interface berbeda.
 
-## 4. Failure design
+## 4. Failure containment
 
-Rancang graceful degradation: event_note tetap tersimpan ketika inference gagal, lalu status pending_review atau pending_retry. Pemanggilan synchronous lebih sederhana tetapi menambah latency; async worker perlu queue, retry dedup dan idempotency. Pilih berdasarkan SLO nyata.
+Persistence membaca/import meter harus terpisah dari scoring. Ketika inference timeout, pembacaan valid tetap tersimpan dan ditampilkan, status `scoring_unavailable` / pending manual review; jangan memalsukan label normal atau menghapus sumber. Retry dibatasi dan idempotent. Pilihan synchronous vs queue perlu dilandaskan ke latency dan kualitas UX yang diukur.
 
-## 5. Architecture documentation
+## 5. Trust boundaries
 
-Gunakan C4 context/container/component atau diagram lain secukupnya, plus sequence diagram untuk alur review dan failure. Diagram yang berbeda harus konsisten dengan kode; beri label Planned/Implemented/Verified. ADR melacak trade-off, bukan daftar tools saja.
+CSV untrusted → validation/size limits. Browser untrusted → auth/session/object scope. AI output untrusted → strict output schema. DB → parameterized SQL, FK, atomic audit. Metrics → redaction. Model artifacts → provenance dan deserialization safety. Tidak ada actuator elektrik, billing atau keputusan safety otomatis.
 
-## Skenario rekayasa perangkat lunak
+## 6. Arsitektur sebagai bukti
 
-Jika AI inference timeout, simpan meter reading lebih dahulu, catat status 'pending_manual_review', jangan mengulang submit sampai menciptakan dua meter reading. Operator tetap dapat bekerja.
+C4 component diagram + sequence diagram untuk success dan timeout; ADR memilih modular monolith; API contract dengan success/errors. Bedakan planned vs implemented. Negative tests harus menguji cross-site IDOR, invalid score dan data retention ketika outage.
 
-## Prinsip dan acceptance criteria
+[Canonical contract](../../docs/architecture/energy-data-contract.md) · [Threat model](../../docs/architecture/threat-model.md) · [Lab](lab-guide.md).
 
-- Diagram konsisten dengan requirement dan relasi data.
-- Semua endpoint kritis memiliki kontrak validasi dan error codes.
-- AI inference failure tidak menghilangkan data yang sudah diterima.
-- Authorization dan secret handling ditempatkan pada trust boundary yang benar.
-
-## Dokumentasi primer untuk pendalaman
-
-- https://c4model.com/
-- https://fastapi.tiangolo.com/tutorial/
-- https://owasp.org/www-project-api-security/
-
-Penjelasan ini mengaitkan materi praktik dengan unit yang dipublikasikan LSP. Ini bukan reproduksi KUK resmi dan tidak menentukan hasil asesmen.
-
-[Praktikum](lab-guide.md)
+Referensi: [C4](https://c4model.com/), [FastAPI](https://fastapi.tiangolo.com/), [OWASP API security](https://owasp.org/www-project-api-security/).

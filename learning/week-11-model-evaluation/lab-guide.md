@@ -1,48 +1,44 @@
-# Hands-on — Model Evaluation, Error Analysis & AI Quality Gates
+# Praktikum Terstruktur — Evaluasi anomali pada angka energi
 
-**Status:** panduan siap; langkah belum dieksekusi. Implementasi, metrik, dan bukti ditulis setelah praktikum.
+**Status:** tugas **direncanakan**; implementasi Week 03–12 belum dijalankan. Semua input, site, meter dan timeseries adalah sintetis.
 
-## Target
+## Problem dan konteks profesional
 
-Mengembangkan baseline text classifier dan mengukur kualitas hasil secara disiplin sebelum mengintegrasikannya ke API.
+Kita memerlukan algoritma yang menandai interval konsumsi tidak biasa, bukan classifier kata dari Week 01. Dataset sintetis menyisipkan spike dengan label ground truth yang jelas.
 
-## Skenario
+**Single source of truth:** [kontrak domain](../../docs/architecture/energy-data-contract.md) · [threat model](../../docs/architecture/threat-model.md). Jangan mencampur kontrak klasifikasi log teks Week 01 dengan data anomaly scoring numerik Week 11–12.
 
-Model Week 01 menghasilkan 77.78% accuracy pada hanya 18 sampel sintetis. Evaluasi lanjutan perlu memperluas data dan memisahkan validation dari test, bukan mengulang banyak perubahan sampai 18 sampel tersebut cocok.
+## Langkah yang akan diimplementasikan saat sesi praktik
 
-## Langkah implementasi
+1. Generate seri 15-menit per meter dengan pola harian/mingguan dan seed; sisipkan spike serta missing data secara terkontrol dan dokumentasikan generator.
 
-1. Review Week 01 verification.md dan identifikasi kesalahan label pada confusion matrix.
+2. Split train→validation→test **kronologis**, fit scaler/rolling baseline hanya dengan masa lalu, threshold dipilih di validation.
 
-2. Susun dataset tambahan yang sepenuhnya sintetis untuk eksperimen baru dan dokumentasikan sumber/seed/label policy.
+3. Bandingkan baseline robust median/IQR dan kandidat ML numerik (mis. Isolation Forest) yang sesuai data.
 
-3. Buat tiga split train/validation/test atau cross-validation yang sesuai, periksa duplicate dan potential group leakage.
+4. Jelaskan raw IsolationForest decision_function bukan probability; normalisasi anomaly_score ke [0,1] hanya lewat transform yang didokumentasikan.
 
-4. Bandingkan aturan, Naive Bayes, dan satu model alternatif yang memiliki alasan teknis jelas (opsional scikit-learn).
+5. Hitung precision/recall/F1 hanya terhadap label injeksi sintetis; ukur juga alert volume, false-alert rate dan per-meter effect.
 
-5. Catat per-class metrics, confusion matrix, error examples sintetis, stability terhadap typo/slang dan abstention policy.
+6. Catat model card: intended use, data schema, seed, split, metrics, limitations, fairness/coverage, data drift, artifact provenance.
 
-6. Buat model card dan quality gate eksplisit sebelum Week 12 integration.
+## Acceptance criteria (belum dicentang)
 
-## Acceptance criteria
+- [ ] Tidak ada leakage dari masa depan atau held-out test saat threshold fitting.
+- [ ] Model mengevaluasi numeric readings, bukan event_note teks.
+- [ ] Metrik berlabel sintetis tidak dipromosikan sebagai validasi kerusakan listrik nyata.
+- [ ] Missing intervals diperlakukan sebagai kualitas data, bukan nol.
 
-- [ ] Model dievaluasi pada set yang tidak digunakan untuk train/tuning.
-- [ ] Metrik yang dipilih berhubungan dengan dampak bisnis salah klasifikasi.
-- [ ] Semua hasil yang dilaporkan benar-benar diukur dan dapat direproduksi.
-- [ ] Model card menyebut limitasi data sintetis dan risiko domain shift.
+## Evidence yang harus dibuat
 
-## Rencana verifikasi
+Generator numeric series, evaluation scripts, confusion report, model card, split manifest.
 
-1. Buat skenario bukti untuk: Model dievaluasi pada set yang tidak digunakan untuk train/tuning.
-2. Buat skenario bukti untuk: Metrik yang dipilih berhubungan dengan dampak bisnis salah klasifikasi.
-3. Buat skenario bukti untuk: Semua hasil yang dilaporkan benar-benar diukur dan dapat direproduksi.
-4. Buat skenario bukti untuk: Model card menyebut limitasi data sintetis dan risiko domain shift.
+Saat praktik: catat input sintetis, expected behavior, actual output, command+versi runtime, error/negative tests, keamanan, dan link commit. Jangan mengarang skor model, latency, atau status passed.
 
-## Dokumentasi hasil
+## Pertanyaan transfer
 
-- Catat perintah, dependency/runtime, input sintetis, output aktual, dan edge case yang diuji.
-- Catat source code atau desain beserta commit/PR.
-- Tuliskan threat dan asumsi tersisa. Jangan menyatakan 'passed' sebelum menjalankan test.
-- Kaitkan hasil dengan [evidence matrix](../../certification/evidence-matrix.md).
+Apa alasan menggunakan time-split dibanding random split untuk data meter berurutan?
 
-[Latihan](exercises.md) · [Simulasi](assessment.md)
+**Definition of done:** seluruh acceptance criteria diverifikasi dengan artefak sendiri, bukan sekadar dokumentasi ini; status BNSP tetap memerlukan asesmen resmi LSP.
+
+[Latihan](exercises.md) · [Knowledge check](knowledge-check.md) · [Evidence matrix](../../certification/evidence-matrix.md)

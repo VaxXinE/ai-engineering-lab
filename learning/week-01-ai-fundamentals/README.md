@@ -1,5 +1,7 @@
 # Modul 01 — AI Engineering Fundamentals
 
+**Studi kasus domain energi:** [Applied Energy Case — worked reasoning, tantangan, negative tests](energy-case-study.md). Gunakan [canonical domain contract](../../docs/architecture/energy-data-contract.md); semua latihan domain ini masih **planned** sampai ada hasil implementasi teruji.
+
 > **Materi v2:** [Deep Dive](deep-dive.md) → [Worked Examples](worked-examples.md) → [Knowledge Check](knowledge-check.md) → [Learning Contract](study-contract.md) → [Lab Guide](lab-guide.md).
 
 **Domain praktik:** AI Smart Energy Monitoring (catatan kejadian perangkat sintetis)  

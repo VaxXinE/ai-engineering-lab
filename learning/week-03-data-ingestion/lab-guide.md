@@ -1,52 +1,44 @@
-# Praktikum — Week 03: Data Ingestion & ETL
+# Praktikum Terstruktur — Ingestion CSV pembacaan meter 15 menit
 
-**Status:** rancangan latihan. Belum ada klaim bahwa langkah di bawah berhasil dijalankan.
+**Status:** tugas **direncanakan**; implementasi Week 03–12 belum dijalankan. Semua input, site, meter dan timeseries adalah sintetis.
 
-## Konteks
+## Problem dan konteks profesional
 
-CSV sintetis dengan kolom meter_reading_id, event_note, received_at, source. Dua baris punya meter_reading_id sama: loader menolak duplikasi atau melakukan upsert sesuai kebijakan yang terdokumentasi, tidak diam-diam menambah dua meter reading.
+Generator menghasilkan 100 rekaman sintetis SITE-A/MTR-001. File mungkin diproses ulang setelah worker timeout, mungkin berisi dua source_event_id yang sama tetapi payload berbeda.
 
-**Prasyarat:** Modul 1 dan 2; Python standard library CSV; dasar SQL.  
-**Dataset:** data sintetis dari capstone; jangan memakai data perusahaan atau kredensial sungguhan.
+**Single source of truth:** [kontrak domain](../../docs/architecture/energy-data-contract.md) · [threat model](../../docs/architecture/threat-model.md). Jangan mencampur kontrak klasifikasi log teks Week 01 dengan data anomaly scoring numerik Week 11–12.
 
-## Langkah kerja
+## Langkah yang akan diimplementasikan saat sesi praktik
 
-1. Buat docs/data-dictionary.md yang mendefinisikan meter_reading_id, event_note, received_at, source, schema version, contoh valid dan tidak valid.
+1. Definisikan schema CSV **8 kolom** sesuai [domain contract](../../docs/architecture/energy-data-contract.md): site_id,meter_id,source_event_id,interval_start_utc,interval_minutes,energy_kwh,voltage_v,current_a.
 
-2. Generate sedikitnya 100 pesan **sintetis**, tidak menggunakan data kantor atau device nyata; simpan generator/seed dan keterangan dataset.
+2. Buat generator deterministik dengan seed; gunakan meter/site fiktif dan timeline UTC 15 menit. Jangan mengubah kWh menjadi kW tanpa durasi.
 
-3. Implementasikan parser CSV yang memvalidasi header, encoding, field wajib, jumlah kolom, dan panjang input.
+3. Parser membatasi bytes/rows, memvalidasi header/encoding dan menolak kolom tambahan, empty ID, atau payload tidak valid. Gunakan test fixtures kecil dahulu.
 
-4. Buat tabel staging atau database lokal (SQLite diperbolehkan sebagai langkah awal); gunakan parameterized insert dan unique constraint.
+4. Design transaction dan constraint UNIQUE(site_id,meter_id,source_event_id); identitas sama dengan payload sama ⇒ skipped; identitas sama dengan payload berbeda ⇒ conflicting duplicate yang ditolak.
 
-5. Jalankan import satu kali, ulangi import file yang sama, lalu verifikasi kebijakan idempotency.
+5. Uji import ulang tiga kali, sekaligus error partial row dan rollback; rekonsiliasi received=accepted+rejected+skipped.
 
-6. Simpan import summary JSON (counts, batch id, error categories) tanpa menyimpan isi pesan pribadi di log.
+6. Catat counts, batch_id, schema_version, checksum dan error categories tanpa membocorkan token/metadata sensitif.
 
-## Test plan minimal
+## Acceptance criteria (belum dicentang)
 
-1. Satu row valid dan satu row missing required field.
-2. Input duplicate meter_reading_id pada file sama dan import ulang.
-3. File tidak ada, kolom berlebih, file terlalu besar dan interruption skenario.
-4. Jumlah accepted + rejected + skipped sama dengan jumlah rows input.
+- [ ] Re-import batch identik tidak menambah record.
+- [ ] Duplikat dengan payload berbeda ditolak, bukan overwrite.
+- [ ] Site-A dan Site-B tetap terpisah meski source_event_id mirip.
+- [ ] Parameterized query mencegah SQL injection; file size/rows terbatas.
 
-## Acceptance criteria
+## Evidence yang harus dibuat
 
-- [ ] CSV valid dapat diproses dengan hasil terhitung.
-- [ ] Input invalid ditolak dan dilaporkan tanpa menyimpan record corrupt.
-- [ ] Menjalankan batch yang sama dua kali tidak menghasilkan duplikasi.
-- [ ] Query parameterized dan transaction behavior teruji.
+Data dictionary, generator, parser/importer, migration constraint, retry tests, import summary JSON.
 
-## Bukti yang disimpan setelah praktik
+Saat praktik: catat input sintetis, expected behavior, actual output, command+versi runtime, error/negative tests, keamanan, dan link commit. Jangan mengarang skor model, latency, atau status passed.
 
-1. Source code / artefak desain serta alasan keputusan yang dibuat sendiri.
-2. Cara menjalankan atau mereproduksi hasil (versi environment dan perintah aktual).
-3. Test report: perintah, hasil sesungguhnya, sampel negatif dan edge cases.
-4. Analisis risiko keamanan, privasi, performa, serta keterbatasan yang belum ditangani.
-5. Link PR/commit ke [matriks bukti](../../certification/evidence-matrix.md).
+## Pertanyaan transfer
 
-## Syarat selesai
+Apa yang berubah jika interval data datang tidak berurutan atau sebagian event hilang?
 
-**Belum selesai** hanya dengan membaca dokumen ini. Tandai selesai setelah implementasi diverifikasi dan evidence tersimpan; uji kompetensi BNSP tetap dilakukan oleh LSP yang berwenang.
+**Definition of done:** seluruh acceptance criteria diverifikasi dengan artefak sendiri, bukan sekadar dokumentasi ini; status BNSP tetap memerlukan asesmen resmi LSP.
 
-[Latihan tambahan](exercises.md) · [Simulasi asesmen](assessment.md)
+[Latihan](exercises.md) · [Knowledge check](knowledge-check.md) · [Evidence matrix](../../certification/evidence-matrix.md)

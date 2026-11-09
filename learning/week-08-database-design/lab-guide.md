@@ -1,48 +1,44 @@
-# Hands-on — Database Entities & Relational Integrity
+# Praktikum Terstruktur — Relasi site, meter, reading, scoring, dan review
 
-**Status:** panduan siap; langkah belum dieksekusi. Implementasi, metrik, dan bukti ditulis setelah praktikum.
+**Status:** tugas **direncanakan**; implementasi Week 03–12 belum dijalankan. Semua input, site, meter dan timeseries adalah sintetis.
 
-## Target
+## Problem dan konteks profesional
 
-Merancang struktur data untuk pesan, prediksi AI, versi model, review, dan audit trail dengan integritas kuat.
+Pembacaan dari beberapa site memakai ID meter yang mungkin sama; inference dapat dijalankan ulang dengan model baru dan keputusan review harus dapat ditelusuri.
 
-## Skenario
+**Single source of truth:** [kontrak domain](../../docs/architecture/energy-data-contract.md) · [threat model](../../docs/architecture/threat-model.md). Jangan mencampur kontrak klasifikasi log teks Week 01 dengan data anomaly scoring numerik Week 11–12.
 
-MeterReading dibuat pada 09.00 dengan model v1, lalu direview ulang oleh operator. Model v2 dipasang minggu berikutnya. Riwayat harus tetap bisa menunjukkan prediksi v1 dan tindakan operator tanpa menghapus data historis.
+## Langkah yang akan diimplementasikan saat sesi praktik
 
-## Langkah implementasi
+1. Rancang ERD Site, Meter, MeterReading, IngestionBatch, ModelVersion, AnomalyEvent, ReviewEvent, dan ReviewerMembership.
 
-1. Definisikan entity diagram untuk organization, user, meter reading, model_version, prediction, review_event, ingestion_batch.
+2. Definisikan FK (site_id,meter_id) pada MeterReading ke Meter, UNIQUE(site_id,meter_id,source_event_id) dan aturan konflik payload.
 
-2. Tentukan data dictionary berisi tipe, nullable rules, uniqueness, retention dan relasi.
+3. Simpan measured_at UTC, interval_minutes, energy_kwh numeric >=0 serta metadata versi input. Jangan menimpa bacaan untuk 'memperbaiki' hasil AI.
 
-3. Buat migration SQL dengan foreign key dan check constraints, bukan tabel di-create manual tanpa versi.
+4. AnomalyEvent menyimpan score/version/time, dan ReviewEvent append-only dengan actor, decision, reason, timestamp.
 
-4. Implementasikan parameterized SQL pada repository layer dan filter organisasi dalam setiap read/update.
+5. Review optimistic locking memakai version expected, update atomik serta conflict response bila affected rows=0.
 
-5. Tambah optimistic concurrency atau unique version supaya simultaneous edits terdeteksi.
+6. Uji cross-site IDOR untuk GET dan POST review, duplicate ingest, FK orphan dan rollback transaction.
 
-6. Buat integration tests untuk duplicate event, foreign key, rollback dan cross-tenant IDOR.
+## Acceptance criteria (belum dicentang)
 
-## Acceptance criteria
+- [ ] Meter SITE-A/MTR-001 dan SITE-B/MTR-001 tidak tercampur.
+- [ ] AnomalyEvent mengacu reading dan model_version yang valid.
+- [ ] Audit review tidak menghapus prediksi lama.
+- [ ] IDOR ditolak berdasarkan authenticated site membership, bukan keacakan ID.
 
-- [ ] Setiap prediction memiliki model_version dan meter_reading_id yang valid.
-- [ ] Foreign key menolak orphan record; rollback transaksi menjaga konsistensi.
-- [ ] Akses tenant A tidak dapat membaca atau mengubah record tenant B.
-- [ ] Re-running migration dan duplicate event ditangani sesuai rencana.
+## Evidence yang harus dibuat
 
-## Rencana verifikasi
+ERD, migration SQL, index design, transaction/integrity tests, authorization test matrix.
 
-1. Buat skenario bukti untuk: Setiap prediction memiliki model_version dan meter_reading_id yang valid.
-2. Buat skenario bukti untuk: Foreign key menolak orphan record; rollback transaksi menjaga konsistensi.
-3. Buat skenario bukti untuk: Akses tenant A tidak dapat membaca atau mengubah record tenant B.
-4. Buat skenario bukti untuk: Re-running migration dan duplicate event ditangani sesuai rencana.
+Saat praktik: catat input sintetis, expected behavior, actual output, command+versi runtime, error/negative tests, keamanan, dan link commit. Jangan mengarang skor model, latency, atau status passed.
 
-## Dokumentasi hasil
+## Pertanyaan transfer
 
-- Catat perintah, dependency/runtime, input sintetis, output aktual, dan edge case yang diuji.
-- Catat source code atau desain beserta commit/PR.
-- Tuliskan threat dan asumsi tersisa. Jangan menyatakan 'passed' sebelum menjalankan test.
-- Kaitkan hasil dengan [evidence matrix](../../certification/evidence-matrix.md).
+Apa yang terjadi jika sebuah site mengirim source_event_id sama dengan site lain?
 
-[Latihan](exercises.md) · [Simulasi](assessment.md)
+**Definition of done:** seluruh acceptance criteria diverifikasi dengan artefak sendiri, bukan sekadar dokumentasi ini; status BNSP tetap memerlukan asesmen resmi LSP.
+
+[Latihan](exercises.md) · [Knowledge check](knowledge-check.md) · [Evidence matrix](../../certification/evidence-matrix.md)

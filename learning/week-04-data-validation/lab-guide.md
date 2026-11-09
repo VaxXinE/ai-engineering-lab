@@ -1,52 +1,44 @@
-# Praktikum — Week 04: Data Quality, Validation & Leakage Prevention
+# Praktikum Terstruktur — Validasi nilai energi dan timeline
 
-**Status:** rancangan latihan. Belum ada klaim bahwa langkah di bawah berhasil dijalankan.
+**Status:** tugas **direncanakan**; implementasi Week 03–12 belum dijalankan. Semua input, site, meter dan timeseries adalah sintetis.
 
-## Konteks
+## Problem dan konteks profesional
 
-EventNote '  ' invalid secara bisnis walau bertipe string. Timestamp di masa depan bisa valid secara format ISO namun tidak semestinya diterima. Train/test dengan teks identik tapi ejaan berbeda juga bisa membocorkan informasi semantik.
+Dalam file terdapat energy_kwh=NaN, 0, -1, interval_start tanpa Z, interval 60 menit, duplicate ID, dan gap 00:45. Kita harus membedakan error schema, nilai valid, dan data hilang.
 
-**Prasyarat:** Modul 3; Python, skema data, data ingestion report.  
-**Dataset:** data sintetis dari capstone; jangan memakai data perusahaan atau kredensial sungguhan.
+**Single source of truth:** [kontrak domain](../../docs/architecture/energy-data-contract.md) · [threat model](../../docs/architecture/threat-model.md). Jangan mencampur kontrak klasifikasi log teks Week 01 dengan data anomaly scoring numerik Week 11–12.
 
-## Langkah kerja
+## Langkah yang akan diimplementasikan saat sesi praktik
 
-1. Susun tabel aturan validasi untuk ID, timestamp, channel, event_note, source, dan label (bila ada).
+1. Definisikan indikator: kWh finite dan >=0, interval_minutes tepat 15, timestamp UTC/offset-aware dan align ke slot 15 menit; panjang ID serta known site/meter dibatasi.
 
-2. Gunakan schema validator (Pydantic atau standard-library validator) terpisah dari parser ingestion.
+2. Implementasikan schema validation; jangan melakukan silent coercion terhadap NaN, infinity, negatif atau timestamp tanpa timezone.
 
-3. Buat fixture sintetis berisi valid row, blank event_note, unsupported source, duplicate ID, future timestamp, dan pesan berlebihan.
+3. Pisahkan invalid row dari **missing slot**: gap 00:45 adalah quality anomaly, bukan measurement 0 kWh; catat expected vs observed slot.
 
-4. Hitung quality metrics sebelum dan sesudah validasi, disertai denominator dan definisi metrik.
+4. Hitung completeness sebagai observed_unique_valid_intervals / expected_intervals, dan reject rate = invalid_rows / received_rows, dengan denominator tertulis.
 
-5. Tambahkan pemeriksaan train/test exact overlap serta dokumentasikan keterbatasan semantic overlap.
+5. Untuk evaluasi AI nanti, gunakan chronological train→validation→test; rolling feature untuk t hanya boleh memakai periode sebelum t.
 
-6. Tulis rekomendasi quality gate untuk menolak dataset sebelum model training.
+6. Jalankan negative test dengan out-of-order, duplicate timestamp, wrong interval, future time yang melanggar policy, dan site mismatch.
 
-## Test plan minimal
+## Acceptance criteria (belum dicentang)
 
-1. Null dan whitespace-only string ditolak.
-2. Unsupported enum/channel dan timestamp out-of-policy ditolak.
-3. Input terlalu panjang ditolak dengan sebab yang aman.
-4. Replikasi data train ke test memicu leakage guard.
+- [ ] NaN/infinity/negatif ditolak; 0 kWh dapat valid bila sesuai aturan simulasi.
+- [ ] Gap dilaporkan sebagai missing slot, tidak diisi nol tanpa penanda.
+- [ ] Timestamp dinormalisasi UTC, interval diketahui dan konsisten.
+- [ ] Data test tidak bocor ke fitting/scaler/rolling feature masa depan.
 
-## Acceptance criteria
+## Evidence yang harus dibuat
 
-- [ ] Minimal lima aturan tervalidasi otomatis dan punya pesan kesalahan terkontrol.
-- [ ] Tersedia ringkasan data quality dengan jumlah dan formula metrik.
-- [ ] Data test tidak tercampur dalam training; kebocoran eksplisit ditolak.
-- [ ] Tidak ada PII/kredensial dalam dataset dan laporan.
+Validator, quality report dengan rumus, timestamp gap detector, test negative, data contract.
 
-## Bukti yang disimpan setelah praktik
+Saat praktik: catat input sintetis, expected behavior, actual output, command+versi runtime, error/negative tests, keamanan, dan link commit. Jangan mengarang skor model, latency, atau status passed.
 
-1. Source code / artefak desain serta alasan keputusan yang dibuat sendiri.
-2. Cara menjalankan atau mereproduksi hasil (versi environment dan perintah aktual).
-3. Test report: perintah, hasil sesungguhnya, sampel negatif dan edge cases.
-4. Analisis risiko keamanan, privasi, performa, serta keterbatasan yang belum ditangani.
-5. Link PR/commit ke [matriks bukti](../../certification/evidence-matrix.md).
+## Pertanyaan transfer
 
-## Syarat selesai
+Kenapa 0 kWh dan missing reading harus divisualisasikan berbeda?
 
-**Belum selesai** hanya dengan membaca dokumen ini. Tandai selesai setelah implementasi diverifikasi dan evidence tersimpan; uji kompetensi BNSP tetap dilakukan oleh LSP yang berwenang.
+**Definition of done:** seluruh acceptance criteria diverifikasi dengan artefak sendiri, bukan sekadar dokumentasi ini; status BNSP tetap memerlukan asesmen resmi LSP.
 
-[Latihan tambahan](exercises.md) · [Simulasi asesmen](assessment.md)
+[Latihan](exercises.md) · [Knowledge check](knowledge-check.md) · [Evidence matrix](../../certification/evidence-matrix.md)

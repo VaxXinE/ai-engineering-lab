@@ -1,46 +1,27 @@
-# Teori — Week 06: User Experience for AI-Assisted Workflows
+# Teori — UX Dashboard Analitik Energi (Week 06)
 
-**Tujuan:** Mendesain alur operator dashboard energi yang dapat mengerti, memeriksa, memperbaiki dan menolak rekomendasi AI.
+**Outcome:** mendesain alur Energy Overview → Meter Detail → Anomaly Review → Audit History yang dapat dipahami operator dan aman ketika data/model gagal.
 
-## Konsep dan keputusan engineering
+## 1. Alur tugas dan persona
 
-### 1. User journey dan task analysis
+**Energy analyst** menilai tren pemakaian. **Facility operator** memeriksa kandidat anomali; **system maintainer** mengurus error ingestion/inference. Jangan menggabungkan seluruh kebutuhan itu dalam satu layar padat. Tetapkan task terukur: menemukan periode konsumsi tinggi, memeriksa kualitas pembacaan, dan menyimpan review tanpa kehilangan draft.
 
-Pisahkan kebutuhan operator, supervisor, dan operator teknis. Rancang task dari pesan baru sampai resolved state dengan jumlah langkah rendah tetapi status yang jelas. Catat moment of uncertainty saat AI salah atau tidak tersedia; di sinilah desain memiliki dampak terbesar pada trust.
+## 2. Kebenaran satuan dan visualisasi
 
-### 2. Human-in-the-loop
+Grafik memakai `energy_kwh` **per 15 menit**, sumbu dan tooltip mencantumkan durasi dan zona waktu. Untuk grafik kekosongan data, tampilkan **gap**, bukan titik `0 kWh`. Konversi ke average kW hanya ketika durasinya jelas. Hindari menyebut satu titik energi tinggi sebagai 'sensor rusak'.
 
-AI tidak boleh menjadi pemutus akhir untuk tindakan konsekuensial tanpa mekanisme review. Operator harus melihat prediksi dan alasan/konteks yang aman, lalu dapat accept/override/abstain. Simpan alasan perubahan dan identitas reviewer secara audit-able.
+## 3. AI assistive, bukan autonomous
 
-### 3. Information architecture
+Tampilkan `anomaly_score` sebagai skor internal/ranking dengan model_version dan indikator `candidate anomaly`. Jangan menampilkan skor 0.93 sebagai peluang 93% kerusakan. Review human mempunyai decision `confirmed_anomaly`, `expected_variation` atau `needs_investigation`. Simpan keputusan manusia terpisah dari skor asli.
 
-Pertahankan navigasi konsisten: Inbox, Detail, Review Queue, History. Bedakan kategori pesan dengan status progres (misalnya normal vs pending). Progressive disclosure menyembunyikan detail teknis sampai dibutuhkan tanpa menyembunyikan tindakan penting.
+## 4. Error/empty/conflict flows
 
-### 4. Designing uncertainty
+Empty: meter belum memiliki readings. Missing: ada slot waktu kosong. Offline/scoring_unavailable: readings tetap terlihat. Unauthorized: tidak membuka site lain. Conflict: dua operator mengedit review version lama → tampilkan konflik sambil mempertahankan draft. Semua kondisi perlu copywriting yang jelas, keyboard access dan fokus yang dapat diprediksi.
 
-Jangan menampilkan relative_score dari model sederhana sebagai probabilitas pasti. Gunakan status 'perlu tinjauan' untuk abstain/low quality input. Berikan feedback ketika prediksi berubah dan informasikan asal prediksi (versi model).
+## 5. Pengujian usability
 
-### 5. Accessibility dan failure state
+Task contoh: temukan MTR-001, bandingkan tiga interval, review satu kandidat anomali. Ukur task success, kesalahan interpretasi satuan, waktu, dan kebutuhan bantuan. Jumlah partisipan sedikit hanya memberikan insight awal, bukan bukti universal.
 
-Gunakan hierarki heading, keyboard focus, labels untuk form, error text yang actionable, dan contrast yang memadai. Skeleton/loading bukan pengganti penjelasan status; pada kegagalan API, lindungi draft dan sediakan retry manual dengan kebijakan idempotency.
+**Anti-pattern:** menampilkan alert 'Bahaya listrik' atau perintah pemadaman berdasarkan anomali model. Sistem pembelajaran ini tidak memproses keputusan keselamatan.
 
-## Studi kasus dalam capstone
-
-Jika prediksi 'warning' salah dan operator memilih 'normal', tampilkan 'Label diperbarui' plus riwayat audit. Jangan diam-diam menghilangkan prediksi awal: itu merusak ability to evaluate model.
-
-## Kontrak kualitas dan keamanan
-
-- Journey memuat alur sukses, error, dan manual override.
-- Prediksi AI dibedakan dari keputusan manusia.
-- Wireframe mencakup loading/empty/error state dan aksesibilitas.
-- Ada minimal tiga task usability dengan success criteria.
-
-**Inti pembelajaran:** kompetensi dinilai dari alasan dan bukti keputusan, bukan hafalan istilah. Materi ini merupakan penjelasan praktis untuk belajar mandiri, bukan salinan KUK resmi.
-
-## Referensi primer
-
-- https://www.w3.org/WAI/WCAG22/quickref/
-- https://www.nngroup.com/articles/ten-usability-heuristics/
-- https://www.nist.gov/itl/ai-risk-management-framework
-
-[Mulai praktikum](lab-guide.md) · [Latihan](exercises.md)
+[Praktikum UX](lab-guide.md) · [Worked examples](worked-examples.md) · [WCAG 2.2 Quick Ref](https://www.w3.org/WAI/WCAG22/quickref/).

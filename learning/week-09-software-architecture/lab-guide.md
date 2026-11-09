@@ -1,48 +1,44 @@
-# Hands-on — Software Architecture for AI-Enabled Applications
+# Praktikum Terstruktur — API dan scorer yang terpisah
 
-**Status:** panduan siap; langkah belum dieksekusi. Implementasi, metrik, dan bukti ditulis setelah praktikum.
+**Status:** tugas **direncanakan**; implementasi Week 03–12 belum dijalankan. Semua input, site, meter dan timeseries adalah sintetis.
 
-## Target
+## Problem dan konteks profesional
 
-Merancang batas komponen, contract API, alur data, failure handling dan desain yang tetap fleksibel saat model AI berubah.
+Kegagalan numerical anomaly model tidak boleh menghapus pembacaan meter valid atau memicu perintah pada instalasi listrik.
 
-## Skenario
+**Single source of truth:** [kontrak domain](../../docs/architecture/energy-data-contract.md) · [threat model](../../docs/architecture/threat-model.md). Jangan mencampur kontrak klasifikasi log teks Week 01 dengan data anomaly scoring numerik Week 11–12.
 
-Jika AI inference timeout, simpan meter reading lebih dahulu, catat status 'pending_manual_review', jangan mengulang submit sampai menciptakan dua meter reading. Operator tetap dapat bekerja.
+## Langkah yang akan diimplementasikan saat sesi praktik
 
-## Langkah implementasi
+1. Gunakan [canonical routes](../../docs/architecture/energy-data-contract.md) alih-alih endpoint dengan spasi: POST /api/v1/import-batches; GET /api/v1/sites/{site_id}/meters/{meter_id}/readings.
 
-1. Tuliskan konteks sistem: actor, frontend, backend, storage, inference, observability dan sistem eksternal.
+2. Rancang komponen ingestion, validation, storage, anomaly scoring port, model adapter, review service dan observability.
 
-2. Gambar component/container diagram; tandai trust boundaries dan data flow PII.
+3. Definisikan `score(features)->AnomalyResult` dengan output finite normalized score, flagged, reason codes, model_version; status aplikasi terpisah.
 
-3. Buat sequence diagram untuk create meter reading, run inference, review, dan timeout fallback.
+4. Gambar sequence diagram: persist reading→async score→review; fault injection timeout→scoring_unavailable tanpa data loss.
 
-4. Definisikan kontrak POST /meter readings serta endpoint review (request, response, validation, errors).
+5. Petakan trust boundaries browser/API, CSV importer, model outputs, DB, logs; site authorization di setiap read/review endpoint.
 
-5. Pisahkan inference adapter dari domain handler; jelaskan opsi sync versus background queue melalui ADR.
+6. Tulis ADR modular monolith vs split-service serta reasoned scaling trigger.
 
-6. Lakukan threat-model ringan untuk injection, IDOR, provider outage, dan data exfiltration; tentukan tests.
+## Acceptance criteria (belum dicentang)
 
-## Acceptance criteria
+- [ ] API methods/path valid dan scope otorisasi jelas.
+- [ ] Model output tidak boleh memutuskan site permissions.
+- [ ] Gagal scoring tidak menghapus accepted readings.
+- [ ] Kontrak adapter berbeda dari Week 01 text classifier.
 
-- [ ] Diagram konsisten dengan requirement dan relasi data.
-- [ ] Semua endpoint kritis memiliki kontrak validasi dan error codes.
-- [ ] AI inference failure tidak menghilangkan data yang sudah diterima.
-- [ ] Authorization dan secret handling ditempatkan pada trust boundary yang benar.
+## Evidence yang harus dibuat
 
-## Rencana verifikasi
+C4 component diagram, sequence success/error, API schema draft, threat model, ADR.
 
-1. Buat skenario bukti untuk: Diagram konsisten dengan requirement dan relasi data.
-2. Buat skenario bukti untuk: Semua endpoint kritis memiliki kontrak validasi dan error codes.
-3. Buat skenario bukti untuk: AI inference failure tidak menghilangkan data yang sudah diterima.
-4. Buat skenario bukti untuk: Authorization dan secret handling ditempatkan pada trust boundary yang benar.
+Saat praktik: catat input sintetis, expected behavior, actual output, command+versi runtime, error/negative tests, keamanan, dan link commit. Jangan mengarang skor model, latency, atau status passed.
 
-## Dokumentasi hasil
+## Pertanyaan transfer
 
-- Catat perintah, dependency/runtime, input sintetis, output aktual, dan edge case yang diuji.
-- Catat source code atau desain beserta commit/PR.
-- Tuliskan threat dan asumsi tersisa. Jangan menyatakan 'passed' sebelum menjalankan test.
-- Kaitkan hasil dengan [evidence matrix](../../certification/evidence-matrix.md).
+Bagaimana mencegah user yang login Site-A meminta reading ID milik Site-B?
 
-[Latihan](exercises.md) · [Simulasi](assessment.md)
+**Definition of done:** seluruh acceptance criteria diverifikasi dengan artefak sendiri, bukan sekadar dokumentasi ini; status BNSP tetap memerlukan asesmen resmi LSP.
+
+[Latihan](exercises.md) · [Knowledge check](knowledge-check.md) · [Evidence matrix](../../certification/evidence-matrix.md)
