@@ -35,9 +35,9 @@ Model ini adalah implementasi **Multinomial Naive Bayes sederhana**; tidak memak
 ## Praktik 3: menjalankan inference
 
 ~~~bash
-python -m week01 predict --text "saya ingin membeli paket langganan"
-python -m week01 predict --text "aplikasi saya gagal login"
-python -m week01 predict --text "alamat kantor perusahaan di mana"
+python -m week01 predict --text "meter melaporkan tegangan stabil normal"
+python -m week01 predict --text "konsumsi energi meningkat mendekati ambang"
+python -m week01 predict --text "sensor offline tidak mengirim data"
 python -m week01 predict --text "zzzzzzqqq"
 ~~~
 
@@ -51,7 +51,7 @@ python -m week01 evaluate
 
 Output mencakup accuracy, macro F1, precision, recall, F1 setiap kelas, confusion matrix, dan abstention_count. Properti rule_based_baseline berisi metrik dari aturan keyword pada **18 test yang sama**.
 
-**Pertanyaan:** Apa makna warning recall 0.6667? Mengapa akurasi tidak otomatis mewakili kemampuan generalisasi model?
+**Pertanyaan:** Apa makna recall per kelas, khususnya kelas `normal` yang pada fixture saat ini adalah 4/6? Mengapa akurasi tidak otomatis membuktikan kemampuan generalisasi model? Jelaskan mengapa hasil evaluasi 18 contoh sintetis bukan bukti kesiapan produksi.
 
 ## Praktik 5: automated testing
 
