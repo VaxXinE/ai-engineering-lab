@@ -1,11 +1,14 @@
-# BNSP Assessment Portfolio (Independent Preparation)
+# Portofolio Dua Skema BNSP — Materi Belajar Mandiri
 
-This directory organizes self-study evidence by **two separate competency schemes**, not by certificate level.
+**Cakupan:** [AI untuk Proses Data](ai-data-processing/README.md) dan [AI untuk Aplikasi Perangkat Lunak](ai-software-application/README.md).
 
-- [AI untuk Proses Data](ai-data-processing/README.md)
-- [AI untuk Aplikasi Perangkat Lunak](ai-software-application/README.md)
-- [Cross-scheme evidence matrix](evidence-matrix.md)
+Saat snapshot **9 November 2026**, laman LSP menampilkan **6 + 12 unit** dengan **4 unit AI bersama**, sehingga materi disusun sekitar **14 area unik**. Direktori BNSP menampilkan **13** untuk skema aplikasi. Jumlah unit final, kode dan KUK harus dikonfirmasi secara tertulis dengan LSP sebelum asesmen. [Sumber dan perubahan regulasi](../docs/references.md).
 
-Four AI integration/operations competency units appear in both scheme descriptions. They can share **learning artifacts**, but recognition of prior certification or exemption from assessment is **not automatic**.
+## Prinsip bukti
 
-**Important:** The application scheme's unit count has differed between published LSP/BNSP listings (12 vs. 13). Verify the final current scheme, SKKNI references, conditions, unit codes, and required evidence directly with the assessing LSP. This directory is not an official competency standard.
+- Simpan hasil belajar, aplikasi dan teknik yang **benar-benar dipraktikkan**.
+- Artefak bersama dapat direferensikan dari dua jalur belajar, **bukan otomatis pengakuan lintas skema**.
+- Jangan mengunggah data/customer/kerja perusahaan tanpa izin atau bukti assessment pribadi yang sensitif.
+- Gunakan [evidence matrix](evidence-matrix.md), [assessment readiness](../docs/assessment-readiness.md) dan [materi 16 minggu](../docs/materials-index.md).
+
+**Saat ini semua unit pada matriks masih belum diverifikasi sebagai kompetensi peserta.** Repo bukan LSP dan tidak mengeluarkan sertifikat.

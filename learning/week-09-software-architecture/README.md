@@ -1,33 +1,25 @@
-# Week 09 — Application Architecture
+# Week 09 — Software Architecture for AI-Enabled Applications
 
-**Status:** Not started · [Roadmap](../../docs/learning-roadmap.md) · [Tracker](../../docs/progress-tracker.md)
+**Materi:** siap dibaca · **Praktik:** belum diimplementasikan/dijalankan · **Alokasi:** 8–10 jam
 
-## Learning objective
+**Unit acuan:** J.620100.008.01 — Merancang Arsitektur Aplikasi (verifikasi dokumen LSP terbaru sebelum asesmen).
 
-Explain system boundaries, interface contracts, data flows and security trade-offs.
+**Tujuan:** Merancang batas komponen, contract API, alur data, failure handling dan desain yang tetap fleksibel saat model AI berubah.
 
-## Topics
+**Prasyarat:** Week 02 technology ADR, Week 07 UI, Week 08 database.
 
-Modular monolith; layers; inference interface; service boundaries; sequence diagrams; threat modeling.
+## Materi dan tugas
+1. [Teori terstruktur](theory.md)
+2. [Panduan praktik dan test plan](lab-guide.md)
+3. [Latihan mandiri](exercises.md)
+4. [Latihan tanya jawab asesmen](assessment.md)
 
-## Hands-on assignment
+**Indikator hasil:**
+- Diagram konsisten dengan requirement dan relasi data.
+- Semua endpoint kritis memiliki kontrak validasi dan error codes.
+- AI inference failure tidak menghilangkan data yang sudah diterima.
+- Authorization dan secret handling ditempatkan pada trust boundary yang benar.
 
-Draw component/sequence diagrams and define validated inference interfaces.
+Semua latihan memakai data sintetis dan mengembangkan [capstone](../../projects/ai-customer-intelligence/README.md). Materi siap bukan bukti implementasi/kelulusan.
 
-## Expected evidence
-
-Architecture document; ADR; API contract.
-
-## Review question
-
-What breaks if you switch AI provider, and how do you isolate that change?
-
-## Completion checklist
-
-- [ ] Concept notes written in your own words, with reliable references.
-- [ ] Hands-on work completed and committed.
-- [ ] Actual verification method and result recorded (no fabricated results).
-- [ ] Security/privacy issues and relevant trade-offs documented.
-- [ ] Evidence linked in [certification matrix](../../certification/evidence-matrix.md).
-
-**Working notes:** Start from [module template](../../docs/templates/module-template.md) and add files to this directory as you work.
+[Roadmap](../../docs/learning-roadmap.md) · [Progress](../../docs/progress-tracker.md) · [Evidence mapping](../../certification/evidence-matrix.md)

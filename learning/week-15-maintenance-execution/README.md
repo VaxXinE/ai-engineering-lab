@@ -1,33 +1,24 @@
-# Week 15 — AI Maintenance Execution
+# Week 15 — Eksekusi Maintenance, Troubleshooting dan Recovery
 
-**Status:** Not started · [Roadmap](../../docs/learning-roadmap.md) · [Tracker](../../docs/progress-tracker.md)
+**Status materi:** siap dipelajari · **Status implementasi:** belum dikerjakan · **Estimasi:** 8–10 jam
 
-## Learning objective
+**Acuan unit:** J.62AIN00.017.1 — Merawat Solusi AI. Kode unit dan KUK final memerlukan konfirmasi LSP.
 
-Rehearse incident diagnosis, recovery, version changes and regression testing.
+**Tujuan:** Membuktikan proses diagnosis gangguan, perbaikan terkontrol, validasi regresi, dan restore di lingkungan uji.
 
-## Topics
+## Cara pakai materi
+1. Baca [teori](theory.md) dan jelaskan inti konsep dengan bahasa sendiri.
+2. Ikuti [lab-guide](lab-guide.md) untuk implementasi (ketika pembelajaran dimulai).
+3. Kerjakan [exercises](exercises.md) dan [simulasi asesmen](assessment.md).
+4. Simpan artefak nyata di repo dan hubungkan ke [evidence matrix](../../certification/evidence-matrix.md).
 
-Incident handling; logging; model versioning; backup/restore; regression testing; update safety.
+**Skenario:** Simulasikan service inference offline sehingga klasifikasi gagal. Data inquiry tetap disimpan. Operator memverifikasi degraded mode, memulihkan service, menjalankan regression test, dan mendokumentasikan insiden.
 
-## Hands-on assignment
+**Indikator:** 
+- Simulasi outage tidak kehilangan inquiry yang sudah diterima.
+- Restore dijalankan pada environment uji dan diperiksa integritasnya.
+- Setiap langkah pemulihan beserta hasil uji dicatat.
+- Regression test menguji akar masalah, bukan hanya happy path.
+- Tidak ada data customer asli atau secret dalam incident report.
 
-Simulate inference outage in a test environment, recover service and record the actual outcome.
-
-## Expected evidence
-
-Incident report; restore test; maintenance log.
-
-## Review question
-
-How do you demonstrate restored availability without concealing data-loss risk?
-
-## Completion checklist
-
-- [ ] Concept notes written in your own words, with reliable references.
-- [ ] Hands-on work completed and committed.
-- [ ] Actual verification method and result recorded (no fabricated results).
-- [ ] Security/privacy issues and relevant trade-offs documented.
-- [ ] Evidence linked in [certification matrix](../../certification/evidence-matrix.md).
-
-**Working notes:** Start from [module template](../../docs/templates/module-template.md) and add files to this directory as you work.
+Baca [roadmap](../../docs/learning-roadmap.md) dan [capstone](../../projects/ai-customer-intelligence/README.md). Keberadaan panduan tidak berarti kompetensi telah diverifikasi.

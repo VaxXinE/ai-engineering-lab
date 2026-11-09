@@ -1,0 +1,32 @@
+name: Curriculum documentation checks
+
+on:
+  push:
+    paths:
+      - '**/*.md'
+      - 'scripts/check_curriculum.py'
+      - '.github/workflows/docs-quality.yml'
+  pull_request:
+    paths:
+      - '**/*.md'
+      - 'scripts/check_curriculum.py'
+      - '.github/workflows/docs-quality.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  validate-docs:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+      - name: Set up Python
+        uses: actions/setup-python@v7
+        with:
+          python-version: '3.13'
+      - name: Check curriculum structure and links
+        run: python scripts/check_curriculum.py

@@ -22,7 +22,7 @@ A hands-on learning and portfolio repository for **AI Application Engineering** 
 | AI integration & operations | 11–15 | Model evaluation, integration, installation, maintenance |
 | Certification preparation | 16 | Evidence mapping, demonstration and mock assessment |
 
-**Start here:** [Learning roadmap](docs/learning-roadmap.md) · [Progress tracker](docs/progress-tracker.md) · [Week 01 (materi + kode + tests)](learning/week-01-ai-fundamentals/README.md)
+**Start here:** [Complete materials index (16 modules)](docs/materials-index.md) · [Learning roadmap](docs/learning-roadmap.md) · [Progress tracker](docs/progress-tracker.md) · [Week 01 example](learning/week-01-ai-fundamentals/README.md)
 
 ## Capstone: AI Customer Intelligence Platform
 
@@ -58,6 +58,12 @@ python -m unittest discover -s tests -v
 ~~~
 
 Baca [materi Week 01](learning/week-01-ai-fundamentals/README.md) dan [hasil verifikasi](learning/week-01-ai-fundamentals/results/verification.md).
+
+## Curriculum completion status
+
+**All educational materials for Weeks 01–16 are authored**: each module has a theory lesson, a hands-on guide, exercises, and mock assessment. **Only Week 01 has implemented lab code and verified tests.** Weeks 02–16 are intentionally *learning-ready, not implementation-complete*, and learner progress is not marked passed. See [materials index](docs/materials-index.md) and [assessment readiness](docs/assessment-readiness.md).
+
+Published LSP listing: 12 software application + 6 data processing units with 4 overlapping; BNSP currently lists 13 application units. [Regulation/sources and verification caveat](docs/references.md).
 
 ## Working agreement
 

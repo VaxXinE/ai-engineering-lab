@@ -1,33 +1,27 @@
-# Week 03 — Data Ingestion
+# Week 03 — Data Ingestion & ETL
 
-**Status:** Not started · [Roadmap](../../docs/learning-roadmap.md) · [Tracker](../../docs/progress-tracker.md)
+**Status materi: Siap dipelajari** · **Status praktik: Belum dikerjakan** · **Alokasi:** 8–10 jam
 
-## Learning objective
+> **Ruang lingkup unit pada daftar LSP yang terpublikasi:** J.63OPR00.014.2 — Melakukan Pemasukan Data. Kode/skema final harus diverifikasi kembali pada dokumen LSP terkini.
 
-Design a repeatable pipeline importing synthetic records safely and consistently.
+**Tujuan:** Memindahkan dataset pesan pelanggan sintetis ke storage secara konsisten, audit-able, dan aman diulang.
 
-## Topics
+**Prasyarat:** Modul 1 dan 2; Python standard library CSV; dasar SQL.
 
-CSV/JSON; ETL/ELT; data dictionary; constraints; transactions; deduplication; idempotency.
+## Urutan baca dan kerja
 
-## Hands-on assignment
+1. [Materi teori](theory.md) — konsep, alasan teknis, contoh dan risiko.
+2. [Panduan hands-on](lab-guide.md) — langkah implementasi dan acceptance criteria.
+3. [Latihan mandiri](exercises.md) — tugas wajib dan tantangan.
+4. [Simulasi asesmen](assessment.md) — pertanyaan, demo, rubrik.
 
-Generate synthetic inquiry records and design an importer with accepted/rejected row reporting.
+## Hasil yang direncanakan
 
-## Expected evidence
+- CSV valid dapat diproses dengan hasil terhitung.
+- Input invalid ditolak dan dilaporkan tanpa menyimpan record corrupt.
+- Menjalankan batch yang sama dua kali tidak menghasilkan duplikasi.
+- Query parameterized dan transaction behavior teruji.
 
-Synthetic fixture; importer source; ingestion log; schema.
+**Catatan:** seluruh latihan merujuk proyek [AI Customer Intelligence](../../projects/ai-customer-intelligence/README.md), menggunakan data sintetis. Materi yang lengkap tidak berarti code, pengujian atau asesmen telah diselesaikan.
 
-## Review question
-
-What happens when the same batch is ingested twice or contains malformed rows?
-
-## Completion checklist
-
-- [ ] Concept notes written in your own words, with reliable references.
-- [ ] Hands-on work completed and committed.
-- [ ] Actual verification method and result recorded (no fabricated results).
-- [ ] Security/privacy issues and relevant trade-offs documented.
-- [ ] Evidence linked in [certification matrix](../../certification/evidence-matrix.md).
-
-**Working notes:** Start from [module template](../../docs/templates/module-template.md) and add files to this directory as you work.
+[Lihat roadmap](../../docs/learning-roadmap.md) · [Tracker](../../docs/progress-tracker.md) · [Evidence matrix](../../certification/evidence-matrix.md)

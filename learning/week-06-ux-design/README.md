@@ -1,33 +1,27 @@
-# Week 06 — AI UX Design
+# Week 06 — User Experience for AI-Assisted Workflows
 
-**Status:** Not started · [Roadmap](../../docs/learning-roadmap.md) · [Tracker](../../docs/progress-tracker.md)
+**Status materi: Siap dipelajari** · **Status praktik: Belum dikerjakan** · **Alokasi:** 8–10 jam
 
-## Learning objective
+> **Ruang lingkup unit pada daftar LSP yang terpublikasi:** J.620100.006.01 — Merancang User Experience. Kode/skema final harus diverifikasi kembali pada dokumen LSP terkini.
 
-Design an understandable operator workflow with human review and graceful failures.
+**Tujuan:** Mendesain alur agent CRM yang dapat mengerti, memeriksa, memperbaiki dan menolak rekomendasi AI.
 
-## Topics
+**Prasyarat:** Use-case Week 01 dan acceptance criteria capstone.
 
-Personas; journey mapping; wireframes; accessibility; uncertainty labels; empty/loading/error states.
+## Urutan baca dan kerja
 
-## Hands-on assignment
+1. [Materi teori](theory.md) — konsep, alasan teknis, contoh dan risiko.
+2. [Panduan hands-on](lab-guide.md) — langkah implementasi dan acceptance criteria.
+3. [Latihan mandiri](exercises.md) — tugas wajib dan tantangan.
+4. [Simulasi asesmen](assessment.md) — pertanyaan, demo, rubrik.
 
-Create a flow and wireframe for accepting or overriding a predicted category.
+## Hasil yang direncanakan
 
-## Expected evidence
+- Journey memuat alur sukses, error, dan manual override.
+- Prediksi AI dibedakan dari keputusan manusia.
+- Wireframe mencakup loading/empty/error state dan aksesibilitas.
+- Ada minimal tiga task usability dengan success criteria.
 
-User journey, wireframe and UX test plan.
+**Catatan:** seluruh latihan merujuk proyek [AI Customer Intelligence](../../projects/ai-customer-intelligence/README.md), menggunakan data sintetis. Materi yang lengkap tidak berarti code, pengujian atau asesmen telah diselesaikan.
 
-## Review question
-
-How should uncertainty and AI failure be communicated to the operator?
-
-## Completion checklist
-
-- [ ] Concept notes written in your own words, with reliable references.
-- [ ] Hands-on work completed and committed.
-- [ ] Actual verification method and result recorded (no fabricated results).
-- [ ] Security/privacy issues and relevant trade-offs documented.
-- [ ] Evidence linked in [certification matrix](../../certification/evidence-matrix.md).
-
-**Working notes:** Start from [module template](../../docs/templates/module-template.md) and add files to this directory as you work.
+[Lihat roadmap](../../docs/learning-roadmap.md) · [Tracker](../../docs/progress-tracker.md) · [Evidence matrix](../../certification/evidence-matrix.md)

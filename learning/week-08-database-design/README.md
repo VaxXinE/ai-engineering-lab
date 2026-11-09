@@ -1,33 +1,25 @@
-# Week 08 — Database Entities and Relations
+# Week 08 — Database Entities & Relational Integrity
 
-**Status:** Not started · [Roadmap](../../docs/learning-roadmap.md) · [Tracker](../../docs/progress-tracker.md)
+**Materi:** siap dibaca · **Praktik:** belum diimplementasikan/dijalankan · **Alokasi:** 8–10 jam
 
-## Learning objective
+**Unit acuan:** J.620100.007.01 — Mengimplementasikan Rancangan Entitas dan Keterkaitan Antar Entitas (verifikasi dokumen LSP terbaru sebelum asesmen).
 
-Design and implement a relational schema with integrity and permission boundaries.
+**Tujuan:** Merancang struktur data untuk pesan, prediksi AI, versi model, review, dan audit trail dengan integritas kuat.
 
-## Topics
+**Prasyarat:** Week 03–04; SQL, relational keys, transactions.
 
-ERD; normalization; primary/foreign keys; constraints; migrations; indexes; transactions.
+## Materi dan tugas
+1. [Teori terstruktur](theory.md)
+2. [Panduan praktik dan test plan](lab-guide.md)
+3. [Latihan mandiri](exercises.md)
+4. [Latihan tanya jawab asesmen](assessment.md)
 
-## Hands-on assignment
+**Indikator hasil:**
+- Setiap prediction memiliki model_version dan inquiry_id yang valid.
+- Foreign key menolak orphan record; rollback transaksi menjaga konsistensi.
+- Akses tenant A tidak dapat membaca atau mengubah record tenant B.
+- Re-running migration dan duplicate event ditangani sesuai rencana.
 
-Design customers, inquiries, predictions, model versions and review events; implement migrations and query tests.
+Semua latihan memakai data sintetis dan mengembangkan [capstone](../../projects/ai-customer-intelligence/README.md). Materi siap bukan bukti implementasi/kelulusan.
 
-## Expected evidence
-
-ERD, migrations, database integration tests.
-
-## Review question
-
-How would you prevent two conflicting reviews and protect one tenant's data?
-
-## Completion checklist
-
-- [ ] Concept notes written in your own words, with reliable references.
-- [ ] Hands-on work completed and committed.
-- [ ] Actual verification method and result recorded (no fabricated results).
-- [ ] Security/privacy issues and relevant trade-offs documented.
-- [ ] Evidence linked in [certification matrix](../../certification/evidence-matrix.md).
-
-**Working notes:** Start from [module template](../../docs/templates/module-template.md) and add files to this directory as you work.
+[Roadmap](../../docs/learning-roadmap.md) · [Progress](../../docs/progress-tracker.md) · [Evidence mapping](../../certification/evidence-matrix.md)

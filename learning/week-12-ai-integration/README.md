@@ -1,33 +1,24 @@
-# Week 12 — AI Component Integration
+# Week 12 — Integrasi Komponen Solusi AI
 
-**Status:** Not started · [Roadmap](../../docs/learning-roadmap.md) · [Tracker](../../docs/progress-tracker.md)
+**Status materi:** siap dipelajari · **Status implementasi:** belum dikerjakan · **Estimasi:** 8–10 jam
 
-## Learning objective
+**Acuan unit:** J.62AIN00.014.1 — Mengintegrasikan Komponen Solusi AI. Kode unit dan KUK final memerlukan konfirmasi LSP.
 
-Connect inference to the backend via a strict interface and handle errors securely.
+**Tujuan:** Menyatukan model inference, service API, storage, review UI, dan pengujian end-to-end tanpa membuat AI menjadi single point of failure.
 
-## Topics
+## Cara pakai materi
+1. Baca [teori](theory.md) dan jelaskan inti konsep dengan bahasa sendiri.
+2. Ikuti [lab-guide](lab-guide.md) untuk implementasi (ketika pembelajaran dimulai).
+3. Kerjakan [exercises](exercises.md) dan [simulasi asesmen](assessment.md).
+4. Simpan artefak nyata di repo dan hubungkan ke [evidence matrix](../../certification/evidence-matrix.md).
 
-Model adapters; inference API; input/output validation; failure modes; auth; prompt injection risks; tracing.
+**Skenario:** Aplikasi CRM menerima inquiry baru. Service memvalidasi input dan izin, menyimpan record, meminta prediksi melalui inference adapter, memvalidasi label hasil, lalu menampilkan status review. Inference dapat gagal atau memilih abstain.
 
-## Hands-on assignment
+**Indikator:** 
+- Prediksi yang tersimpan selalu mempunyai model_version dan valid label.
+- Data inquiry tidak hilang ketika AI gagal.
+- Izin akses dites untuk resource berbeda dan tenant lain.
+- UI dapat menerima hasil normal, abstain, timeout dan invalid model output.
+- Ada bukti tests yang dijalankan, bukan screenshot tanpa reproduksi.
 
-Implement a classification endpoint and integrate predictions into the dashboard with integration tests.
-
-## Expected evidence
-
-Working inference path; API docs; error-path evidence.
-
-## Review question
-
-What should happen if a model returns an unknown class or times out?
-
-## Completion checklist
-
-- [ ] Concept notes written in your own words, with reliable references.
-- [ ] Hands-on work completed and committed.
-- [ ] Actual verification method and result recorded (no fabricated results).
-- [ ] Security/privacy issues and relevant trade-offs documented.
-- [ ] Evidence linked in [certification matrix](../../certification/evidence-matrix.md).
-
-**Working notes:** Start from [module template](../../docs/templates/module-template.md) and add files to this directory as you work.
+Baca [roadmap](../../docs/learning-roadmap.md) dan [capstone](../../projects/ai-customer-intelligence/README.md). Keberadaan panduan tidak berarti kompetensi telah diverifikasi.

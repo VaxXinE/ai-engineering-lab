@@ -1,33 +1,24 @@
-# Week 13 — AI Installation and Deployment
+# Week 13 — Instalasi, Konfigurasi dan Deployment AI
 
-**Status:** Not started · [Roadmap](../../docs/learning-roadmap.md) · [Tracker](../../docs/progress-tracker.md)
+**Status materi:** siap dipelajari · **Status implementasi:** belum dikerjakan · **Estimasi:** 8–10 jam
 
-## Learning objective
+**Acuan unit:** J.62AIN00.015.1 — Memasang Solusi AI. Kode unit dan KUK final memerlukan konfirmasi LSP.
 
-Prepare reproducible installation and verify deployment safely.
+**Tujuan:** Menyiapkan runtime yang reproducible, rahasia yang terlindungi, health checks, release metadata, dan proses rollback.
 
-## Topics
+## Cara pakai materi
+1. Baca [teori](theory.md) dan jelaskan inti konsep dengan bahasa sendiri.
+2. Ikuti [lab-guide](lab-guide.md) untuk implementasi (ketika pembelajaran dimulai).
+3. Kerjakan [exercises](exercises.md) dan [simulasi asesmen](assessment.md).
+4. Simpan artefak nyata di repo dan hubungkan ke [evidence matrix](../../certification/evidence-matrix.md).
 
-Docker; environments; dependency locking; secret injection; health checks; smoke tests; rollback.
+**Skenario:** Aplikasi yang berjalan pada laptop developer perlu bisa dipasang ulang di lingkungan test tanpa hidden manual setup. Gunakan container untuk UI, API, dan database serta model artifact tervalidasi.
 
-## Hands-on assignment
+**Indikator:** 
+- Satu runbook cukup untuk instalasi pada environment bersih.
+- Tidak ada credential asli, privileged container yang tidak perlu, atau secret di image.
+- Health/status endpoints memberi sinyal operasional yang tepat.
+- Smoke test dan rollback diuji serta hasilnya dicatat.
+- Model artifact punya provenance/version/hash atau kontrol setara.
 
-Containerize the application and document clean setup and smoke-test results.
-
-## Expected evidence
-
-Container configuration; installation runbook; executed tests.
-
-## Review question
-
-How do you roll back a broken model without losing customer records?
-
-## Completion checklist
-
-- [ ] Concept notes written in your own words, with reliable references.
-- [ ] Hands-on work completed and committed.
-- [ ] Actual verification method and result recorded (no fabricated results).
-- [ ] Security/privacy issues and relevant trade-offs documented.
-- [ ] Evidence linked in [certification matrix](../../certification/evidence-matrix.md).
-
-**Working notes:** Start from [module template](../../docs/templates/module-template.md) and add files to this directory as you work.
+Baca [roadmap](../../docs/learning-roadmap.md) dan [capstone](../../projects/ai-customer-intelligence/README.md). Keberadaan panduan tidak berarti kompetensi telah diverifikasi.

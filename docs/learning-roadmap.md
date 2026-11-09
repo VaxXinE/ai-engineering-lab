@@ -1,46 +1,53 @@
-# 16-Week Learning Roadmap
+# Roadmap Belajar AI Engineering — 16 Minggu
 
-**Audience:** full-stack engineer with around 2–3 years of experience. **Workload:** 8–10 hours/week (128–160 hours estimated). **Learning split:** approximately 30% concepts / 70% practice. These are planning estimates, not an LSP requirement.
+**Sasaran:** Full-Stack Software Engineer, pengalaman 2–3 tahun. **Rencana:** 8–10 jam per minggu (total 128–160 jam). Estimasi ini dibuat untuk belajar mandiri, bukan ketentuan BNSP.
 
-| Week | Module | Key deliverable | Focus |
-| --- | --- | --- | --- |
-| 01 | AI fundamentals | AI use-case specification and risk notes | Foundation |
-| 02 | Technology assessment | Tool comparison + Architecture Decision Record | Application |
-| 03 | Data ingestion | Repeatable synthetic CSV import design | Data |
-| 04 | Data validation | Validation rules and data quality report | Data |
-| 05 | Data structures | Algorithms for deduplication and grouping | Application |
-| 06 | User experience | User journey, wireframe and review workflow | Application |
-| 07 | User interface | Dashboard interactions and UX states | Application |
-| 08 | Database design | ERD, schema and migration plan | Application |
-| 09 | Software architecture | Component + sequence diagrams; API boundaries | Application |
-| 10 | Scalability | Latency, throughput, capacity and failure analysis | Application |
-| 11 | Model evaluation | Baseline text classifier evaluation | AI integration |
-| 12 | AI integration | Inference API design and integration tests | Shared AI |
-| 13 | Installation | Containerization and deployment runbook | Shared AI |
-| 14 | Maintenance planning | Monitoring, backup, drift and rollback plan | Shared AI |
-| 15 | Maintenance execution | Incident, recovery and regression evidence | Shared AI |
-| 16 | Assessment readiness | Demo script and evidence mapping | Both schemes |
+| Minggu | Modul | Fokus dan output yang ditargetkan |
+| --- | --- | --- |
+| 01 | [AI Engineering Fundamentals](../learning/week-01-ai-fundamentals/README.md) | Foundation: baca teori, implementasi, test, lalu kumpulkan bukti |
+| 02 | [Technology Assessment](../learning/week-02-technology-assessment/README.md) | Software engineering: baca teori, implementasi, test, lalu kumpulkan bukti |
+| 03 | [Data Ingestion & ETL](../learning/week-03-data-ingestion/README.md) | AI Data Processing: baca teori, implementasi, test, lalu kumpulkan bukti |
+| 04 | [Data Validation & Quality](../learning/week-04-data-validation/README.md) | AI Data Processing: baca teori, implementasi, test, lalu kumpulkan bukti |
+| 05 | [Data Structures & Algorithms](../learning/week-05-data-structures/README.md) | Software engineering: baca teori, implementasi, test, lalu kumpulkan bukti |
+| 06 | [UX for AI-assisted workflows](../learning/week-06-ux-design/README.md) | Software engineering: baca teori, implementasi, test, lalu kumpulkan bukti |
+| 07 | [UI Implementation](../learning/week-07-ui-implementation/README.md) | Software engineering: baca teori, implementasi, test, lalu kumpulkan bukti |
+| 08 | [Database & Data Integrity](../learning/week-08-database-design/README.md) | Software engineering: baca teori, implementasi, test, lalu kumpulkan bukti |
+| 09 | [Software Architecture](../learning/week-09-software-architecture/README.md) | Software engineering: baca teori, implementasi, test, lalu kumpulkan bukti |
+| 10 | [Scalability & Reliability](../learning/week-10-scalability/README.md) | Software engineering: baca teori, implementasi, test, lalu kumpulkan bukti |
+| 11 | [Model Evaluation & Quality](../learning/week-11-model-evaluation/README.md) | Supporting AI engineering: baca teori, implementasi, test, lalu kumpulkan bukti |
+| 12 | [AI Integration](../learning/week-12-ai-integration/README.md) | Shared AI units: baca teori, implementasi, test, lalu kumpulkan bukti |
+| 13 | [AI Installation & Deployment](../learning/week-13-ai-installation/README.md) | Shared AI units: baca teori, implementasi, test, lalu kumpulkan bukti |
+| 14 | [AI Maintenance Planning](../learning/week-14-maintenance-planning/README.md) | Shared AI units: baca teori, implementasi, test, lalu kumpulkan bukti |
+| 15 | [AI Maintenance Execution](../learning/week-15-maintenance-execution/README.md) | Shared AI units: baca teori, implementasi, test, lalu kumpulkan bukti |
+| 16 | [Assessment & Evidence Portfolio](../learning/week-16-assessment/README.md) | Both schemes: baca teori, implementasi, test, lalu kumpulkan bukti |
 
-## Weekly routine
+## Fase dan checkpoint
 
-- **2 hours**: read theory and standards;
-- **4–5 hours**: code or design hands-on;
-- **1–2 hours**: test and document evidence;
-- **~1 hour**: explain decisions aloud as mock assessor questions.
+**Fase 1 · Week 01–02 — Fundamentals/technology.** Memahami AI/ML, baseline klasifikasi, eksperimen, teknologi, dependency dan trade-off. Week 01 sudah punya contoh implementasi; Week 02 masih lab plan.
 
-## Checkpoints
+**Fase 2 · Week 03–04 — Data processing.** Proses import, validasi, quality report, idempotency dan perlindungan PII. Checkpoint: ingestion demonstrable dan reject/duplicate path teruji.
 
-- **End of Week 04:** repeatable data ingestion and validation, backed by demonstrable evidence.
-- **End of Week 10:** frontend, backend, database, UX and architecture connect logically.
-- **End of Week 15:** AI integration, installation, monitoring and recovery documented and tested as implemented.
-- **End of Week 16:** evidence mapped to each relevant unit and gaps made explicit.
+**Fase 3 · Week 05–10 — Software engineering.** Struktur data, UX/UI, DB, arsitektur, dan scalability. Checkpoint: UI + API + database dengan constraints dan pengujian.
 
-## Success criteria
+**Fase 4 · Week 11–15 — AI integration & operations.** Evaluasi classifier, integration, installation, monitoring, maintenance dan disaster-recovery exercise. Checkpoint: end-to-end workflow + failure handling + maintenance evidence.
 
-1. Demonstrate one coherent system using synthetic data.
-2. Show documented requirements, design, tests and operational plans.
-3. Explain security decisions and trade-offs.
-4. Show only **executed** results and actual artifacts.
-5. Cross-check unit codes and formal assessment criteria against the **current** LSP scheme document. Successful completion of this roadmap does not guarantee BNSP certification.
+**Fase 5 · Week 16 — Assessment readiness.** Pemetaan unit, demo, wawancara teknis, bukti kontribusi dan gap review.
 
-See [tracker](progress-tracker.md), [capstone](../projects/ai-customer-intelligence/README.md) and [evidence matrix](../certification/evidence-matrix.md).
+## Pola belajar
+
+1. Baca teori dan tulis penjelasan singkat dalam bahasa sendiri.
+2. Implementasi hands-on sesuai lab-guide dan scope realistis.
+3. Jalankan tests (happy, invalid, failure) dan catat hasil **aktual**.
+4. Dokumentasikan keputusan, trade-off dan risiko keamanan.
+5. Jawab assessment questions dan lengkapi evidence matrix.
+6. Tandai progress peserta hanya setelah demonstrasi berhasil.
+
+**Status sekarang:** seluruh bahan ajar tersedia; latihan peserta Week 01–16 masih belum selesai. Code nyata yang sudah dibuat hanya Week 01.
+
+## Kompetensi dan caveat regulasi
+
+- [Penerapan AI untuk Proses Data](https://lspartificialintelligence.id/skema-penerapan-artificial-intelligence-ai-untuk-proses-data/) tercatat 6 unit.
+- [Penerapan AI untuk Aplikasi Perangkat Lunak](https://lspartificialintelligence.id/penerapan-ai-untuk-aplikasi-perangkat-lunak/) tercatat 12 unit di LSP; BNSP directory tercatat 13.
+- [Kepmenaker 103/2026](https://jdih.kemnaker.go.id/peraturan/detail/3020/keputusan-menteri-ketenagakerjaan-nomor-103-tahun-2026) berlaku dan mencabut standar AI 123/2021. Konfirmasi KUK/skema final dengan LSP, karena daftar publikasi dapat belum diperbarui.
+
+[Indeks materi](materials-index.md) · [Progress tracker](progress-tracker.md) · [Assessment guidance](assessment-readiness.md)

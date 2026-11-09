@@ -1,33 +1,27 @@
-# Week 02 — Technology Assessment
+# Week 02 — Technology Assessment & Dependency Selection
 
-**Status:** Not started · [Roadmap](../../docs/learning-roadmap.md) · [Tracker](../../docs/progress-tracker.md)
+**Status materi: Siap dipelajari** · **Status praktik: Belum dikerjakan** · **Alokasi:** 8–10 jam
 
-## Learning objective
+> **Ruang lingkup unit pada daftar LSP yang terpublikasi:** J.620100.001.01 (Menganalisis tools); J.620100.003.01 (Mengidentifikasi library/komponen/framework). Kode/skema final harus diverifikasi kembali pada dokumen LSP terkini.
 
-Compare and justify tools, model strategies, libraries, frameworks and operational costs.
+**Tujuan:** Memilih teknologi yang aman, relevan, terukur, dan bisa dipelihara untuk capstone AI Customer Intelligence.
 
-## Topics
+**Prasyarat:** Modul 1, pemahaman aplikasi web/API, dan kemampuan membaca dokumentasi library.
 
-Framework trade-offs; local model vs external API; compatibility; licensing; dependency hygiene; ADR; secrets management.
+## Urutan baca dan kerja
 
-## Hands-on assignment
+1. [Materi teori](theory.md) — konsep, alasan teknis, contoh dan risiko.
+2. [Panduan hands-on](lab-guide.md) — langkah implementasi dan acceptance criteria.
+3. [Latihan mandiri](exercises.md) — tugas wajib dan tantangan.
+4. [Simulasi asesmen](assessment.md) — pertanyaan, demo, rubrik.
 
-Compare three tool/model options and create an ADR for the capstone.
+## Hasil yang direncanakan
 
-## Expected evidence
+- Tiga strategi AI dibandingkan dengan bobot eksplisit dan rasional penilaian.
+- ADR memuat alternatif yang ditolak beserta konsekuensinya.
+- Dependency dan lisensi utama dicatat tanpa hardcoded API key.
+- Ada rencana validasi berbasis pengukuran, bukan hanya opini.
 
-Technology evaluation matrix; ADR.
+**Catatan:** seluruh latihan merujuk proyek [AI Customer Intelligence](../../projects/ai-customer-intelligence/README.md), menggunakan data sintetis. Materi yang lengkap tidak berarti code, pengujian atau asesmen telah diselesaikan.
 
-## Review question
-
-Why did you choose this stack, and what would make you reconsider?
-
-## Completion checklist
-
-- [ ] Concept notes written in your own words, with reliable references.
-- [ ] Hands-on work completed and committed.
-- [ ] Actual verification method and result recorded (no fabricated results).
-- [ ] Security/privacy issues and relevant trade-offs documented.
-- [ ] Evidence linked in [certification matrix](../../certification/evidence-matrix.md).
-
-**Working notes:** Start from [module template](../../docs/templates/module-template.md) and add files to this directory as you work.
+[Lihat roadmap](../../docs/learning-roadmap.md) · [Tracker](../../docs/progress-tracker.md) · [Evidence matrix](../../certification/evidence-matrix.md)

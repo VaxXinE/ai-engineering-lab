@@ -1,31 +1,34 @@
-# Learning Progress Tracker
+# Progress Tracker — Materi vs Kompetensi
 
-> Tick only after the weekly deliverable can be demonstrated and is documented.
+**Materi tersedia bukan berarti praktikum peserta selesai.** Tabel ini memisahkan ketersediaan materi dan bukti penyelesaian aktual.
 
-| Week | Milestone | Completed | Evidence link |
-| --- | --- | --- | --- |
-| 01 | AI fundamentals | [ ] | [Starter + tests](../learning/week-01-ai-fundamentals/README.md); [hasil verifikasi kode](../learning/week-01-ai-fundamentals/results/verification.md) — **latihan peserta belum selesai** |
-| 02 | Technology assessment | [ ] | TBD |
-| 03 | Data ingestion | [ ] | TBD |
-| 04 | Data validation | [ ] | TBD |
-| 05 | Data structures | [ ] | TBD |
-| 06 | UX design | [ ] | TBD |
-| 07 | UI implementation | [ ] | TBD |
-| 08 | Database / ERD | [ ] | TBD |
-| 09 | Software architecture | [ ] | TBD |
-| 10 | Scalability | [ ] | TBD |
-| 11 | Model selection & evaluation | [ ] | TBD |
-| 12 | AI component integration | [ ] | TBD |
-| 13 | AI installation | [ ] | TBD |
-| 14 | Maintenance planning | [ ] | TBD |
-| 15 | Maintenance execution | [ ] | TBD |
-| 16 | Assessment simulation | [ ] | TBD |
+| Week | Modul | Teori/Lab/Latihan/Asesmen | Praktikum peserta | Bukti |
+| --- | --- | --- | --- | --- |
+| 01 | [AI Engineering Fundamentals](../learning/week-01-ai-fundamentals/README.md) | Ready | [ ] | [Starter tests](../learning/week-01-ai-fundamentals/results/verification.md); latihan peserta belum dinilai |
+| 02 | [Technology Assessment](../learning/week-02-technology-assessment/README.md) | Ready | [ ] | Not started |
+| 03 | [Data Ingestion & ETL](../learning/week-03-data-ingestion/README.md) | Ready | [ ] | Not started |
+| 04 | [Data Validation & Quality](../learning/week-04-data-validation/README.md) | Ready | [ ] | Not started |
+| 05 | [Data Structures & Algorithms](../learning/week-05-data-structures/README.md) | Ready | [ ] | Not started |
+| 06 | [UX for AI-assisted workflows](../learning/week-06-ux-design/README.md) | Ready | [ ] | Not started |
+| 07 | [UI Implementation](../learning/week-07-ui-implementation/README.md) | Ready | [ ] | Not started |
+| 08 | [Database & Data Integrity](../learning/week-08-database-design/README.md) | Ready | [ ] | Not started |
+| 09 | [Software Architecture](../learning/week-09-software-architecture/README.md) | Ready | [ ] | Not started |
+| 10 | [Scalability & Reliability](../learning/week-10-scalability/README.md) | Ready | [ ] | Not started |
+| 11 | [Model Evaluation & Quality](../learning/week-11-model-evaluation/README.md) | Ready | [ ] | Not started |
+| 12 | [AI Integration](../learning/week-12-ai-integration/README.md) | Ready | [ ] | Not started |
+| 13 | [AI Installation & Deployment](../learning/week-13-ai-installation/README.md) | Ready | [ ] | Not started |
+| 14 | [AI Maintenance Planning](../learning/week-14-maintenance-planning/README.md) | Ready | [ ] | Not started |
+| 15 | [AI Maintenance Execution](../learning/week-15-maintenance-execution/README.md) | Ready | [ ] | Not started |
+| 16 | [Assessment & Evidence Portfolio](../learning/week-16-assessment/README.md) | Ready | [ ] | Not started |
 
-## Checkpoints
+## Checkpoint kompetensi
 
-- [ ] Data processing demonstration completed (Week 04)
-- [ ] Full-stack architecture demonstrated (Week 10)
-- [ ] AI integration and maintenance demonstrated (Week 15)
-- [ ] Evidence matrix reviewed and gaps addressed (Week 16)
+- [ ] Data processing demonstration (M03–04)
+- [ ] Full-stack system demonstrable (M05–10)
+- [ ] AI integration, installation, maintenance demonstrable (M11–15)
+- [ ] Evidence matrix verified (M16)
+- [ ] Latest approved LSP scheme/KUK confirmed (before formal assessment)
 
-**Last reviewed:** 2026-11-09 — Week 01 starter code verified locally; personal exercise remains pending. Replace `TBD` with specific files, PRs or commits when evidence exists.
+**Per 9 November 2026:** materi 16 modul sudah siap dibaca; **hanya kode contoh Week 01** terverifikasi melalui unit tests. Kesiapan peserta belum dinilai dan status BNSP belum diklaim.
+
+[Indeks materi](materials-index.md)

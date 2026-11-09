@@ -1,33 +1,24 @@
-# Week 14 — AI Maintenance Planning
+# Week 14 — Rencana Pemeliharaan Solusi AI
 
-**Status:** Not started · [Roadmap](../../docs/learning-roadmap.md) · [Tracker](../../docs/progress-tracker.md)
+**Status materi:** siap dipelajari · **Status implementasi:** belum dikerjakan · **Estimasi:** 8–10 jam
 
-## Learning objective
+**Acuan unit:** J.62AIN00.016.1 — Merencanakan Perawatan Solusi AI. Kode unit dan KUK final memerlukan konfirmasi LSP.
 
-Define monitoring and maintenance actions based on measured risks.
+**Tujuan:** Menghasilkan maintenance plan yang memisahkan reliability aplikasi, kualitas prediksi, keamanan dependency dan pemulihan insiden.
 
-## Topics
+## Cara pakai materi
+1. Baca [teori](theory.md) dan jelaskan inti konsep dengan bahasa sendiri.
+2. Ikuti [lab-guide](lab-guide.md) untuk implementasi (ketika pembelajaran dimulai).
+3. Kerjakan [exercises](exercises.md) dan [simulasi asesmen](assessment.md).
+4. Simpan artefak nyata di repo dan hubungkan ke [evidence matrix](../../certification/evidence-matrix.md).
 
-Availability; latency; inference errors; model drift; privacy-safe logs; backups; recovery objectives; update cadence.
+**Skenario:** Setelah sistem terpasang, kualitas klasifikasi bisa turun walau service tetap online. Kita merencanakan pengukuran outcome, inspeksi, update, backup, dan incident response sebelum gangguan nyata terjadi.
 
-## Hands-on assignment
+**Indikator:** 
+- Setiap metrik memiliki definisi yang tidak ambigu dan sumber data.
+- Tersedia severity, owner, tindakan, escalation dan jadwal review.
+- Tersedia backup/restore plan, rollback dan kebijakan model update.
+- Privasi log dan akses observability diperhitungkan.
+- Tidak ada klaim 'drift terdeteksi' tanpa data pengamatan.
 
-Write a maintenance plan with metrics, alerts, owners, backup schedules and rollback criteria.
-
-## Expected evidence
-
-Maintenance plan; monitoring specification; risk register.
-
-## Review question
-
-What metric would trigger model re-evaluation rather than automatic retraining?
-
-## Completion checklist
-
-- [ ] Concept notes written in your own words, with reliable references.
-- [ ] Hands-on work completed and committed.
-- [ ] Actual verification method and result recorded (no fabricated results).
-- [ ] Security/privacy issues and relevant trade-offs documented.
-- [ ] Evidence linked in [certification matrix](../../certification/evidence-matrix.md).
-
-**Working notes:** Start from [module template](../../docs/templates/module-template.md) and add files to this directory as you work.
+Baca [roadmap](../../docs/learning-roadmap.md) dan [capstone](../../projects/ai-customer-intelligence/README.md). Keberadaan panduan tidak berarti kompetensi telah diverifikasi.

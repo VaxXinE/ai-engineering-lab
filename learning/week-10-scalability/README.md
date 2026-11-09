@@ -1,33 +1,25 @@
-# Week 10 — Scalability and Reliability
+# Week 10 — Scalability, Performance & Reliability
 
-**Status:** Not started · [Roadmap](../../docs/learning-roadmap.md) · [Tracker](../../docs/progress-tracker.md)
+**Materi:** siap dibaca · **Praktik:** belum diimplementasikan/dijalankan · **Alokasi:** 8–10 jam
 
-## Learning objective
+**Unit acuan:** J.620100.002.01 — Menganalisis Skalabilitas Perangkat Lunak (verifikasi dokumen LSP terbaru sebelum asesmen).
 
-Analyze capacity limits and apply proportionate reliability safeguards.
+**Tujuan:** Mengukur bottleneck frontend/backend/DB/inference dan merancang scaling serta failure protection berdasarkan data.
 
-## Topics
+**Prasyarat:** Week 08–09 architecture dan API plan.
 
-Throughput; P95 latency; concurrency; connection pools; queues; caching; timeouts; bounded retries; rate limits.
+## Materi dan tugas
+1. [Teori terstruktur](theory.md)
+2. [Panduan praktik dan test plan](lab-guide.md)
+3. [Latihan mandiri](exercises.md)
+4. [Latihan tanya jawab asesmen](assessment.md)
 
-## Hands-on assignment
+**Indikator hasil:**
+- Setiap hasil uji mencantumkan alat, mesin, durasi, concurrency, dan ukuran data.
+- Rekomendasi perubahan diturunkan dari bottleneck yang diobservasi.
+- Sistem menghindari retry tak berbatas dan uncontrolled external API consumption.
+- Terdapat error case dan timeout scenario dalam pengujian.
 
-Create test scenarios for individual vs batch requests, report observed latency and propose improvements.
+Semua latihan memakai data sintetis dan mengembangkan [capstone](../../projects/ai-customer-intelligence/README.md). Materi siap bukan bukti implementasi/kelulusan.
 
-## Expected evidence
-
-Scalability report; actual load-test results when run.
-
-## Review question
-
-When should work move to a queue? How do retries cause duplicate processing?
-
-## Completion checklist
-
-- [ ] Concept notes written in your own words, with reliable references.
-- [ ] Hands-on work completed and committed.
-- [ ] Actual verification method and result recorded (no fabricated results).
-- [ ] Security/privacy issues and relevant trade-offs documented.
-- [ ] Evidence linked in [certification matrix](../../certification/evidence-matrix.md).
-
-**Working notes:** Start from [module template](../../docs/templates/module-template.md) and add files to this directory as you work.
+[Roadmap](../../docs/learning-roadmap.md) · [Progress](../../docs/progress-tracker.md) · [Evidence mapping](../../certification/evidence-matrix.md)

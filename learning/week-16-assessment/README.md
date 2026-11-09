@@ -1,33 +1,24 @@
-# Week 16 — Assessment Readiness
+# Week 16 — Portofolio dan Simulasi Asesmen BNSP
 
-**Status:** Not started · [Roadmap](../../docs/learning-roadmap.md) · [Tracker](../../docs/progress-tracker.md)
+**Status materi:** siap dipelajari · **Status implementasi:** belum dikerjakan · **Estimasi:** 8–10 jam
 
-## Learning objective
+**Acuan unit:** Konsolidasi bukti dua skema terpisah; bukan unit kompetensi tersendiri.. Kode unit dan KUK final memerlukan konfirmasi LSP.
 
-Prepare traceable, reproducible evidence and demonstrate engineering competence.
+**Tujuan:** Menyiapkan evidence matrix yang akurat, demonstrasi sistem, wawancara teknis, dan gap analysis untuk asesor LSP.
 
-## Topics
+## Cara pakai materi
+1. Baca [teori](theory.md) dan jelaskan inti konsep dengan bahasa sendiri.
+2. Ikuti [lab-guide](lab-guide.md) untuk implementasi (ketika pembelajaran dimulai).
+3. Kerjakan [exercises](exercises.md) dan [simulasi asesmen](assessment.md).
+4. Simpan artefak nyata di repo dan hubungkan ke [evidence matrix](../../certification/evidence-matrix.md).
 
-Competency evidence mapping; FR.APL.01/FR.APL.02 concepts; oral demonstrations; gaps; privacy review.
+**Skenario:** Punya repo berisi kode tidak otomatis memenuhi unit kompetensi. Untuk setiap unit harus ada klaim kemampuan spesifik, tindakan yang dilakukan peserta, artefak, hasil verifikasi aktual, dan batas kontribusinya.
 
-## Hands-on assignment
+**Indikator:** 
+- Matriks unit sesuai dokumen LSP final yang dikonfirmasi.
+- Setiap klaim kompetensi mempunyai bukti kontribusi sendiri dan dapat direproduksi.
+- Tes dan demo hasil nyata, tidak ada klaim palsu.
+- Data/credential/proprietary work aman sebelum dibagikan.
+- Kekurangan bukti dan rencana remediasi tercatat jelas.
 
-Link artifacts to the evidence matrix and conduct a full end-to-end demo and mock questioning.
-
-## Expected evidence
-
-Evidence pack, demo script, unresolved gap register.
-
-## Review question
-
-Can you show evidence for your own work rather than only describe it?
-
-## Completion checklist
-
-- [ ] Concept notes written in your own words, with reliable references.
-- [ ] Hands-on work completed and committed.
-- [ ] Actual verification method and result recorded (no fabricated results).
-- [ ] Security/privacy issues and relevant trade-offs documented.
-- [ ] Evidence linked in [certification matrix](../../certification/evidence-matrix.md).
-
-**Working notes:** Start from [module template](../../docs/templates/module-template.md) and add files to this directory as you work.
+Baca [roadmap](../../docs/learning-roadmap.md) dan [capstone](../../projects/ai-customer-intelligence/README.md). Keberadaan panduan tidak berarti kompetensi telah diverifikasi.

@@ -1,33 +1,25 @@
-# Week 07 — UI Implementation
+# Week 07 — Implementasi UI Dashboard AI
 
-**Status:** Not started · [Roadmap](../../docs/learning-roadmap.md) · [Tracker](../../docs/progress-tracker.md)
+**Materi:** siap dibaca · **Praktik:** belum diimplementasikan/dijalankan · **Alokasi:** 8–10 jam
 
-## Learning objective
+**Unit acuan:** J.620100.005.02 — Mengimplementasikan User Interface (verifikasi dokumen LSP terbaru sebelum asesmen).
 
-Plan and implement accessible, responsive, type-safe dashboard interactions.
+**Tujuan:** Menerapkan wireframe Week 06 menjadi frontend yang responsif, aksesibel, dan aman menghadapi hasil AI yang tidak pasti.
 
-## Topics
+**Prasyarat:** Week 06; TypeScript, React dan HTTP API dasar.
 
-React/Next.js; components; API types; validation; loading/error states; accessibility.
+## Materi dan tugas
+1. [Teori terstruktur](theory.md)
+2. [Panduan praktik dan test plan](lab-guide.md)
+3. [Latihan mandiri](exercises.md)
+4. [Latihan tanya jawab asesmen](assessment.md)
 
-## Hands-on assignment
+**Indikator hasil:**
+- Semua state idle/loading/empty/success/error dapat direproduksi.
+- Label AI dan keputusan manusia ditampilkan berbeda.
+- Aksi double-submit tertahan di UI dan direncanakan juga dicegah di server.
+- Komponen kritis dapat digunakan dengan keyboard.
 
-Build the initial dashboard and review screen, using synthetic/mock data until API exists.
+Semua latihan memakai data sintetis dan mengembangkan [capstone](../../projects/ai-customer-intelligence/README.md). Materi siap bukan bukti implementasi/kelulusan.
 
-## Expected evidence
-
-UI source, screenshots, component tests when implemented.
-
-## Review question
-
-How does the UI prevent an unauthorized action, and why must the API also enforce it?
-
-## Completion checklist
-
-- [ ] Concept notes written in your own words, with reliable references.
-- [ ] Hands-on work completed and committed.
-- [ ] Actual verification method and result recorded (no fabricated results).
-- [ ] Security/privacy issues and relevant trade-offs documented.
-- [ ] Evidence linked in [certification matrix](../../certification/evidence-matrix.md).
-
-**Working notes:** Start from [module template](../../docs/templates/module-template.md) and add files to this directory as you work.
+[Roadmap](../../docs/learning-roadmap.md) · [Progress](../../docs/progress-tracker.md) · [Evidence mapping](../../certification/evidence-matrix.md)
