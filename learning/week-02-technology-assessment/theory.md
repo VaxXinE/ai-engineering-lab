@@ -1,6 +1,6 @@
 # Teori — Week 02: Technology Assessment & Dependency Selection
 
-**Tujuan:** Memilih teknologi yang aman, relevan, terukur, dan bisa dipelihara untuk capstone AI Customer Intelligence.
+**Tujuan:** Memilih teknologi yang aman, relevan, terukur, dan bisa dipelihara untuk capstone AI Smart Energy Monitoring.
 
 ## Konsep dan keputusan engineering
 

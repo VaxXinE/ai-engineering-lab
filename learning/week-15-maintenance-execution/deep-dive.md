@@ -15,11 +15,11 @@ Saat inference timeout meningkat, lihat sejak kapan, perubahan terakhir, p95, qu
 
 ### 2. Fault isolation dengan correlation ID
 
-Gunakan request_id yang aman untuk menelusuri browser→API→inference→DB. Logs harus menyamarkan PII, prompt, tokens dan secrets. Catat error class dan retry count, bukan full chat. Root cause belum terbukti jika hanya ada correlation; bandingkan healthy versus failing requests, deploy diff dan resource trends.
+Gunakan request_id yang aman untuk menelusuri browser→API→inference→DB. Logs harus menyamarkan PII, prompt, tokens dan secrets. Catat error class dan retry count, bukan full telemetri. Root cause belum terbukti jika hanya ada correlation; bandingkan healthy versus failing requests, deploy diff dan resource trends.
 
 ### 3. Human fallback and containment
 
-Jika model hasilnya tidak tepercaya, hentikan auto-route dan tampilkan manual review untuk pesan baru. Jangan menghapus inquiries yang sedang menunggu. Untuk kemungkinan credential leak, containment mencakup revoke/rotate dengan prosedur yang benar, audit access dan komunikasi; jangan mem-push contoh token ke issue publik.
+Jika model hasilnya tidak tepercaya, hentikan auto-route dan tampilkan manual review untuk pesan baru. Jangan menghapus meter readings yang sedang menunggu. Untuk kemungkinan credential leak, containment mencakup revoke/rotate dengan prosedur yang benar, audit access dan komunikasi; jangan mem-push contoh token ke issue publik.
 
 ### 4. Restore di environment berbeda
 

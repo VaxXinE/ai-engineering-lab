@@ -13,7 +13,7 @@
 
 ### 1. Definisikan sumber dan data contract sebelum coding
 
-Dataset chat memiliki source, event ID, tenant ID, message, received_at, dan consent status. Tentukan field wajib, tipe, encoding, range panjang, dan pemilik data. Source lineage menyimpan asal input, schema_version dan timestamp import agar kesalahan bisa diusut. Tanpa kontrak, perubahan kolom mendadak dapat diam-diam memindahkan data yang salah ke tabel yang tampak valid.
+Dataset telemetri memiliki source, event ID, tenant ID, event_note, received_at, dan consent status. Tentukan field wajib, tipe, encoding, range panjang, dan pemilik data. Source lineage menyimpan asal input, schema_version dan timestamp import agar kesalahan bisa diusut. Tanpa kontrak, perubahan kolom mendadak dapat diam-diam memindahkan data yang salah ke tabel yang tampak valid.
 
 ### 2. ETL versus ELT dan staging
 
@@ -45,7 +45,7 @@ Setiap batch harus melaporkan received, accepted, rejected, skipped serta alasan
 
 ## Transfer ke profesi full-stack
 
-Ambil satu kebutuhan dari capstone [AI Customer Intelligence](../../projects/ai-customer-intelligence/README.md). Jelaskan **data apa yang tepercaya, aturan bisnis mana yang harus deterministik, apa yang bisa diprediksi AI, bagaimana failure ditangani, dan bagaimana keputusan diuji**. Jangan menyatakan modul selesai hanya dengan menyalin contoh.
+Ambil satu kebutuhan dari capstone [AI Smart Energy Monitoring](../../projects/ai-energy-intelligence/README.md). Jelaskan **data apa yang tepercaya, aturan bisnis mana yang harus deterministik, apa yang bisa diprediksi AI, bagaimana failure ditangani, dan bagaimana keputusan diuji**. Jangan menyatakan modul selesai hanya dengan menyalin contoh.
 
 ## Bacaan lanjutan (dokumentasi dan pembelajaran primer)
 

@@ -8,7 +8,7 @@ Detect → triage → mitigate → recover → verify → postmortem. Mitigasi s
 
 ## 2. Root cause versus symptom
 
-HTTP 500 hanya gejala. Bedakan timeout network, missing model artifact, invalid schema, expired credential, DB saturation, dan release incompatibility. Gunakan correlation ID dan bounded logs untuk menemukan komponen gagal. Redact customer content dan tidak menyalin token ke issue.
+HTTP 500 hanya gejala. Bedakan timeout network, missing model artifact, invalid schema, expired credential, DB saturation, dan release incompatibility. Gunakan correlation ID dan bounded logs untuk menemukan komponen gagal. Redact device content dan tidak menyalin token ke issue.
 
 ## 3. Change management and regression
 
@@ -24,15 +24,15 @@ Postmortem fokus pada kronologi, dampak, penyebab teknis, contributing factors, 
 
 ## Studi kasus
 
-Simulasikan service inference offline sehingga klasifikasi gagal. Data inquiry tetap disimpan. Operator memverifikasi degraded mode, memulihkan service, menjalankan regression test, dan mendokumentasikan insiden.
+Simulasikan service inference offline sehingga klasifikasi gagal. Data meter reading tetap disimpan. Operator memverifikasi degraded mode, memulihkan service, menjalankan regression test, dan mendokumentasikan insiden.
 
 ## Pertimbangan verifikasi
 
-- Simulasi outage tidak kehilangan inquiry yang sudah diterima.
+- Simulasi outage tidak kehilangan meter reading yang sudah diterima.
 - Restore dijalankan pada environment uji dan diperiksa integritasnya.
 - Setiap langkah pemulihan beserta hasil uji dicatat.
 - Regression test menguji akar masalah, bukan hanya happy path.
-- Tidak ada data customer asli atau secret dalam incident report.
+- Tidak ada data device asli atau secret dalam incident report.
 
 ## Bacaan primer
 

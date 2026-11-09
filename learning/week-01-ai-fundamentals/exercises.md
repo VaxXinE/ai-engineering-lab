@@ -24,7 +24,7 @@ Pilih satu pesan test yang salah. Jelaskan token mana yang sudah/tidak dikenal, 
 Ciptakan lima kalimat sintetis baru (typo/slang), lalu bandingkan prediksi manual dan model. Jelaskan kapan rule-based lebih aman/sederhana dan kapan ML lebih relevan.
 
 ## E. Human review UX (opsional)
-Gambarkan langkah agent melihat prediksi, melakukan koreksi, dan memproses abstain. Jelaskan efeknya pada API/DB yang akan dibangun kemudian.
+Gambarkan langkah operator melihat prediksi, melakukan koreksi, dan memproses abstain. Jelaskan efeknya pada API/DB yang akan dibangun kemudian.
 
 ## Rubrik refleksi
 - **Konsep:** bisa menjelaskan ML, training, inference, evaluation vs rules.

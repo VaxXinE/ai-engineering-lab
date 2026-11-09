@@ -24,4 +24,4 @@
 - Privasi log dan akses observability diperhitungkan.
 - Tidak ada klaim 'drift terdeteksi' tanpa data pengamatan.
 
-Baca [roadmap](../../docs/learning-roadmap.md) dan [capstone](../../projects/ai-customer-intelligence/README.md). Keberadaan panduan tidak berarti kompetensi telah diverifikasi.
+Baca [roadmap](../../docs/learning-roadmap.md) dan [capstone](../../projects/ai-energy-intelligence/README.md). Keberadaan panduan tidak berarti kompetensi telah diverifikasi.

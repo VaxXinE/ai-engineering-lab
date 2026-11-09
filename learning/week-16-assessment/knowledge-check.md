@@ -27,7 +27,7 @@ Tutup teori. Jawab soal berikut tanpa bantuan, lalu evaluasi dengan alasan di ba
 
 ## Latihan transfer
 
-Ambil satu masalah dari [capstone](../../projects/ai-customer-intelligence/README.md), ubah satu constraint utama, dan jelaskan akibatnya pada solution design. Catat miskonsepsi yang sudah diperbaiki.
+Ambil satu masalah dari [capstone](../../projects/ai-energy-intelligence/README.md), ubah satu constraint utama, dan jelaskan akibatnya pada solution design. Catat miskonsepsi yang sudah diperbaiki.
 
 ## Jadwal recall
 

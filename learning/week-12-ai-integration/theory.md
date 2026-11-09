@@ -4,7 +4,7 @@
 
 ## 1. Contract-first integration
 
-Rancang request/response schema yang ketat sebelum menghubungkan UI, API dan model. Label hanya boleh sales/support/general/abstain; model version wajib disertakan. Status aplikasi seperti pending/inferred/reviewed bukan label AI. Pisahkan status agar proses bisnis tidak mengira prediksi sebagai keputusan final.
+Rancang request/response schema yang ketat sebelum menghubungkan UI, API dan model. Label hanya boleh normal/warning/fault/abstain; model version wajib disertakan. Status aplikasi seperti pending/inferred/reviewed bukan label AI. Pisahkan status agar proses bisnis tidak mengira prediksi sebagai keputusan final.
 
 ## 2. Ports and adapters
 
@@ -12,11 +12,11 @@ Definisikan antarmuka inference dengan method predict(text)->Prediction; impleme
 
 ## 3. Transaction and failure handling
 
-Simpan inquiry secara konsisten, lalu lakukan inference dengan timeouts terkendali; jika provider gagal, jangan hilangkan pesan. Untuk pemrosesan asynchronous gunakan queue dan idempotency key. Status pending_manual_review lebih aman daripada menciptakan prediksi tebakan baru saat service tidak tersedia.
+Simpan meter reading secara konsisten, lalu lakukan inference dengan timeouts terkendali; jika provider gagal, jangan hilangkan pesan. Untuk pemrosesan asynchronous gunakan queue dan idempotency key. Status pending_manual_review lebih aman daripada menciptakan prediksi tebakan baru saat service tidak tersedia.
 
 ## 4. Security boundary
 
-Authentication dan server-side object-level authorization wajib untuk endpoint review. Validasi payload panjang, label output model, dan safe logging; pesan pelanggan tidak boleh dikirim ke eksternal tanpa otorisasi kebijakan dan data minimization. Prompt injection relevan bila nanti menggunakan LLM dengan tool atau retrieval.
+Authentication dan server-side object-level authorization wajib untuk endpoint review. Validasi payload panjang, label output model, dan safe logging; catatan kejadian perangkat tidak boleh dikirim ke eksternal tanpa otorisasi kebijakan dan data minimization. Prompt injection relevan bila nanti menggunakan LLM dengan tool atau retrieval.
 
 ## 5. Test pyramid
 
@@ -24,12 +24,12 @@ Unit test inference adapter dan domain service, integration test API + database,
 
 ## Studi kasus
 
-Aplikasi CRM menerima inquiry baru. Service memvalidasi input dan izin, menyimpan record, meminta prediksi melalui inference adapter, memvalidasi label hasil, lalu menampilkan status review. Inference dapat gagal atau memilih abstain.
+Aplikasi dashboard energi menerima meter reading baru. Service memvalidasi input dan izin, menyimpan record, meminta prediksi melalui inference adapter, memvalidasi label hasil, lalu menampilkan status review. Inference dapat gagal atau memilih abstain.
 
 ## Pertimbangan verifikasi
 
 - Prediksi yang tersimpan selalu mempunyai model_version dan valid label.
-- Data inquiry tidak hilang ketika AI gagal.
+- Data meter reading tidak hilang ketika AI gagal.
 - Izin akses dites untuk resource berbeda dan tenant lain.
 - UI dapat menerima hasil normal, abstain, timeout dan invalid model output.
 - Ada bukti tests yang dijalankan, bukan screenshot tanpa reproduksi.

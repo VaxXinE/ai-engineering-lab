@@ -21,7 +21,7 @@ Schema memeriksa tipe dan struktur; semantic rule menghubungkan data dengan kont
 
 ### 3. Validation boundary dan fail-safe defaults
 
-Validasi paling awal dilakukan saat data masuk; aturan kritis juga ditegakkan di database dan pada output model. Return error yang dapat ditindaklanjuti per field, tetapi jangan membocorkan full message atau detail internal ke log. Untuk pipeline dengan data sebagian invalid, kebijakan quarantine atau reject dapat lebih aman daripada silent coercion (misalnya mengubah tanggal yang tak dapat diparse menjadi hari ini).
+Validasi paling awal dilakukan saat data masuk; aturan kritis juga ditegakkan di database dan pada output model. Return error yang dapat ditindaklanjuti per field, tetapi jangan membocorkan full event_note atau detail internal ke log. Untuk pipeline dengan data sebagian invalid, kebijakan quarantine atau reject dapat lebih aman daripada silent coercion (misalnya mengubah tanggal yang tak dapat diparse menjadi hari ini).
 
 ### 4. Profiling dan quality gate
 
@@ -29,11 +29,11 @@ Data profiling menghitung null, distribution per channel/label, panjang teks, ju
 
 ### 5. Data leakage dalam machine learning
 
-Leakage bukan hanya duplikat teks persis. Dataset bisa bocor jika preprocessing belajar statistik dari seluruh data sebelum split, data dari customer yang sama tersebar di train dan test, atau fitur mengandung informasi tentang label masa depan. Split berdasarkan group atau waktu ketika relevan. Jangan terus tuning menggunakan test set karena ia berubah menjadi sumber keputusan model.
+Leakage bukan hanya duplikat teks persis. Dataset bisa bocor jika preprocessing belajar statistik dari seluruh data sebelum split, data dari device yang sama tersebar di train dan test, atau fitur mengandung informasi tentang label masa depan. Split berdasarkan group atau waktu ketika relevan. Jangan terus tuning menggunakan test set karena ia berubah menjadi sumber keputusan model.
 
 ### 6. Privasi, anonymization dan retention
 
-PII dalam chat dapat berupa nomor telepon, rekening, alamat, atau konteks kombinasi yang memungkinkan re-identification. Untuk pembelajaran buat data sintetis dari nol; tidak cukup mengganti nama pada chat sungguhan. Batasi retention, access policy, encryption dan audit. Output error dan model cards tidak perlu menyimpan pesan mentah jika statistik agregat sudah cukup.
+PII dalam telemetri dapat berupa nomor telepon, rekening, alamat, atau konteks kombinasi yang memungkinkan re-identification. Untuk pembelajaran buat data sintetis dari nol; tidak cukup mengganti nama pada telemetri sungguhan. Batasi retention, access policy, encryption dan audit. Output error dan model cards tidak perlu menyimpan pesan mentah jika statistik agregat sudah cukup.
 
 ## Miskonsepsi yang perlu diwaspadai
 
@@ -45,7 +45,7 @@ PII dalam chat dapat berupa nomor telepon, rekening, alamat, atau konteks kombin
 
 ## Transfer ke profesi full-stack
 
-Ambil satu kebutuhan dari capstone [AI Customer Intelligence](../../projects/ai-customer-intelligence/README.md). Jelaskan **data apa yang tepercaya, aturan bisnis mana yang harus deterministik, apa yang bisa diprediksi AI, bagaimana failure ditangani, dan bagaimana keputusan diuji**. Jangan menyatakan modul selesai hanya dengan menyalin contoh.
+Ambil satu kebutuhan dari capstone [AI Smart Energy Monitoring](../../projects/ai-energy-intelligence/README.md). Jelaskan **data apa yang tepercaya, aturan bisnis mana yang harus deterministik, apa yang bisa diprediksi AI, bagaimana failure ditangani, dan bagaimana keputusan diuji**. Jangan menyatakan modul selesai hanya dengan menyalin contoh.
 
 ## Bacaan lanjutan (dokumentasi dan pembelajaran primer)
 

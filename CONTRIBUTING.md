@@ -14,7 +14,7 @@ This repo prioritizes **clarity, reproducibility, security, traceable evidence, 
 
 - `docs: define week 01 AI use case`
 - `feat: add synthetic data ingestion pipeline`
-- `test: cover invalid customer message payloads`
+- `test: cover invalid device event note payloads`
 - `fix: enforce ownership checks on prediction lookup`
 
 ## Definition of done
@@ -24,6 +24,6 @@ This repo prioritizes **clarity, reproducibility, security, traceable evidence, 
 - [ ] Relevant unit/integration/security tests are executed and recorded.
 - [ ] Error, loading and permission states are considered as applicable.
 - [ ] Documentation and evidence links are updated.
-- [ ] No secrets, company code or real customer data are committed.
+- [ ] No secrets, company code or real device data are committed.
 
 See [lesson template](docs/templates/module-template.md) and [evidence template](docs/templates/evidence-template.md).

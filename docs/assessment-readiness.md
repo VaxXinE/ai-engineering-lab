@@ -27,7 +27,7 @@ Bukti yang diharapkan:
 - [ ] Dokumen skema resmi terbaru telah diterima.
 - [ ] Semua unit dan KUK dipetakan, termasuk perbedaan 12 vs 13.
 - [ ] Kode, dokumentasi dan demo benar-benar milik atau kontribusi peserta.
-- [ ] Bukti dapat dipertanggungjawabkan tanpa data/customer proprietary.
+- [ ] Bukti dapat dipertanggungjawabkan tanpa data/device proprietary.
 - [ ] Mock interview dan demo end-to-end dilakukan dengan hasil aktual.
 - [ ] Persyaratan dan metode asesmen LSP dikonfirmasi.
 - [ ] Gap yang belum teruji dicatat, bukan ditandai hijau.

@@ -11,7 +11,7 @@
 
 ### 1. Evaluation loop yang disiplin
 
-Definisikan target use case dan risk cost dulu. Train untuk fitting; validation untuk tuning parameter; test untuk evaluasi final. Jangan mencoba banyak model pada test sampai memilih yang paling tinggi, karena test menjadi validation tersembunyi. Gunakan cross-validation jika dataset train kecil, dengan group/time split bila ada hubungan antar customer atau urutan waktu.
+Definisikan target use case dan risk cost dulu. Train untuk fitting; validation untuk tuning parameter; test untuk evaluasi final. Jangan mencoba banyak model pada test sampai memilih yang paling tinggi, karena test menjadi validation tersembunyi. Gunakan cross-validation jika dataset train kecil, dengan group/time split bila ada hubungan antar device atau urutan waktu.
 
 ### 2. Label policy dan inter-annotator quality
 
@@ -19,7 +19,7 @@ Ground truth tidak otomatis benar. Pesan 'Saya mau beli tapi login gagal' mengan
 
 ### 3. Precision, recall, F1, macro vs weighted
 
-Accuracy tertipu class imbalance. Pada 95% general messages, model yang selalu menjawab general tampak 95% akurat namun gagal menemukan sales/support. Macro F1 memberi bobot sama ke setiap kelas, weighted F1 memberi bobot berdasarkan support. Ukur per-class recall, precision, confusion matrix dan abstain. Pilih metrik berdasarkan dampak false negative/positive di operasi.
+Accuracy tertipu class imbalance. Pada 95% fault messages, model yang selalu menjawab fault tampak 95% akurat namun gagal menemukan normal/warning. Macro F1 memberi bobot sama ke setiap kelas, weighted F1 memberi bobot berdasarkan warning. Ukur per-class recall, precision, confusion matrix dan abstain. Pilih metrik berdasarkan dampak false negative/positive di operasi.
 
 ### 4. Probability calibration dan threshold
 

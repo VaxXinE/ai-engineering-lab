@@ -1,18 +1,18 @@
-"""Hand-written decision rules: deterministic, requires no ML training."""
+"""Deterministic educational rules for synthetic energy-device event notes."""
 
 from .model import tokenize
 
 RULES = {
-    "sales": {"harga", "biaya", "beli", "membeli", "diskon", "langganan", "paket", "penawaran"},
-    "support": {"error", "gagal", "bug", "gangguan", "masalah", "login", "password", "terkunci"},
-    "general": {"alamat", "kantor", "kontak", "panduan", "profil", "faq", "informasi", "tutorial"},
+    "normal": {"normal", "stabil", "lancar", "teratur", "konsisten", "sesuai", "valid"},
+    "warning": {"lonjakan", "meningkat", "fluktuasi", "berlebih", "anomali", "peringatan", "ambang"},
+    "fault": {"offline", "gagal", "rusak", "kerusakan", "putus", "error", "terputus", "berhenti"},
 }
 
 
 def classify_by_rules(text: str) -> str:
-    """Choose class with most keyword matches. Ties/no match fall back to general."""
+    """Use keyword votes. Ambiguous/no-match events require human review."""
     words = set(tokenize(text))
     scores = {label: len(words & keywords) for label, keywords in RULES.items()}
-    best_score = max(scores.values())
-    winners = [label for label, score in scores.items() if score == best_score]
-    return winners[0] if len(winners) == 1 and best_score > 0 else "general"
+    peak = max(scores.values())
+    winners = [label for label, value in scores.items() if value == peak]
+    return winners[0] if peak > 0 and len(winners) == 1 else "abstain"

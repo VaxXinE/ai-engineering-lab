@@ -12,7 +12,7 @@ HTTP request dapat gagal, timeout, berulang, atau datang tidak berurutan. Tampil
 
 ## 3. Aksesibilitas dan UX
 
-Semantic HTML untuk tabel, form label, tombol, dialog, dan error message. Focus state dan keyboard support wajib. Hindari penggunaan warna sebagai satu-satunya penanda status; gunakan teks seperti 'Perlu ditinjau' dan 'AI tidak tersedia'. Status perlu dapat dipahami screen reader via peringatan yang tepat.
+Semantic HTML untuk tabel, form label, tombol, dialog, dan error event_note. Focus state dan keyboard warning wajib. Hindari penggunaan warna sebagai satu-satunya penanda status; gunakan teks seperti 'Perlu ditinjau' dan 'AI tidak tersedia'. Status perlu dapat dipahami screen reader via peringatan yang tepat.
 
 ## 4. Uncertain AI output
 
@@ -24,7 +24,7 @@ Escaping UI dari React membantu mencegah injection teks, tetapi bahaya masih ada
 
 ## Skenario rekayasa perangkat lunak
 
-Untuk inquiry yang masuk dengan label 'support', agent melihat prediksi lalu memilih 'sales'. UI menampilkan konfirmasi, menyimpan action, serta mengembalikan hasil audit. Request gagal tidak menghilangkan perubahan yang belum tersimpan.
+Untuk meter reading yang masuk dengan label 'warning', operator melihat prediksi lalu memilih 'normal'. UI menampilkan konfirmasi, menyimpan action, serta mengembalikan hasil audit. Request gagal tidak menghilangkan perubahan yang belum tersimpan.
 
 ## Prinsip dan acceptance criteria
 

@@ -5,7 +5,7 @@
 ## Retrieval questions
 
 1. Apa beda validity dan accuracy?
-2. Mengapa completeness message 92% tidak sama dengan valid rate total?
+2. Mengapa completeness event_note 92% tidak sama dengan valid rate total?
 3. Kapan pipeline harus quarantine record?
 4. Mengapa fit scaler sebelum split salah?
 5. Apakah pesan PII-redacted otomatis aman dipublikasikan?
@@ -17,7 +17,7 @@
 
 Validity adalah kesesuaian aturan; accuracy kesesuaian dengan keadaan benar yang perlu diverifikasi.
 
-**2. Mengapa completeness message 92% tidak sama dengan valid rate total?**
+**2. Mengapa completeness event_note 92% tidak sama dengan valid rate total?**
 
 Kualitas total dipengaruhi duplikasi dan timestamp, dan himpunan error bisa overlap.
 

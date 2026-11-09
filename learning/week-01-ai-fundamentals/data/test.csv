@@ -1,19 +1,19 @@
 text,label
-"bagaimana cara mendapat voucher pembelian",sales
-"saya ingin informasi penawaran bundling",sales
-"bisakah sales menghubungi saya tentang paket",sales
-"minta katalog harga untuk kebutuhan kantor",sales
-"berapa ongkos aktivasi paket baru",sales
-"apa keuntungan membeli versi enterprise",sales
-"layanan lambat sejak kemarin",support
-"bagaimana cara reset password akun",support
-"akses saya ditolak meskipun sudah login",support
-"muncul kode kesalahan saat menyimpan",support
-"sinkronisasi data gagal berulang kali",support
-"tolong bantu gangguan fitur pencarian",support
-"ada panduan pengenalan produk",general
-"apa visi dan misi perusahaan",general
-"bagaimana mencari artikel tutorial",general
-"apakah situs memiliki halaman faq",general
-"informasi lokasi cabang tersedia di mana",general
-"terima kasih atas informasinya",general
+"meter mencatat konsumsi energi normal",normal
+"tegangan panel stabil selama interval",normal
+"telemetri meter diterima tepat waktu",normal
+"data arus tetap sesuai pola harian",normal
+"sensor aktif dan pembacaan konsisten",normal
+"kwh harian tidak menunjukkan perubahan",normal
+"pemakaian kwh melonjak melebihi pola",warning
+"arus panel meningkat tidak biasa",warning
+"tegangan berubah tajam pada malam",warning
+"analitik menandai konsumsi berlebih",warning
+"puncak energi melewati baseline",warning
+"pembacaan meter menunjukkan fluktuasi",warning
+"sensor offline sejak dini hari",fault
+"gateway tidak menerima data listrik",fault
+"perangkat gagal mengirim telemetri",fault
+"meter berhenti akibat kerusakan",fault
+"modul sensor tidak merespons",fault
+"data hilang karena koneksi putus",fault

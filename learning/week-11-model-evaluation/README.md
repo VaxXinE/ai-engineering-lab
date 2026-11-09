@@ -23,6 +23,6 @@
 - Semua hasil yang dilaporkan benar-benar diukur dan dapat direproduksi.
 - Model card menyebut limitasi data sintetis dan risiko domain shift.
 
-Semua latihan memakai data sintetis dan mengembangkan [capstone](../../projects/ai-customer-intelligence/README.md). Materi siap bukan bukti implementasi/kelulusan.
+Semua latihan memakai data sintetis dan mengembangkan [capstone](../../projects/ai-energy-intelligence/README.md). Materi siap bukan bukti implementasi/kelulusan.
 
 [Roadmap](../../docs/learning-roadmap.md) · [Progress](../../docs/progress-tracker.md) · [Evidence mapping](../../certification/evidence-matrix.md)

@@ -23,6 +23,6 @@
 - AI inference failure tidak menghilangkan data yang sudah diterima.
 - Authorization dan secret handling ditempatkan pada trust boundary yang benar.
 
-Semua latihan memakai data sintetis dan mengembangkan [capstone](../../projects/ai-customer-intelligence/README.md). Materi siap bukan bukti implementasi/kelulusan.
+Semua latihan memakai data sintetis dan mengembangkan [capstone](../../projects/ai-energy-intelligence/README.md). Materi siap bukan bukti implementasi/kelulusan.
 
 [Roadmap](../../docs/learning-roadmap.md) · [Progress](../../docs/progress-tracker.md) · [Evidence mapping](../../certification/evidence-matrix.md)

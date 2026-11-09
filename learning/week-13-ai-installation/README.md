@@ -24,4 +24,4 @@
 - Smoke test dan rollback diuji serta hasilnya dicatat.
 - Model artifact punya provenance/version/hash atau kontrol setara.
 
-Baca [roadmap](../../docs/learning-roadmap.md) dan [capstone](../../projects/ai-customer-intelligence/README.md). Keberadaan panduan tidak berarti kompetensi telah diverifikasi.
+Baca [roadmap](../../docs/learning-roadmap.md) dan [capstone](../../projects/ai-energy-intelligence/README.md). Keberadaan panduan tidak berarti kompetensi telah diverifikasi.

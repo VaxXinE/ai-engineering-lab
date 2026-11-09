@@ -1,53 +1,61 @@
-# Use Case — Synthetic Customer Inquiry Classification
+# Use Case — Synthetic Device Event Classification
 
-**Tanggal:** 9 November 2026  
-**Versi:** 0.1 (proof-of-concept, belum production)
+**Domain:** AI Smart Energy Monitoring • **Status:** proof-of-concept, bukan keselamatan listrik.
 
-## Masalah dan tujuan
+## Masalah
 
-Pesan customer website/live chat perlu dipilah ke sales, support, atau general inquiry. Modul ini mempraktikkan cara mendefinisikan tugas AI dan mengevaluasinya; **belum ada penghematan biaya atau perbaikan KPI yang dibuktikan**.
+Pembacaan meter listrik sintetis dapat dilengkapi **catatan kejadian perangkat** (misalnya "tegangan stabil", "pemakaian meningkat", atau "sensor offline"). Pada modul pertama, kita mempelajari supervised text classification dengan mengkategorikan catatan buatan menjadi:
+- `normal`: kondisi pembacaan stabil yang dilaporkan simulator.
+- `warning`: indikasi perubahan/peningkatan yang perlu pemeriksaan.
+- `fault`: indikasi perangkat atau telemetri gagal.
 
-## Persona
-- Agent: memeriksa dan dapat mengoreksi label.
-- Sales: menerima prospek yang relevan.
-- Developer/QA: menguji data, output, dan risiko.
+Output adalah **label edukatif**, bukan penilaian profesional terhadap keamanan instalasi listrik dan bukan keputusan otomatis. Sistem produksi harus memakai aturan validasi dan prosedur teknis yang berbeda.
 
-## Kontrak input/output
+## Dataset dan kontrak
 
-- **Input:** pesan sintetis 1–500 karakter dengan kata yang dapat dibaca.
-- **Output:** kelas sales/support/general, atau abstain jika tidak satu pun token dikenali.
-- **Format:** JSON pada CLI; relative_score bukan confidence terkalibrasi.
-- **Storage:** tidak ada penyimpanan pesan yang dimasukkan pada CLI.
+Input: CSV `text,label` berisi 54 training examples dan 18 held-out test examples, seluruhnya fiktif.
+
+- Teks: 1–500 karakter, minimal satu token Unicode yang dapat dibaca.
+- Label: `normal | warning | fault`.
+- Inference: label atau `abstain` jika tidak ada token dikenali.
+- JSON output: label, relative_score (bukan confidence terkalibrasi), dan explanatory note.
+
+## Alur
+
+```mermaid
+flowchart LR
+    A["Synthetic device event notes"] --> B["Training 54 examples"]
+    A --> C["Held-out 18 examples"]
+    B --> D["Naive Bayes model"]
+    C --> E["Evaluation"]
+    D --> E
+    C --> F["Rule-based comparator"]
+    F --> E
+```
 
 ## Acceptance criteria
 
-1. File data wajib CSV text,label dengan kategori yang sah.
-2. Data kosong, duplikat, invalid, atau berukuran berlebihan ditolak.
-3. Model dilatih menggunakan train, dievaluasi dengan test terpisah, overlap terdeteksi.
-4. Output evaluasi memuat accuracy, macro F1, precision/recall/F1 per kelas, matrix, abstention.
-5. Perbandingan model ML dan rule-based memakai dataset uji yang sama.
-6. Unit tests menilai happy path, failure path, dan kasus khusus.
+1. Input invalid, labels salah, dan duplikasi ditolak.
+2. Training dan test terpisah; normalized overlap ditolak.
+3. Ada evaluasi accuracy, precision, recall, macro F1, confusion matrix dan abstention.
+4. Rule-based comparator dan ML memakai held-out test sama.
+5. Error tidak membocorkan data masukan yang sensitif.
+6. Seluruh hasil harus dapat dijalankan dan dinilai secara lokal tanpa API eksternal.
 
-## Quality dan security constraints
+## Hubungan dengan capstone
 
-- Tidak memerlukan jaringan maupun API key.
-- Data seluruhnya sintetis; jangan memasukkan data klien sungguhan.
-- Skor hasil adalah performa pada dataset uji kecil, bukan prediksi performa dunia nyata.
-- Tidak melakukan proses bisnis otomatis; human review direncanakan di capstone.
+Week 01 memproses **catatan kejadian teks** untuk mempelajari ML. Capstone [AI Smart Energy Monitoring](../../projects/ai-energy-intelligence/README.md) nanti menggunakan **data numerik meter** (kWh per interval, arus dan tegangan) untuk mendeteksi kandidat anomali.
 
-## Risiko dan kontrol
+Jangan menyamakan dua use case itu. Text classification dan numerical anomaly detection membutuhkan data, model, dan evaluasi berbeda.
 
-| Risiko | Dampak | Kontrol awal |
-| --- | --- | --- |
-| PII bocor lewat dataset | Pelanggaran privasi | Dataset sintetis |
-| Input tidak valid | Training/output rusak | Validasi schema, label, panjang |
-| Test leakage | Metrik menyesatkan | Pemisahan file + duplicate check |
-| Kata asing tidak dikenali | Salah route | Explicit abstain |
-| Relative score dianggap kepastian | Overtrust | Disclaimer output |
-| Deploy terlalu dini | Salah keputusan operasional | POC lokal, tidak ada integrasi production |
+## Risiko
 
-## Di luar cakupan
+| Risiko | Kontrol pembelajaran |
+| --- | --- |
+| False normal / false fault | Human review; jangan melakukan aksi listrik otomatis |
+| Data leakage | Train/test separated dan overlap checks |
+| Miscalibrated relative score | Jangan sebut persentase kepastian |
+| Input tidak dikenal | Explicit abstain |
+| Privacy | Data sintetis, tanpa lokasi gedung/meter nyata |
 
-Frontend, backend service, authentication, database, cloud deployment, LLM, vector database, fine tuning, serta pengolahan data asli.
-
-Lanjutkan pada [capstone project](../../projects/ai-customer-intelligence/README.md).
+Data dan hasil model **tidak digunakan untuk billing, kontrol daya, atau penilaian keselamatan**.

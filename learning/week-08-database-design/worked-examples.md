@@ -11,11 +11,11 @@ Contoh **ilustratif** untuk pemahaman dan code review. Cuplikan kode tidak otoma
 1. Contoh SQL ilustratif (bukan migration yang sudah dijalankan):
 
 ```sql
-CREATE TABLE inquiries (
+CREATE TABLE meter readings (
   id bigint GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
   tenant_id uuid NOT NULL,
   source_event_id text NOT NULL,
-  message text NOT NULL CHECK (char_length(message) BETWEEN 1 AND 500),
+  event_note text NOT NULL CHECK (char_length(event_note) BETWEEN 1 AND 500),
   created_at timestamptz NOT NULL DEFAULT now(),
   UNIQUE (tenant_id, source_event_id)
 );
@@ -31,13 +31,13 @@ CREATE TABLE inquiries (
 
 **Teach-back:** jelaskan mengapa langkah 1→2→3 menghasilkan solusi dan bagaimana kegagalannya diuji.
 
-## Contoh 2: Optimistic lock saat dua agent mengedit
+## Contoh 2: Optimistic lock saat dua operator mengedit
 
-**Masalah:** Agent A dan B membaca row version=3; A menyimpan dahulu, B menyimpan dengan data lama.
+**Masalah:** Operator A dan B membaca row version=3; A menyimpan dahulu, B menyimpan dengan data lama.
 
 **Solusi bertahap:**
 
-1. Saat A update: UPDATE inquiries SET status='reviewed', version=4 WHERE id=? AND version=3; affected 1.
+1. Saat A update: UPDATE meter readings SET status='reviewed', version=4 WHERE id=? AND version=3; affected 1.
 
 2. B mencoba WHERE version=3 setelah A commit; affected 0, artinya konflik, bukan sukses.
 

@@ -20,7 +20,7 @@ Semua langkah berikut adalah **contoh pembelajaran**, bukan laporan pelaksanaan.
 
 ## Contoh 2: Quality degradation tanpa downtime
 
-**Problem:** API tetap 200, tetapi support override agent naik dari 5% ke 20% setelah model update.
+**Problem:** API tetap 200, tetapi warning override operator naik dari 5% ke 20% setelah model update.
 
 1. Pastikan perbedaan jumlah sampel dan label policy tidak berubah; bandingkan per tenant/channel/language.
 

@@ -7,11 +7,11 @@
 2. Kenapa klasifikasi rule-based bukan machine learning?
 3. Apa perbedaan training, inference, evaluation, deployment?
 4. Mengapa data test tidak boleh dilatih?
-5. Apa dampak false negative untuk kategori support?
+5. Apa dampak false negative untuk kategori warning?
 6. Apa beda precision, recall, F1 dan accuracy?
 7. Kenapa macro F1 digunakan pada multiclass?
 8. Kenapa skor relatif model belum tentu probabilitas benar?
-9. Apa risiko menyimpan teks pelanggan dan log inference?
+9. Apa risiko menyimpan teks perangkat dan log inference?
 10. Bagaimana desain proses human review untuk kasus abstain?
 
 ## Demo yang harus bisa dilakukan

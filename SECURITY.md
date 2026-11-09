@@ -5,7 +5,7 @@
 This is a **public learning repository**, not a production system. Treat any future AI-integrated application as potentially security-sensitive.
 
 - **No secrets**: Do not commit tokens, API keys, passwords, service credentials, `.env` or cloud keys.
-- **No private records**: Use generated/synthetic customer data only. Do not push client or employer data, customer chats, unpublished business logic, or private assessment documents.
+- **No private records**: Use generated/synthetic device data only. Do not push client or employer data, device chats, unpublished business logic, or private assessment documents.
 - **Least privilege**: Apply authorization at API and object level; do not rely on hidden frontend controls.
 - **Validate boundaries**: Validate input types, file sizes and AI output schemas; encode UI output; use parameterized SQL.
 - **AI safety**: Treat prompts, retrieval context, model output and model files as untrusted. Mitigate prompt injection, data disclosure and unbounded usage.

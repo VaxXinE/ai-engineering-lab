@@ -9,7 +9,7 @@ Contoh ini diselesaikan langkah demi langkah. Bacalah **sebelum** mengerjakan la
 **Solusi dan reasoning:**
 
 1. Rancang UNIQUE(tenant_id, source_event_id) untuk mencegah duplikasi lintas worker.
-2. Contoh SQL ilustratif: INSERT INTO inquiries(tenant_id,source_event_id,message) VALUES ($1,$2,$3) ON CONFLICT (tenant_id,source_event_id) DO NOTHING;
+2. Contoh SQL ilustratif: INSERT INTO meter readings(tenant_id,source_event_id,event_note) VALUES ($1,$2,$3) ON CONFLICT (tenant_id,source_event_id) DO NOTHING;
 3. Jika hasil import pertama menerima 3 record berbeda dan kedua input sama, import kedua membuat 0 row baru; laporkan tiga skipped berdasarkan conflict handling yang benar-benar diukur.
 4. Negative test: dua tenant boleh memiliki source_event_id sama jika constraint mengikutkan tenant_id, tetapi satu tenant tak boleh duplikat.
 

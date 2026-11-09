@@ -25,6 +25,6 @@
 - Data test tidak tercampur dalam training; kebocoran eksplisit ditolak.
 - Tidak ada PII/kredensial dalam dataset dan laporan.
 
-**Catatan:** seluruh latihan merujuk proyek [AI Customer Intelligence](../../projects/ai-customer-intelligence/README.md), menggunakan data sintetis. Materi yang lengkap tidak berarti code, pengujian atau asesmen telah diselesaikan.
+**Catatan:** seluruh latihan merujuk proyek [AI Smart Energy Monitoring](../../projects/ai-energy-intelligence/README.md), menggunakan data sintetis. Materi yang lengkap tidak berarti code, pengujian atau asesmen telah diselesaikan.
 
 [Lihat roadmap](../../docs/learning-roadmap.md) · [Tracker](../../docs/progress-tracker.md) · [Evidence matrix](../../certification/evidence-matrix.md)

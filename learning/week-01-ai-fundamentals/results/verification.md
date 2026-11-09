@@ -1,48 +1,32 @@
-# Week 01 — Hasil Verifikasi Lokal
+# Week 01 — Verifikasi Setelah Migrasi Use Case
 
-**Tanggal:** 9 November 2026  
-**Lingkungan:** Python 3.13 di container lokal  
-**Status:** Starter code telah diuji secara lokal; kompetensi peserta belum dinilai.
+**Diperbarui:** 9 November 2026
 
-Perintah yang dijalankan:
+## Perubahan besar
 
-~~~bash
+Model dan aturan pengolahan teks kini memakai `normal`, `warning`, `fault` untuk **synthetic energy-device event notes**, bukan kategori domain lain.
+
+- Training examples: 54 sintetis, 18 per kelas.
+- Held-out evaluation examples: 18 sintetis, 6 per kelas.
+- API/model eksternal: tidak digunakan.
+- Tes unit dan evaluasi hasil: **jalankan ulang setelah perubahan data/label**.
+- Skor accuracy/F1 sebelumnya **tidak boleh dipakai sebagai hasil benchmark untuk dataset baru**.
+
+## Perintah verifikasi
+
+```bash
 cd learning/week-01-ai-fundamentals
 python -m unittest discover -s tests -v
 python -m week01 evaluate
-python -m week01 predict --text "saya ingin membeli paket langganan"
+python -m week01 predict --text "meter melaporkan tegangan stabil normal"
 python -m compileall -q week01
-~~~
+```
 
-## Hasil aktual
+**Status:** pendokumentasian disiapkan; hasil aktual untuk dataset baru perlu direkam dari CI atau local run yang selesai. Setelah itu masukkan accuracy/F1, confusion matrix dan test outcomes yang benar-benar diamati. Jangan menyebutnya siap produksi.
 
-| Item | Nilai |
-| --- | --- |
-| Automated tests | **23 passed, 0 failed** |
-| Data latih | **54** contoh sintetis |
-| Data uji held-out | **18** contoh sintetis |
-| Naive Bayes accuracy | **0.7778** |
-| Naive Bayes macro F1 | **0.7948** |
-| Rule-based accuracy | **0.7222** |
-| Rule-based macro F1 | **0.7242** |
-| ML abstentions | **1 dari 18** |
-| Demo prediksi | "saya ingin membeli paket langganan" → sales; relative_score 0.9914 |
+### Batasan
 
-## ML Confusion Matrix
-
-| Label asli / prediksi | sales | support | general | abstain |
-| --- | ---: | ---: | ---: | ---: |
-| sales | 6 | 0 | 0 | 0 |
-| support | 1 | 4 | 1 | 0 |
-| general | 1 | 0 | 4 | 1 |
-
-## Batasan penting
-
-- **72 teks buatan tangan** terlalu sedikit untuk memperkirakan performa pada chat customer nyata.
-- Tidak ada cross-validation, pembuktian semantic leakage, pengujian fairness atau calibration.
-- Relative_score **bukan** probabilitas terkalibrasi.
-- Belum ada API, frontend, authorization, storage, observability atau deployment.
-- CI GitHub Actions dirancang, tetapi **hasil workflow cloud belum diverifikasi** di catatan ini.
-- Jangan pakai contoh ini sebagai sistem routing customer production.
-
-Angka ini hanya menunjukkan kemampuan demonstrasi teknis pada set uji kecil. Hasil bisa berubah bila kode/data diperbarui.
+- Text classifier ini bukan model mendeteksi anomali numerik.
+- 72 contoh sintetis tidak mencerminkan situasi lapangan.
+- Tidak ada aksi otomatis yang mengendalikan perangkat listrik.
+- Relative_score tidak terkalibrasi.

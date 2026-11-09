@@ -4,28 +4,28 @@
 
 ## Konteks
 
-Jika prediksi 'support' salah dan agent memilih 'sales', tampilkan 'Label diperbarui' plus riwayat audit. Jangan diam-diam menghilangkan prediksi awal: itu merusak ability to evaluate model.
+Jika prediksi 'warning' salah dan operator memilih 'normal', tampilkan 'Label diperbarui' plus riwayat audit. Jangan diam-diam menghilangkan prediksi awal: itu merusak ability to evaluate model.
 
 **Prasyarat:** Use-case Week 01 dan acceptance criteria capstone.  
 **Dataset:** data sintetis dari capstone; jangan memakai data perusahaan atau kredensial sungguhan.
 
 ## Langkah kerja
 
-1. Buat dua persona singkat: agent dan supervisor, termasuk pain points dan hak akses.
+1. Buat dua persona singkat: operator dan supervisor, termasuk pain points dan hak akses.
 
-2. Petakan journey dari incoming inquiry, AI prediction, review, override, submit, dan audit trail.
+2. Petakan journey dari incoming meter reading, AI prediction, review, override, submit, dan audit trail.
 
 3. Gambar wireframe Inbox, Detail, Review Queue, dan Empty/Error state memakai alat pilihan.
 
 4. Prototipe alur ketika prediksi abstain dan ketika inference service timeout.
 
-5. Buat kriteria usability (dapat menemukan unread inquiries, review tanpa kehilangan draft, melihat status model) dan tiga task test.
+5. Buat kriteria usability (dapat menemukan unread meter readings, review tanpa kehilangan draft, melihat status model) dan tiga task test.
 
 6. Evaluasi minimum keyboard navigation, label controls, semantic alerts, dan keterbacaan.
 
 ## Test plan minimal
 
-1. Agent bisa menemukan 1 inquiry tanpa tersesat.
+1. Operator bisa menemukan 1 meter reading tanpa tersesat.
 2. Pada timeout AI, data pesan tetap terlihat dan aksi manual tersedia.
 3. Semua input punya label yang jelas dan fokus keyboard terurut.
 4. Status 'abstain' tidak keliru ditampilkan sebagai kepastian.

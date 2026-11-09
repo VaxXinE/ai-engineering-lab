@@ -18,7 +18,7 @@
 
 7. Bagaimana desain untuk operator keyboard-only?
 
-8. Apa informasi yang perlu disimpan ketika agent mengoreksi AI?
+8. Apa informasi yang perlu disimpan ketika operator mengoreksi AI?
 
 ## Demo praktis yang perlu disiapkan
 

@@ -11,7 +11,7 @@
 
 ### 1. Tentukan boundary dari kebutuhan, bukan nama framework
 
-Uraikan aktor agent, tenant, supervisor, browser, backend, database dan AI inference. Trust boundary memisahkan browser yang tidak dipercaya dari backend, dan komponen AI dari business logic. Data chat user harus divalidasi pada batas masuk; respons AI juga dianggap tidak dipercaya. Diagram C4 Context menjelaskan aktor dan hubungan; Container menjelaskan deployment-level units; Component menjelaskan modul internal. Gunakan kedalaman yang membantu pengambilan keputusan.
+Uraikan aktor operator, tenant, supervisor, browser, backend, database dan AI inference. Trust boundary memisahkan browser yang tidak dipercaya dari backend, dan komponen AI dari business logic. Data telemetri user harus divalidasi pada batas masuk; respons AI juga dianggap tidak dipercaya. Diagram C4 Context menjelaskan aktor dan hubungan; Container menjelaskan deployment-level units; Component menjelaskan modul internal. Gunakan kedalaman yang membantu pengambilan keputusan.
 
 ### 2. Modular monolith adalah pilihan sadar
 
@@ -19,15 +19,15 @@ Monolith modular memiliki deployment sederhana, transaksi DB lebih mudah, latenc
 
 ### 3. Ports and adapters untuk vendor-independent AI
 
-Domain service bergantung pada port interface: classify(message)->Prediction. Adapter lokal bisa Naive Bayes, remote adapter bisa hosted LLM; keduanya harus validasi output yang sama. Jangan meletakkan prompt, SDK, API key, atau aturan retry provider di controller bisnis. Tujuannya bukan overengineering, melainkan memisahkan risiko perubahan model/provider dari proses review customer.
+Domain service bergantung pada port interface: classify(event_note)->Prediction. Adapter lokal bisa Naive Bayes, remote adapter bisa hosted LLM; keduanya harus validasi output yang sama. Jangan meletakkan prompt, SDK, API key, atau aturan retry provider di controller bisnis. Tujuannya bukan overengineering, melainkan memisahkan risiko perubahan model/provider dari proses review device.
 
 ### 4. Consistency dan asynchronous workflows
 
-Synchronous inference dapat menambah latency endpoint create; asynchronous pattern menyimpan inquiry dahulu dan memproses inference kemudian. Jika database commit berhasil tetapi queue publish gagal, outbox pattern bisa membantu konsistensi; di skala kecil, status pending dan retry reconciler mungkin cukup. Rancang idempotency agar pesan tidak duplikat saat retry. Setiap strategi punya operational cost.
+Synchronous inference dapat menambah latency endpoint create; asynchronous pattern menyimpan meter reading dahulu dan memproses inference kemudian. Jika database commit berhasil tetapi queue publish gagal, outbox pattern bisa membantu konsistensi; di skala kecil, status pending dan retry reconciler mungkin cukup. Rancang idempotency agar pesan tidak duplikat saat retry. Setiap strategi punya operational cost.
 
 ### 5. Security dan abuse controls
 
-AuthN memverifikasi identitas; AuthZ menentukan akses per tenant/inquiry; input validation memastikan bentuk data; output encoding mencegah XSS; secrets tidak boleh masuk frontend atau logs. Model tidak punya hak memutuskan kepemilikan object. Gunakan least privilege untuk worker, DB dan provider, serta rate limiting untuk penggunaan mahal. Threat model menyebut asset, entry point, trust boundaries, possible attacker dan mitigasi.
+AuthN memverifikasi identitas; AuthZ menentukan akses per tenant/meter reading; input validation memastikan bentuk data; output encoding mencegah XSS; secrets tidak boleh masuk frontend atau logs. Model tidak punya hak memutuskan kepemilikan object. Gunakan least privilege untuk worker, DB dan provider, serta rate limiting untuk penggunaan mahal. Threat model menyebut asset, entry point, trust boundaries, possible attacker dan mitigasi.
 
 ## Checklist penalaran
 

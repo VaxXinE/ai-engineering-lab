@@ -4,7 +4,7 @@
 
 ## Masalah yang dikerjakan
 
-Aplikasi CRM menerima inquiry baru. Service memvalidasi input dan izin, menyimpan record, meminta prediksi melalui inference adapter, memvalidasi label hasil, lalu menampilkan status review. Inference dapat gagal atau memilih abstain.
+Aplikasi dashboard energi menerima meter reading baru. Service memvalidasi input dan izin, menyimpan record, meminta prediksi melalui inference adapter, memvalidasi label hasil, lalu menampilkan status review. Inference dapat gagal atau memilih abstain.
 
 ## Langkah terurut
 
@@ -12,7 +12,7 @@ Aplikasi CRM menerima inquiry baru. Service memvalidasi input dan izin, menyimpa
 
 2. Buat adapter lokal yang memanggil model baseline dari Week 11 di backend; tandai model version pada respons.
 
-3. Implementasikan endpoint create inquiry dan classify dengan authorization dan idempotency policy yang jelas.
+3. Implementasikan endpoint create meter reading dan classify dengan authorization dan idempotency policy yang jelas.
 
 4. Pastikan hasil classifier divalidasi against label enum, bukan ditulis mentah ke database.
 
@@ -23,7 +23,7 @@ Aplikasi CRM menerima inquiry baru. Service memvalidasi input dan izin, menyimpa
 ## Acceptance criteria
 
 - [ ] Prediksi yang tersimpan selalu mempunyai model_version dan valid label.
-- [ ] Data inquiry tidak hilang ketika AI gagal.
+- [ ] Data meter reading tidak hilang ketika AI gagal.
 - [ ] Izin akses dites untuk resource berbeda dan tenant lain.
 - [ ] UI dapat menerima hasil normal, abstain, timeout dan invalid model output.
 - [ ] Ada bukti tests yang dijalankan, bukan screenshot tanpa reproduksi.

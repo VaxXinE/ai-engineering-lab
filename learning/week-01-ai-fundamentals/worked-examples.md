@@ -2,16 +2,16 @@
 
 Contoh ini diselesaikan langkah demi langkah. Bacalah **sebelum** mengerjakan latihan, lalu tutup dokumen dan ulangi reasoning dari awal. Tidak ada klaim eksekusi kode/tes baru pada file ini.
 
-## Contoh 1: Menghitung metrik dari 10 data support
+## Contoh 1: Menghitung metrik dari 10 data warning
 
-**Masalah:** Ada 10 pesan yang sebenarnya support. Model menandai 8 pesan sebagai support; 6 di antaranya benar, 2 ternyata general. Empat pesan support lainnya salah label.
+**Masalah:** Ada 10 pesan yang sebenarnya warning. Model menandai 8 pesan sebagai warning; 6 di antaranya benar, 2 ternyata fault. Empat pesan warning lainnya salah label.
 
 **Solusi dan reasoning:**
 
 1. TP=6, FP=2, FN=4. Precision = 6/(6+2) = 0.75.
 2. Recall = 6/(6+4) = 0.60. F1 = 2*(0.75*0.60)/(0.75+0.60) = 0.6667.
-3. Kesimpulan: meski precision cukup tinggi, model gagal mengenali 40% komplain. Ini dapat lebih berbahaya daripada angka accuracy global terlihat.
-4. Jika salah melewatkan keluhan lebih mahal daripada false alert, prioritaskan recall support dan human review untuk status ambigu.
+3. Kesimpulan: meski precision cukup tinggi, model gagal mengenali 40% anomali. Ini dapat lebih berbahaya daripada angka accuracy global terlihat.
+4. Jika salah melewatkan anomali lebih mahal daripada false alert, prioritaskan recall warning dan human review untuk status ambigu.
 
 **Counterexample / failure mode:** Kesalahan umum: memakai FN=2 karena keliru menganggap FP dan FN sama; atau menyimpulkan accuracy dari hanya metrik satu kelas.
 

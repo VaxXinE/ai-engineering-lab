@@ -5,7 +5,7 @@
 ## Pertanyaan
 
 1. Kenapa memakai train/validation/test?
-2. 95 general dari 100, selalu memprediksi general: accuracy?
+2. 95 fault dari 100, selalu memprediksi fault: accuracy?
 3. Macro F1 memberi bobot berdasarkan sample count?
 4. Kenapa softmax score belum tentu confidence?
 5. Bolehkah membuka file joblib random dari internet?

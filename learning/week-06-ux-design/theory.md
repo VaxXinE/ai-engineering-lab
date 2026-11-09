@@ -1,12 +1,12 @@
 # Teori — Week 06: User Experience for AI-Assisted Workflows
 
-**Tujuan:** Mendesain alur agent CRM yang dapat mengerti, memeriksa, memperbaiki dan menolak rekomendasi AI.
+**Tujuan:** Mendesain alur operator dashboard energi yang dapat mengerti, memeriksa, memperbaiki dan menolak rekomendasi AI.
 
 ## Konsep dan keputusan engineering
 
 ### 1. User journey dan task analysis
 
-Pisahkan kebutuhan agent, supervisor, dan operator teknis. Rancang task dari pesan baru sampai resolved state dengan jumlah langkah rendah tetapi status yang jelas. Catat moment of uncertainty saat AI salah atau tidak tersedia; di sinilah desain memiliki dampak terbesar pada trust.
+Pisahkan kebutuhan operator, supervisor, dan operator teknis. Rancang task dari pesan baru sampai resolved state dengan jumlah langkah rendah tetapi status yang jelas. Catat moment of uncertainty saat AI salah atau tidak tersedia; di sinilah desain memiliki dampak terbesar pada trust.
 
 ### 2. Human-in-the-loop
 
@@ -14,7 +14,7 @@ AI tidak boleh menjadi pemutus akhir untuk tindakan konsekuensial tanpa mekanism
 
 ### 3. Information architecture
 
-Pertahankan navigasi konsisten: Inbox, Detail, Review Queue, History. Bedakan kategori pesan dengan status progres (misalnya sales vs pending). Progressive disclosure menyembunyikan detail teknis sampai dibutuhkan tanpa menyembunyikan tindakan penting.
+Pertahankan navigasi konsisten: Inbox, Detail, Review Queue, History. Bedakan kategori pesan dengan status progres (misalnya normal vs pending). Progressive disclosure menyembunyikan detail teknis sampai dibutuhkan tanpa menyembunyikan tindakan penting.
 
 ### 4. Designing uncertainty
 
@@ -26,7 +26,7 @@ Gunakan hierarki heading, keyboard focus, labels untuk form, error text yang act
 
 ## Studi kasus dalam capstone
 
-Jika prediksi 'support' salah dan agent memilih 'sales', tampilkan 'Label diperbarui' plus riwayat audit. Jangan diam-diam menghilangkan prediksi awal: itu merusak ability to evaluate model.
+Jika prediksi 'warning' salah dan operator memilih 'normal', tampilkan 'Label diperbarui' plus riwayat audit. Jangan diam-diam menghilangkan prediksi awal: itu merusak ability to evaluate model.
 
 ## Kontrak kualitas dan keamanan
 

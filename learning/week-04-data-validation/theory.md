@@ -18,7 +18,7 @@ Buat summary jumlah null, duplikasi, distribusi kelas, panjang teks, nilai tidak
 
 ### 4. Data leakage dan split
 
-Data test tak boleh memengaruhi training, pemilihan fitur, atau threshold melalui trial yang terus-menerus. Periksa overlap ID, normalized text, dan entity. Lebih kuat lagi gunakan group split per customer/tenant serta time-based split sesuai use case. Catat batasan pemeriksaan duplicate sederhana.
+Data test tak boleh memengaruhi training, pemilihan fitur, atau threshold melalui trial yang terus-menerus. Periksa overlap ID, normalized text, dan entity. Lebih kuat lagi gunakan group split per device/tenant serta time-based split sesuai use case. Catat batasan pemeriksaan duplicate sederhana.
 
 ### 5. Privasi dan klasifikasi sensitivitas
 
@@ -26,7 +26,7 @@ Minimalkan data yang dikumpulkan, mask PII untuk debugging, batasi akses dataset
 
 ## Studi kasus dalam capstone
 
-Message '  ' invalid secara bisnis walau bertipe string. Timestamp di masa depan bisa valid secara format ISO namun tidak semestinya diterima. Train/test dengan teks identik tapi ejaan berbeda juga bisa membocorkan informasi semantik.
+EventNote '  ' invalid secara bisnis walau bertipe string. Timestamp di masa depan bisa valid secara format ISO namun tidak semestinya diterima. Train/test dengan teks identik tapi ejaan berbeda juga bisa membocorkan informasi semantik.
 
 ## Kontrak kualitas dan keamanan
 

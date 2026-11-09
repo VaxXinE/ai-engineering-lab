@@ -34,7 +34,7 @@ Gunakan progression: remember/understand → apply → analyze → evaluate → 
 
 ### 3. Merrill — authentic problem first
 
-Setiap modul memakai **satu proyek konsisten** (AI Customer Intelligence), lalu lima tahap:
+Setiap modul memakai **satu proyek konsisten** (AI Smart Energy Monitoring), lalu lima tahap:
 - **Problem:** tunjukkan problem profesional dan batasannya.
 - **Activation:** kaitkan pengetahuan full-stack yang sudah dimiliki.
 - **Demonstration:** guru menunjukkan solusi yang sudah dikerjakan, termasuk reasoning dan failure cases.

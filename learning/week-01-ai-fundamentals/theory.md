@@ -4,12 +4,12 @@
 
 | Konsep | Makna | Contoh software |
 | --- | --- | --- |
-| AI | Istilah payung untuk sistem yang menunjukkan kemampuan menyelesaikan tugas cerdas | Pengelompokan pertanyaan customer |
+| AI | Istilah payung untuk sistem yang menunjukkan kemampuan menyelesaikan tugas cerdas | Pengelompokan pertanyaan device |
 | ML | Subbidang AI yang mempelajari pola dari contoh data | Text classifier yang dilatih dari contoh berlabel |
 | Deep Learning | Subbidang ML dengan jaringan saraf berlapis | Model text/image modern |
-| Generative AI | Model yang dapat menghasilkan konten baru | Ringkasan chat |
+| Generative AI | Model yang dapat menghasilkan konten baru | Ringkasan telemetri |
 | LLM | Model bahasa skala besar untuk memproses/menghasilkan teks | Chatbot, summarization, extraction |
-| Rule-based | Logika eksplisit buatan developer, tidak otomatis merupakan ML | Jika ada kata harga, arahkan ke sales |
+| Rule-based | Logika eksplisit buatan developer, tidak otomatis merupakan ML | Jika ada kata harga, arahkan ke normal |
 
 **Tidak semua solusi AI butuh LLM.** Untuk tugas yang sederhana dan terstruktur, aturan eksplisit atau model klasifikasi kecil dapat lebih murah, cepat, dapat diaudit, dan mudah dipelihara.
 
@@ -60,9 +60,9 @@ Minggu ini hanya menerapkan dua pendekatan pertama. Tidak ada API AI eksternal a
 
 ## 5. Accuracy, Precision, Recall, F1
 
-- **TP:** support yang diprediksi sebagai support.
-- **FP:** bukan support tetapi diprediksi support.
-- **FN:** support tetapi diprediksi kategori lain, termasuk abstain.
+- **TP:** warning yang diprediksi sebagai warning.
+- **FP:** bukan warning tetapi diprediksi warning.
+- **FN:** warning tetapi diprediksi kategori lain, termasuk abstain.
 
 ~~~text
 Precision = TP / (TP + FP)
@@ -74,7 +74,7 @@ Macro F1  = Rata-rata F1 dari tiga kelas
 
 Confusion matrix membantu kita melihat kelas mana yang sering tertukar. Data berimbang dalam latihan ini **tidak mewakili** traffic aplikasi sungguhan. Accuracy tinggi pada data kecil tidak berarti model layak produksi.
 
-**Trade-off bisnis:** salah mengirim keluhan ke sales dapat memperlambat support; salah mengirim lead ke general dapat menunda follow-up. Karena itu hasil AI memerlukan evaluasi berdasarkan dampak kesalahan dan jalur pemeriksaan manusia.
+**Trade-off bisnis:** salah mengirim anomali ke normal dapat memperlambat warning; salah mengirim lead ke fault dapat menunda follow-up. Karena itu hasil AI memerlukan evaluasi berdasarkan dampak kesalahan dan jalur pemeriksaan manusia.
 
 ## 6. Posisi AI dalam software full-stack
 
@@ -92,7 +92,7 @@ Diagram di atas merupakan **target rancangan** untuk modul berikutnya, bukan kom
 
 ## 7. Batasan keamanan dan kualitas
 
-1. Pakai **data sintetis**; jangan kirim percakapan/customer records asli.
+1. Pakai **data sintetis**; jangan kirim percakapan/device records asli.
 2. Jangan membocorkan rahasia, API key, atau data pribadi melalui prompt/log.
 3. Validasi input dan output; perlakukan model sebagai komponen yang dapat salah.
 4. Pantau kemungkinan data leakage, typo, slang, bahasa campuran, dan perubahan distribusi data.

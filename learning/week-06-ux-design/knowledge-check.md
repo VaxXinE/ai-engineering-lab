@@ -13,7 +13,7 @@ Jawab tanpa melihat teori. Setelah itu bandingkan dengan pembahasan; jawab *meng
 
 ## Jawaban dan alasan
 
-**1.** Agar agent mengetahui asal keputusan dan evaluasi model punya ground truth review.
+**1.** Agar operator mengetahui asal keputusan dan evaluasi model punya ground truth review.
 
 **2.** Tampilkan perlu review dan jalur manual, bukan memilih label secara diam-diam.
 

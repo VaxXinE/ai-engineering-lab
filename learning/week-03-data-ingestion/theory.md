@@ -1,6 +1,6 @@
 # Teori — Week 03: Data Ingestion & ETL
 
-**Tujuan:** Memindahkan dataset pesan pelanggan sintetis ke storage secara konsisten, audit-able, dan aman diulang.
+**Tujuan:** Memindahkan dataset catatan kejadian perangkat sintetis ke storage secara konsisten, audit-able, dan aman diulang.
 
 ## Konsep dan keputusan engineering
 
@@ -10,7 +10,7 @@ Sebelum mengimpor data, definisikan sumber, pemilik, timestamp, tipe kolom, allo
 
 ### 2. ETL versus ELT
 
-ETL membersihkan dan mentransformasikan sebelum load; ELT memuat data ke staging terkontrol lalu mentransformasikan. Untuk CRM kecil, ETL sederhana cukup; untuk volume lebih besar, staging membantu audit dan reprocessing. Hindari menyimpan data invalid ke tabel produksi tanpa status dan guard.
+ETL membersihkan dan mentransformasikan sebelum load; ELT memuat data ke staging terkontrol lalu mentransformasikan. Untuk dashboard energi kecil, ETL sederhana cukup; untuk volume lebih besar, staging membantu audit dan reprocessing. Hindari menyimpan data invalid ke tabel produksi tanpa status dan guard.
 
 ### 3. Idempotency dan batch processing
 
@@ -26,7 +26,7 @@ Hasil import harus melaporkan accepted, rejected, skipped/duplicate, durasi, bat
 
 ## Studi kasus dalam capstone
 
-CSV sintetis dengan kolom inquiry_id, message, received_at, source. Dua baris punya inquiry_id sama: loader menolak duplikasi atau melakukan upsert sesuai kebijakan yang terdokumentasi, tidak diam-diam menambah dua inquiry.
+CSV sintetis dengan kolom meter_reading_id, event_note, received_at, source. Dua baris punya meter_reading_id sama: loader menolak duplikasi atau melakukan upsert sesuai kebijakan yang terdokumentasi, tidak diam-diam menambah dua meter reading.
 
 ## Kontrak kualitas dan keamanan
 

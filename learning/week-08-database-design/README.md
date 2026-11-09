@@ -18,11 +18,11 @@
 4. [Latihan tanya jawab asesmen](assessment.md)
 
 **Indikator hasil:**
-- Setiap prediction memiliki model_version dan inquiry_id yang valid.
+- Setiap prediction memiliki model_version dan meter_reading_id yang valid.
 - Foreign key menolak orphan record; rollback transaksi menjaga konsistensi.
 - Akses tenant A tidak dapat membaca atau mengubah record tenant B.
 - Re-running migration dan duplicate event ditangani sesuai rencana.
 
-Semua latihan memakai data sintetis dan mengembangkan [capstone](../../projects/ai-customer-intelligence/README.md). Materi siap bukan bukti implementasi/kelulusan.
+Semua latihan memakai data sintetis dan mengembangkan [capstone](../../projects/ai-energy-intelligence/README.md). Materi siap bukan bukti implementasi/kelulusan.
 
 [Roadmap](../../docs/learning-roadmap.md) · [Progress](../../docs/progress-tracker.md) · [Evidence mapping](../../certification/evidence-matrix.md)

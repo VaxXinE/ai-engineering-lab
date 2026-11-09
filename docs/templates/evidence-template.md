@@ -22,5 +22,5 @@ Commands, environment and expected outcomes.
 Who checked it, what ran and what remains unverified:
 
 ## Privacy check
-- [ ] No secrets or real user/customer information
+- [ ] No secrets or real user/device information
 - [ ] Permission to share all included artifacts

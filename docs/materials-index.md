@@ -9,6 +9,8 @@ Setiap README Week 01–16 kini memberi tautan:
 
 [Lihat prinsip desain pembelajaran](instructional-design.md), [rubrik kualitas](content-quality-rubric.md), [referensi riset](learning-science-references.md), dan [catatan SKKNI 2026](standards-watch.md).
 
+**Use case seluruh modul:** [AI Smart Energy Monitoring — casebook](domain-casebook.md). Fokus pada data konsumsi energi sintetis, kualitas pengukuran, anomali dan dashboard review; latihan teks di Modul 1 hanyalah pengantar supervised ML.
+
 ## Pengertian status
 
 - **Materials only:** teori, panduan lab, latihan dan simulasi sudah ditulis; code, data praktikum, tests dan bukti tugas **belum** dibuat/dijalankan.

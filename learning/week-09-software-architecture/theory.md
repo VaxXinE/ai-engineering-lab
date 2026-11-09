@@ -16,7 +16,7 @@ Klasifikasi AI dan input pengguna sama-sama tidak tepercaya. Sebelum model: auth
 
 ## 4. Failure design
 
-Rancang graceful degradation: message tetap tersimpan ketika inference gagal, lalu status pending_review atau pending_retry. Pemanggilan synchronous lebih sederhana tetapi menambah latency; async worker perlu queue, retry dedup dan idempotency. Pilih berdasarkan SLO nyata.
+Rancang graceful degradation: event_note tetap tersimpan ketika inference gagal, lalu status pending_review atau pending_retry. Pemanggilan synchronous lebih sederhana tetapi menambah latency; async worker perlu queue, retry dedup dan idempotency. Pilih berdasarkan SLO nyata.
 
 ## 5. Architecture documentation
 
@@ -24,7 +24,7 @@ Gunakan C4 context/container/component atau diagram lain secukupnya, plus sequen
 
 ## Skenario rekayasa perangkat lunak
 
-Jika AI inference timeout, simpan inquiry lebih dahulu, catat status 'pending_manual_review', jangan mengulang submit sampai menciptakan dua inquiry. Agent tetap dapat bekerja.
+Jika AI inference timeout, simpan meter reading lebih dahulu, catat status 'pending_manual_review', jangan mengulang submit sampai menciptakan dua meter reading. Operator tetap dapat bekerja.
 
 ## Prinsip dan acceptance criteria
 

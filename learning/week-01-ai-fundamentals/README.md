@@ -1,110 +1,54 @@
 # Modul 01 — AI Engineering Fundamentals
 
-> **Materi v2:** [Deep Dive](deep-dive.md) → [Worked Examples](worked-examples.md) → [Knowledge Check + pembahasan](knowledge-check.md) → [Learning Contract](study-contract.md). Setelah itu baru praktik memakai [Lab Guide](lab-guide.md). Dokumentasi tersedia **bukan berarti latihan peserta sudah selesai**.
+> **Materi v2:** [Deep Dive](deep-dive.md) → [Worked Examples](worked-examples.md) → [Knowledge Check](knowledge-check.md) → [Learning Contract](study-contract.md) → [Lab Guide](lab-guide.md).
 
+**Domain praktik:** AI Smart Energy Monitoring (catatan kejadian perangkat sintetis)  
+**Status:** Kode latihan tersedia; progres belajar peserta belum dinilai.  
+**Estimasi:** 8–10 jam • **Kebutuhan:** Python 3.11+
 
-**Jalur belajar:** AI Aplikasi Perangkat Lunak + AI Proses Data  
-**Status:** Starter materi dan kode tersedia; kemampuan peserta belum dinilai.  
-**Estimasi belajar:** 8–10 jam  
-**Prasyarat:** Python 3.11+, terminal dasar
+## Tujuan
 
-## Apa yang akan dipelajari?
+Pelajari AI vs ML vs DL vs GenAI, training vs inference, evaluasi, data leakage, dan keterbatasan confidence menggunakan **text classifier untuk catatan perangkat energi**. Ini aplikasi ML kecil yang tidak memerlukan API key atau instalasi package eksternal.
 
-Sebagai full-stack software engineer, kita tidak cukup hanya memanggil API AI. Modul ini mengenalkan konsep **AI vs ML vs DL vs Generative AI**, **training vs inference**, **evaluasi model**, dan **risiko penggunaan AI** melalui klasifikasi pesan pelanggan **sintetis**.
+Kategori:
+- `normal` — pembacaan stabil
+- `warning` — perubahan penggunaan/tegangan yang perlu pemeriksaan
+- `fault` — perangkat/sensor atau telemetri bermasalah
+- `abstain` — input tak dikenal, dialihkan ke peninjauan manual
 
-Studi kasus: mengategorikan pesan menjadi **sales**, **support**, atau **general** menggunakan dua pendekatan:
-- **Rule-based:** aturan keyword yang ditulis developer, tanpa training ML.
-- **Multinomial Naive Bayes:** model statistik sederhana yang mempelajari frekuensi kata dari data berlabel.
-
-Ini adalah proof-of-concept lokal, **bukan layanan AI production** dan **bukan LLM**.
-
-## Hasil belajar
-
-Setelah mengerjakan modul ini, peserta diharapkan bisa:
-1. Menjelaskan AI, ML, DL, GenAI, dan penggunaan LLM dalam software.
-2. Memisahkan data latih, inferensi, dan data uji tanpa kebocoran data.
-3. Membaca accuracy, precision, recall, F1, confusion matrix dan abstentions.
-4. Membandingkan rule-based dengan ML berdasarkan hasil pengujian.
-5. Menjelaskan keterbatasan model dan alasan human review diperlukan.
-
-## Alur sistem
-
-~~~mermaid
-flowchart LR
-    A[72 pesan sintetis] --> B[54 data train]
-    A --> C[18 data test]
-    B --> D[Training Naive Bayes]
-    D --> E[Inference]
-    C --> E
-    E --> F[Accuracy, Precision, Recall, F1]
-    C --> G[Rule-based baseline]
-    G --> H[Evaluasi pembanding]
-~~~
+Bukan model yang mampu menganalisis keamanan instalasi listrik. Kategori diperoleh dari contoh berlabel sintetis untuk demonstrasi algoritma.
 
 ## Quick start
 
-Dari root repo:
-
-~~~bash
+```bash
 cd learning/week-01-ai-fundamentals
+python -m week01 predict --text "meter melaporkan tegangan stabil normal"
+python -m week01 predict --text "konsumsi energi meningkat mendekati ambang"
+python -m week01 predict --text "sensor offline tidak mengirim data"
 python -m week01 evaluate
-python -m week01 predict --text "saya ingin membeli paket langganan"
-python -m week01 predict --text "aplikasi saya gagal login"
-python -m week01 predict --text "zzzzzzqqq"
 python -m unittest discover -s tests -v
-~~~
+```
 
-Tidak perlu pip install; semua kode memakai **Python standard library**. Gunakan python3 atau py -3 jika alias python tidak tersedia.
+Training: **54** catatan sintetis, evaluation: **18** catatan sintetis. `relative_score` bukan probabilitas terkalibrasi. Semua kode memakai Python standard library.
 
-Contoh custom dataset:
+## Navigasi
 
-~~~bash
-python -m week01 --train data/train.csv evaluate --test data/test.csv
-~~~
+- [Teori singkat](theory.md)
+- [Deep Dive](deep-dive.md)
+- [Worked Examples](worked-examples.md)
+- [Knowledge Check](knowledge-check.md)
+- [Use-case dan kontrak](use-case-spec.md)
+- [Panduan praktikum](lab-guide.md)
+- [Latihan](exercises.md)
+- [Simulasi asesmen](assessment.md)
+- [Hasil dan batas verifikasi](results/verification.md)
 
-**Penting:** relative_score adalah bobot relatif model, **bukan probabilitas yang sudah terkalibrasi**. Jika tidak ada token yang dikenali, model mengeluarkan **abstain**. Data test tidak digunakan saat pelatihan.
+## Kriteria penyelesaian peserta
 
-## Struktur modul
+- [ ] Bisa menjelaskan perbedaan rule-based dan model yang dilatih.
+- [ ] Menjalankan tiga contoh inference dan evaluasi sendiri.
+- [ ] Memahami precision/recall/F1 serta confusion matrix kelas.
+- [ ] Mengidentifikasi kasus gagal atau abstain dan menjelaskan human fallback.
+- [ ] Menghasilkan catatan latihan/commit yang dapat diverifikasi.
 
-| File / Folder | Fungsi |
-| --- | --- |
-| week01/dataset.py | Validasi dan pembacaan CSV; cek overlap train/test |
-| week01/model.py | Tokenizer dan Multinomial Naive Bayes |
-| week01/rules.py | Baseline aturan keyword |
-| week01/metrics.py | Accuracy, precision, recall, F1, confusion matrix |
-| week01/cli.py | Command predict dan evaluate |
-| data/train.csv | 54 pesan sintetis berlabel |
-| data/test.csv | 18 pesan sintetis untuk evaluasi |
-| tests/ | 23 automated tests |
-| results/verification.md | Hasil eksekusi yang telah diuji |
-
-## Urutan belajar
-
-1. [Teori AI Engineering](theory.md)
-2. [Use-case specification](use-case-spec.md)
-3. [Praktikum dan troubleshooting](lab-guide.md)
-4. [Latihan mandiri](exercises.md)
-5. [Simulasi pertanyaan asesmen](assessment.md)
-6. [Bukti verifikasi teknis](results/verification.md)
-
-## Checklist belajar personal
-
-- [ ] Bisa menjelaskan AI, ML, DL, GenAI, training dan inference.
-- [ ] Berhasil menjalankan predict, evaluate dan test suite sendiri.
-- [ ] Bisa menjelaskan setidaknya satu kesalahan prediksi dan alasan terjadinya.
-- [ ] Menyelesaikan latihan A dan B dan mencatat hasil aktual.
-- [ ] Memahami risiko data leakage, privasi, misrouting, dan overtrust.
-- [ ] Membuat catatan/refleksi di branch latihan sendiri.
-
-**Checklist tidak otomatis tercentang saat file di-push.** Kesiapan sertifikasi tetap menunggu bukti kompetensi dan asesmen LSP.
-
-## Referensi pembelajaran
-
-- [Google Machine Learning Crash Course](https://developers.google.com/machine-learning/crash-course)
-- [scikit-learn — Naive Bayes](https://scikit-learn.org/stable/modules/naive_bayes.html)
-- [Python — unittest](https://docs.python.org/3/library/unittest.html)
-- [NIST AI Risk Management Framework](https://www.nist.gov/itl/ai-risk-management-framework)
-
-[Roadmap lengkap](../../docs/learning-roadmap.md) | [Tracker](../../docs/progress-tracker.md) | [Portfolio BNSP](../../certification/evidence-matrix.md)
-
-> Week 01 adalah fondasi lintas unit, bukan bukti bahwa unit kompetensi BNSP tertentu telah dipenuhi.
+**Terkait capstone:** [AI Smart Energy Monitoring](../../projects/ai-energy-intelligence/README.md). Modul 11–12 nanti membahas **numerical energy anomaly detection**, bukan sekadar classifier teks modul ini.

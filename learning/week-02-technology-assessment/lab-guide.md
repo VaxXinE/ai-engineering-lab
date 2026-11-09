@@ -11,7 +11,7 @@ Contoh keputusan: membandingkan classifier lokal Naive Bayes, hosted LLM, dan at
 
 ## Langkah kerja
 
-1. Salin persyaratan dari projects/ai-customer-intelligence/docs/requirements.md; identifikasi requirement must-have dan constraint.
+1. Salin persyaratan dari projects/ai-energy-intelligence/docs/requirements.md; identifikasi requirement must-have dan constraint.
 
 2. Buat docs/decisions/0001-ai-strategy.md dengan tiga opsi: rule-based, model ML lokal, dan hosted LLM.
 
@@ -19,7 +19,7 @@ Contoh keputusan: membandingkan classifier lokal Naive Bayes, hosted LLM, dan at
 
 4. Bandingkan dua opsi backend dan dua pilihan UI berdasarkan kemampuan implementasi dan operasional tim.
 
-5. Catat threat model awal: data pelanggan, kredensial provider, abuse rate, dependency berbahaya, vendor outage.
+5. Catat threat model awal: data perangkat, kredensial provider, abuse rate, dependency berbahaya, vendor outage.
 
 6. Pilih arsitektur baseline sementara, tulis rollback/exit strategy dan cara memverifikasinya pada Week 11.
 

@@ -13,7 +13,7 @@
 
 ### 1. Model konseptual → fisik
 
-Entitas inti: Tenant, User, Inquiry, Prediction, ModelVersion, ReviewEvent dan IngestionBatch. One-to-many: Tenant→Inquiry, Inquiry→Prediction, Inquiry→ReviewEvent. Prediction mengacu ModelVersion supaya hasil historis dapat ditelusuri setelah upgrade. Tentukan arti status dan owned_by. Jangan menggabungkan semua entitas ke satu tabel dengan banyak nullable columns karena mempersulit integrity.
+Entitas inti: Tenant, User, MeterReading, Prediction, ModelVersion, ReviewEvent dan IngestionBatch. One-to-many: Tenant→MeterReading, MeterReading→Prediction, MeterReading→ReviewEvent. Prediction mengacu ModelVersion supaya hasil historis dapat ditelusuri setelah upgrade. Tentukan arti status dan owned_by. Jangan menggabungkan semua entitas ke satu tabel dengan banyak nullable columns karena mempersulit integrity.
 
 ### 2. Constraints sebagai kontrak bisnis
 
@@ -21,11 +21,11 @@ Primary key mengidentifikasi baris; foreign key memastikan relasi sah; UNIQUE(te
 
 ### 3. Isolation dan lost update
 
-Dua agent dapat mengambil inquiry yang sama. Tanpa version checking, penyimpanan kedua menimpa perubahan pertama. Optimistic lock menambah row version dan update WHERE id=? AND version=?; jika affected_rows=0, return conflict dan tawarkan reload/merge. Transaction memastikan review event dan perubahan status terjadi atomik.
+Dua operator dapat mengambil meter reading yang sama. Tanpa version checking, penyimpanan kedua menimpa perubahan pertama. Optimistic lock menambah row version dan update WHERE id=? AND version=?; jika affected_rows=0, return conflict dan tawarkan reload/merge. Transaction memastikan review event dan perubahan status terjadi atomik.
 
 ### 4. Object-level authorization dan multi-tenancy
 
-Endpoint /inquiries/{id} harus membatasi WHERE id = ? AND tenant_id = authorized_tenant, bukan hanya memeriksa user login. Gunakan least-privilege DB credentials dan separate permission untuk worker versus agent. Test silang tenant dengan dua organisasi sintetis; jangan menganggap UUID acak sebagai security control.
+Endpoint /meter readings/{id} harus membatasi WHERE id = ? AND tenant_id = authorized_tenant, bukan hanya memeriksa user login. Gunakan least-privilege DB credentials dan separate permission untuk worker versus operator. Test silang tenant dengan dua organisasi sintetis; jangan menganggap UUID acak sebagai security control.
 
 ### 5. Query performance dan indexing
 
@@ -35,9 +35,9 @@ Index tenant_id + created_at mempercepat inbox filter per tenant; indeks semua k
 
 Expand/migrate/contract mengurangi risiko deployment aplikasi v1/v2 bersamaan. Backup restore diuji di instance isolated, khususnya sebelum migration destruktif. Model_version harus survive rollback karena inference lama bisa dipakai untuk menjelaskan keputusan historis.
 
-## Aplikasi dalam AI Customer Intelligence
+## Aplikasi dalam AI Smart Energy Monitoring
 
-Pikirkan perubahan berikut: traffic 10 kali lebih tinggi, pelanggan memakai dua tenant, pengguna dapat memasukkan teks tidak tepercaya, dan AI service suatu saat mati. Desain mana yang tetap aman? Apa yang mesti diubah? Tuliskan konsekuensi pada kode, data, UX, keamanan, dan monitoring.
+Pikirkan perubahan berikut: traffic 10 kali lebih tinggi, perangkat memakai dua tenant, pengguna dapat memasukkan teks tidak tepercaya, dan AI service suatu saat mati. Desain mana yang tetap aman? Apa yang mesti diubah? Tuliskan konsekuensi pada kode, data, UX, keamanan, dan monitoring.
 
 ## Bacaan primer
 

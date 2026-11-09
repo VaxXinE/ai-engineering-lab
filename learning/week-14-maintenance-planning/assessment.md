@@ -12,7 +12,7 @@
 
 4. Apa itu SLI/SLO?
 
-5. Mengapa logging raw chat berisiko?
+5. Mengapa logging raw telemetri berisiko?
 
 6. Kapan model harus di-rollback?
 

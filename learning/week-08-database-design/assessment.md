@@ -20,7 +20,7 @@ Ini pertanyaan latihan nonresmi, **bukan bank soal BNSP**.
 
 ## Demonstrasi yang harus mampu dilakukan
 
-- [ ] Setiap prediction memiliki model_version dan inquiry_id yang valid.
+- [ ] Setiap prediction memiliki model_version dan meter_reading_id yang valid.
 - [ ] Foreign key menolak orphan record; rollback transaksi menjaga konsistensi.
 - [ ] Akses tenant A tidak dapat membaca atau mengubah record tenant B.
 - [ ] Re-running migration dan duplicate event ditangani sesuai rencana.

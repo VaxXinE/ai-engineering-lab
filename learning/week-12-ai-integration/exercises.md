@@ -2,7 +2,7 @@
 
 ## Tugas
 
-1. A: Buat fake adapter yang selalu timeout, lalu uji status fallback tidak menghapus inquiry.
+1. A: Buat fake adapter yang selalu timeout, lalu uji status fallback tidak menghapus meter reading.
 
 2. B: Simulasikan model return label tidak dikenal dan pastikan API tidak mem-persist hasil invalid.
 

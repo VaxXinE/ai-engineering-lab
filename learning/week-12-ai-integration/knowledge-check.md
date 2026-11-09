@@ -8,7 +8,7 @@
 2. Bolehkah AI menentukan tenant_id?
 3. Apa fallback aman ketika inference gagal?
 4. Bagaimana menguji provider tanpa biaya jaringan?
-5. Apa itu prompt injection pada kasus chat?
+5. Apa itu prompt injection pada kasus telemetri?
 6. Mengapa idempotency penting pada worker?
 
 ## Pembahasan
@@ -17,11 +17,11 @@
 
 **2.** Tidak. Server harus menggunakan authorization context, bukan output model.
 
-**3.** Pertahankan inquiry dan tampilkan manual review atau bounded retry.
+**3.** Pertahankan meter reading dan tampilkan manual review atau bounded retry.
 
 **4.** Fake adapter deterministik plus contract/negative tests; provider integration test terpisah opsional.
 
-**5.** Customer message berisi instruksi yang mencoba mengubah perilaku model dari task yang diperbolehkan.
+**5.** device event note berisi instruksi yang mencoba mengubah perilaku model dari task yang diperbolehkan.
 
 **6.** Retry setelah timeout dapat memproses event yang sama berkali-kali tanpa key/constraint.
 

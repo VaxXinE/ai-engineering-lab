@@ -7,7 +7,7 @@
 
 > **Ruang lingkup unit pada daftar LSP yang terpublikasi:** J.63OPR00.014.2 — Melakukan Pemasukan Data. Kode/skema final harus diverifikasi kembali pada dokumen LSP terkini.
 
-**Tujuan:** Memindahkan dataset pesan pelanggan sintetis ke storage secara konsisten, audit-able, dan aman diulang.
+**Tujuan:** Memindahkan dataset catatan kejadian perangkat sintetis ke storage secara konsisten, audit-able, dan aman diulang.
 
 **Prasyarat:** Modul 1 dan 2; Python standard library CSV; dasar SQL.
 
@@ -25,6 +25,6 @@
 - Menjalankan batch yang sama dua kali tidak menghasilkan duplikasi.
 - Query parameterized dan transaction behavior teruji.
 
-**Catatan:** seluruh latihan merujuk proyek [AI Customer Intelligence](../../projects/ai-customer-intelligence/README.md), menggunakan data sintetis. Materi yang lengkap tidak berarti code, pengujian atau asesmen telah diselesaikan.
+**Catatan:** seluruh latihan merujuk proyek [AI Smart Energy Monitoring](../../projects/ai-energy-intelligence/README.md), menggunakan data sintetis. Materi yang lengkap tidak berarti code, pengujian atau asesmen telah diselesaikan.
 
 [Lihat roadmap](../../docs/learning-roadmap.md) · [Tracker](../../docs/progress-tracker.md) · [Evidence matrix](../../certification/evidence-matrix.md)

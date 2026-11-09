@@ -22,11 +22,11 @@
 
 ## Bukti demonstrasi
 
-- [ ] Simulasi outage tidak kehilangan inquiry yang sudah diterima.
+- [ ] Simulasi outage tidak kehilangan meter reading yang sudah diterima.
 - [ ] Restore dijalankan pada environment uji dan diperiksa integritasnya.
 - [ ] Setiap langkah pemulihan beserta hasil uji dicatat.
 - [ ] Regression test menguji akar masalah, bukan hanya happy path.
-- [ ] Tidak ada data customer asli atau secret dalam incident report.
+- [ ] Tidak ada data device asli atau secret dalam incident report.
 
 ## Rubrik penilaian diri
 

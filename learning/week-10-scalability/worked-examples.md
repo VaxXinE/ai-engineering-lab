@@ -34,7 +34,7 @@
 
 4. Catat attempted vs successful requests dan biaya aktual; jangan menghitung hanya request dari UI.
 
-**Anti-pattern:** Retry POST create inquiry tanpa idempotency bisa menghasilkan duplikat bahkan jika provider hanya timeout setelah berhasil memproses.
+**Anti-pattern:** Retry POST create meter reading tanpa idempotency bisa menghasilkan duplikat bahkan jika provider hanya timeout setelah berhasil memproses.
 
 **Explain-back:** bagaimana cara membuat negative test untuk membuktikan anti-pattern tersebut?
 

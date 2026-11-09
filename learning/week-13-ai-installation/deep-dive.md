@@ -27,7 +27,7 @@ Database migration bukan operasi yang otomatis reversible. Jika aplikasi v2 mena
 
 ### 5. Liveness, readiness dan smoke test
 
-Liveness menjawab apakah proses masih hidup; readiness menjawab dapatkah service melayani request saat ini. Health endpoint tidak boleh membeberkan secret. Smoke test end-to-end dengan satu inquiry sintetis memastikan UI/API/DB/model terhubung. HTTP 200 pada /health saja tidak membuktikan model output benar; uji kontrak minimal juga.
+Liveness menjawab apakah proses masih hidup; readiness menjawab dapatkah service melayani request saat ini. Health endpoint tidak boleh membeberkan secret. Smoke test end-to-end dengan satu meter reading sintetis memastikan UI/API/DB/model terhubung. HTTP 200 pada /health saja tidak membuktikan model output benar; uji kontrak minimal juga.
 
 ### 6. Rollback dan pembuktian instalasi
 

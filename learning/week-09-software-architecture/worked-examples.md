@@ -4,17 +4,17 @@
 
 ## Solusi 1: Alur error AI pada modular monolith
 
-**Masalah:** Create inquiry sukses menyimpan data, tetapi inference timeout.
+**Masalah:** Create meter reading sukses menyimpan data, tetapi inference timeout.
 
 **Tahapan pemecahan:**
 
-1. Browser mengirim POST /inquiries dengan autentikasi; backend memvalidasi tenant dan payload.
+1. Browser mengirim POST /meter readings dengan autentikasi; backend memvalidasi tenant dan payload.
 
-2. Database menyimpan inquiry status=pending_inference dan commit. Model dipanggil lewat interface dengan timeout.
+2. Database menyimpan meter reading status=pending_inference dan commit. Model dipanggil lewat interface dengan timeout.
 
-3. Saat timeout, backend tidak menghapus inquiry; status pending_manual_review atau pending_retry sesuai kebijakan.
+3. Saat timeout, backend tidak menghapus meter reading; status pending_manual_review atau pending_retry sesuai kebijakan.
 
-4. Agent dashboard tetap menampilkan pesan dan memungkinkan review manual. Correlation ID membantu tracing.
+4. Operator dashboard tetap menampilkan pesan dan memungkinkan review manual. Correlation ID membantu tracing.
 
 5. Skenario diuji dengan fake adapter yang selalu timeout, bukan mematikan provider produksi.
 
@@ -34,7 +34,7 @@
 from typing import Protocol, Literal
 from dataclasses import dataclass
 
-Label = Literal['sales','support','general','abstain']
+Label = Literal['normal','warning','fault','abstain']
 
 @dataclass(frozen=True)
 class Prediction:
@@ -45,7 +45,7 @@ class Classifier(Protocol):
     def predict(self, text: str) -> Prediction: ...
 ```
 
-2. Domain memanggil Classifier, bukan sdk.chat.completions.create secara langsung.
+2. Domain memanggil Classifier, bukan sdk.telemetri.completions.create secara langsung.
 
 3. Adapter baru wajib lulus contract test label enum, model_version, input limits dan timeout behavior.
 

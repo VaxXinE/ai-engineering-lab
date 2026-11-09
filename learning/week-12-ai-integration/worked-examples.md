@@ -18,7 +18,7 @@ from pydantic import BaseModel, ConfigDict, Field
 
 class AIResult(BaseModel):
     model_config = ConfigDict(extra='forbid')
-    label: Literal['sales','support','general','abstain']
+    label: Literal['normal','warning','fault','abstain']
     model_version: str = Field(min_length=1, max_length=64)
 
 # AIResult.model_validate({'label':'admin','model_version':'v1'})
@@ -35,15 +35,15 @@ class AIResult(BaseModel):
 
 ## Solusi 2: Sequence error untuk inference timeout
 
-**Masalah:** Inquiry tersimpan namun AI model tidak merespons dalam deadline yang disepakati.
+**Masalah:** MeterReading tersimpan namun AI model tidak merespons dalam deadline yang disepakati.
 
 **Tahapan pemecahan:**
 
-1. POST inquiry valid → commit record dengan status pending_inference.
+1. POST meter reading valid → commit record dengan status pending_inference.
 
 2. Adapter memanggil AI dengan timeout; request gagal sehingga status berubah ke pending_manual_review dengan audit event.
 
-3. UI menampilkan inquiry dan memberi action review agent; tidak memalsukan prediction 'general'.
+3. UI menampilkan meter reading dan memberi action review operator; tidak memalsukan prediction 'fault'.
 
 4. Integration test memakai fake adapter timeout dan assert record tetap ada serta review action authorized.
 

@@ -25,7 +25,7 @@ For each area, record:
 
 1. Specific path, PR or commit and a description of **individual contribution**.
 2. Test or demonstration steps that actually ran.
-3. Screenshots/logs without secrets or real customer data.
+3. Screenshots/logs without secrets or real device data.
 4. Date of verification, assessor feedback (when available) and any unresolved gaps.
 
 **Do not assume automatic competency credit across LSP schemes.** The assessing LSP decides which evidence is acceptable. A formal scheme may add or revise units and performance criteria.

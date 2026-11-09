@@ -15,13 +15,13 @@
 3. Kerjakan [exercises](exercises.md) dan [simulasi asesmen](assessment.md).
 4. Simpan artefak nyata di repo dan hubungkan ke [evidence matrix](../../certification/evidence-matrix.md).
 
-**Skenario:** Aplikasi CRM menerima inquiry baru. Service memvalidasi input dan izin, menyimpan record, meminta prediksi melalui inference adapter, memvalidasi label hasil, lalu menampilkan status review. Inference dapat gagal atau memilih abstain.
+**Skenario:** Aplikasi dashboard energi menerima meter reading baru. Service memvalidasi input dan izin, menyimpan record, meminta prediksi melalui inference adapter, memvalidasi label hasil, lalu menampilkan status review. Inference dapat gagal atau memilih abstain.
 
 **Indikator:** 
 - Prediksi yang tersimpan selalu mempunyai model_version dan valid label.
-- Data inquiry tidak hilang ketika AI gagal.
+- Data meter reading tidak hilang ketika AI gagal.
 - Izin akses dites untuk resource berbeda dan tenant lain.
 - UI dapat menerima hasil normal, abstain, timeout dan invalid model output.
 - Ada bukti tests yang dijalankan, bukan screenshot tanpa reproduksi.
 
-Baca [roadmap](../../docs/learning-roadmap.md) dan [capstone](../../projects/ai-customer-intelligence/README.md). Keberadaan panduan tidak berarti kompetensi telah diverifikasi.
+Baca [roadmap](../../docs/learning-roadmap.md) dan [capstone](../../projects/ai-energy-intelligence/README.md). Keberadaan panduan tidak berarti kompetensi telah diverifikasi.

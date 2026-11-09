@@ -6,7 +6,7 @@
 
 2. B: Jelaskan kapan caching inference melanggar batas privasi tenant.
 
-3. C: Rancang retry policy berbeda untuk GET report dan POST create inquiry.
+3. C: Rancang retry policy berbeda untuk GET report dan POST create meter reading.
 
 ## Review checklist
 - [ ] Keputusan dapat dijelaskan, termasuk alternatif dan konsekuensi.

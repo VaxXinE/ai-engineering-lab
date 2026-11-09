@@ -8,11 +8,11 @@ Mulai dari rule-based dan Naive Bayes Week 01 sebagai baseline. Model baru dinil
 
 ## 2. Data splitting dan experimental discipline
 
-Pisahkan train/validation/test: train untuk fitting, validation untuk hyperparameter selection, test sebagai evaluasi final. Data kecil mudah overfit dan noisy; gunakan cross-validation pada train/validation, lalu satu held-out evaluation. Group split diperlukan bila pesan dari customer yang sama berkorelasi; time split bila perilaku berubah dari waktu ke waktu.
+Pisahkan train/validation/test: train untuk fitting, validation untuk hyperparameter selection, test sebagai evaluasi final. Data kecil mudah overfit dan noisy; gunakan cross-validation pada train/validation, lalu satu held-out evaluation. Group split diperlukan bila pesan dari device yang sama berkorelasi; time split bila perilaku berubah dari waktu ke waktu.
 
 ## 3. Metrics beyond accuracy
 
-Pada tiga kelas, lihat precision dan recall per class, macro F1, confusion matrix serta abstention/rejection rate. Cost-sensitive decisions bisa memprioritaskan support recall jika salah menyalurkan komplain mahal. Calibration dibutuhkan bila skor akan ditampilkan sebagai probabilitas; jangan mengubah softmax score menjadi jaminan.
+Pada tiga kelas, lihat precision dan recall per class, macro F1, confusion matrix serta abstention/rejection rate. Cost-sensitive decisions bisa memprioritaskan warning recall jika salah menyalurkan anomali mahal. Calibration dibutuhkan bila skor akan ditampilkan sebagai probabilitas; jangan mengubah softmax score menjadi jaminan.
 
 ## 4. Error taxonomy dan model card
 

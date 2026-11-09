@@ -11,7 +11,7 @@ Link the relevant weekly module and evidence-matrix row:
 - [ ] Documentation reviewed
 - [ ] Tests run (paste actual commands and results)
 - [ ] Security and privacy implications checked
-- [ ] No secrets or real customer data introduced
+- [ ] No secrets or real device data introduced
 
 ## Evidence
 

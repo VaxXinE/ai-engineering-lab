@@ -8,7 +8,7 @@ Merancang batas komponen, contract API, alur data, failure handling dan desain y
 
 ## Skenario
 
-Jika AI inference timeout, simpan inquiry lebih dahulu, catat status 'pending_manual_review', jangan mengulang submit sampai menciptakan dua inquiry. Agent tetap dapat bekerja.
+Jika AI inference timeout, simpan meter reading lebih dahulu, catat status 'pending_manual_review', jangan mengulang submit sampai menciptakan dua meter reading. Operator tetap dapat bekerja.
 
 ## Langkah implementasi
 
@@ -16,9 +16,9 @@ Jika AI inference timeout, simpan inquiry lebih dahulu, catat status 'pending_ma
 
 2. Gambar component/container diagram; tandai trust boundaries dan data flow PII.
 
-3. Buat sequence diagram untuk create inquiry, run inference, review, dan timeout fallback.
+3. Buat sequence diagram untuk create meter reading, run inference, review, dan timeout fallback.
 
-4. Definisikan kontrak POST /inquiries serta endpoint review (request, response, validation, errors).
+4. Definisikan kontrak POST /meter readings serta endpoint review (request, response, validation, errors).
 
 5. Pisahkan inference adapter dari domain handler; jelaskan opsi sync versus background queue melalui ADR.
 

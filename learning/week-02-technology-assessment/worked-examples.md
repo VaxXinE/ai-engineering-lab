@@ -19,14 +19,14 @@ Contoh ini diselesaikan langkah demi langkah. Bacalah **sebelum** mengerjakan la
 
 ## Contoh 2: ADR pendek untuk model local-first
 
-**Masalah:** Sebuah CRM perlu intent classification, tanpa mengirim data chat ke pihak luar. Tentukan keputusan yang masuk akal.
+**Masalah:** Sebuah dashboard energi perlu energy anomaly scoring, tanpa mengirim data telemetri ke pihak luar. Tentukan keputusan yang masuk akal.
 
 **Solusi dan reasoning:**
 
 1. Context: data policy melarang data raw keluar; 30–50 req/menit; tiga kategori dan budget rendah.
 2. Options: rules, local ML, hosted LLM. Hosted LLM tidak memenuhi hard constraint, sehingga tidak layak.
 3. Decision: mulai model lokal sebagai baseline; rule-based tetap jadi comparator; bukan klaim final paling akurat.
-4. Verification: held-out macro F1, support recall, p95 latency, monitoring drift dan ability to rollback; if thresholds fail, evaluasi opsi lain yang memenuhi privacy.
+4. Verification: held-out macro F1, warning recall, p95 latency, monitoring drift dan ability to rollback; if thresholds fail, evaluasi opsi lain yang memenuhi privacy.
 
 **Counterexample / failure mode:** ADR buruk hanya menulis 'pakai FastAPI karena cepat dan populer' tanpa constraint, trade-off, atau bukti.
 

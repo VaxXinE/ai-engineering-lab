@@ -13,23 +13,23 @@ Contoh **ilustratif** untuk pemahaman dan code review. Cuplikan kode tidak otoma
 2. Contoh TypeScript ilustratif:
 
 ```ts
-type Inquiry = { id: string; message: string };
+type MeterReading = { id: string; event_note: string };
 type Result =
   | { status: 'idle' }
   | { status: 'loading' }
-  | { status: 'success'; inquiries: Inquiry[] }
-  | { status: 'error'; message: string };
+  | { status: 'success'; meter readings: MeterReading[] }
+  | { status: 'error'; event_note: string };
 function renderSummary(result: Result): string {
   switch (result.status) {
     case 'idle': return 'Siap';
     case 'loading': return 'Memuat';
-    case 'success': return `${result.inquiries.length} data`;
-    case 'error': return result.message;
+    case 'success': return `${result.meter readings.length} data`;
+    case 'error': return result.event_note;
   }
 }
 ```
 
-3. Pada branch success, compiler tahu inquiries tersedia; branch error tidak bisa keliru mengaksesnya.
+3. Pada branch success, compiler tahu meter readings tersedia; branch error tidak bisa keliru mengaksesnya.
 
 4. Test setiap variant dan empty array (success tetapi tidak ada hasil).
 
@@ -39,7 +39,7 @@ function renderSummary(result: Result): string {
 
 ## Contoh 2: Dua request filter datang tak berurutan
 
-**Masalah:** User mengaktifkan filter support, kemudian sales. Response support datang setelah response sales.
+**Masalah:** User mengaktifkan filter warning, kemudian normal. Response warning datang setelah response normal.
 
 **Solusi bertahap:**
 
@@ -47,7 +47,7 @@ function renderSummary(result: Result): string {
 
 2. Gunakan request key / sequence id dan hanya update UI jika response cocok filter terbaru.
 
-3. Test dengan deferred promises: request kedua resolve lebih dulu; data pertama tidak boleh menimpa state sales.
+3. Test dengan deferred promises: request kedua resolve lebih dulu; data pertama tidak boleh menimpa state normal.
 
 4. Backend tetap wajib membatasi hasil berdasarkan tenant; filter frontend tidak cukup untuk authorization.
 

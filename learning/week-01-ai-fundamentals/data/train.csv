@@ -1,55 +1,55 @@
 text,label
-"berapa harga paket berlangganan",sales
-"saya ingin mengetahui biaya layanan",sales
-"bagaimana cara membeli paket premium",sales
-"apakah ada diskon untuk pelanggan baru",sales
-"tolong kirimkan daftar harga produk",sales
-"saya tertarik mencoba layanan berbayar",sales
-"apa pilihan paket yang tersedia",sales
-"berapa biaya per bulan untuk paket bisnis",sales
-"apakah tersedia demo sebelum membeli",sales
-"ingin berkonsultasi tentang penawaran produk",sales
-"bisa minta penawaran harga khusus tim",sales
-"bagaimana proses pembelian lisensi",sales
-"adakah promosi bulan ini",sales
-"saya ingin upgrade ke paket pro",sales
-"apakah ada paket tahunan lebih murah",sales
-"mau daftar layanan premium",sales
-"cara berlangganan untuk perusahaan",sales
-"berapa harga langganan satu tahun",sales
-"aplikasi gagal login setelah update",support
-"saya tidak bisa masuk ke akun",support
-"halaman dashboard selalu error",support
-"bagaimana mengatasi tombol yang tidak berfungsi",support
-"proses unggah berkas terus gagal",support
-"sistem menampilkan pesan server bermasalah",support
-"akun saya terkunci dan perlu bantuan",support
-"kenapa notifikasi tidak muncul",support
-"data yang saya simpan tidak terlihat",support
-"tolong perbaiki bug pada halaman profil",support
-"aplikasi berhenti saat dibuka",support
-"password sudah benar tapi login gagal",support
-"riwayat transaksi tidak dapat ditampilkan",support
-"integrasi api mengalami gangguan",support
-"halaman pembayaran tidak bisa dimuat",support
-"kenapa aplikasi sering keluar sendiri",support
-"fitur ekspor laporan menghasilkan error",support
-"tidak dapat mengganti kata sandi",support
-"jam operasional kantor sampai kapan",general
-"di mana alamat kantor pusat",general
-"bagaimana cara menghubungi tim",general
-"apa nama perusahaan penyedia layanan",general
-"apakah layanan tersedia pada akhir pekan",general
-"tolong jelaskan profil perusahaan",general
-"ada tautan ke halaman bantuan umum",general
-"kapan perusahaan ini didirikan",general
-"bagaimana cara membaca panduan pengguna",general
-"di mana saya bisa melihat kebijakan privasi",general
-"bahasa apa saja yang didukung website",general
-"apakah ada berita terbaru tentang perusahaan",general
-"apakah tersedia pusat informasi resmi",general
-"bagaimana cara mengirimkan masukan umum",general
-"apakah ada kontak email perusahaan",general
-"di mana halaman syarat penggunaan",general
-"bisakah melihat daftar fitur umum",general
-"siapa yang dapat menggunakan layanan ini",general
+"pembacaan meter stabil setiap interval",normal
+"arus listrik stabil pada panel utama",normal
+"tegangan meter tercatat normal",normal
+"konsumsi kwh sesuai pola harian",normal
+"sensor energi melaporkan status normal",normal
+"pengukuran arus sesuai rentang operasi",normal
+"meter aktif dan data masuk teratur",normal
+"panel listrik berfungsi stabil",normal
+"pencatatan energi lancar tanpa gangguan",normal
+"data pengukuran valid setiap jam",normal
+"pola konsumsi listrik terkendali",normal
+"semua meter mengirim data tepat waktu",normal
+"tegangan stabil sepanjang pengukuran",normal
+"pembacaan kwh konsisten pagi hari",normal
+"sensor listrik bekerja normal",normal
+"pembaruan data meter selesai sukses",normal
+"arus panel berada pada rentang biasa",normal
+"telemetri energi diterima sesuai jadwal",normal
+"pemakaian energi meningkat mendekati ambang",warning
+"konsumsi listrik melonjak pada malam hari",warning
+"tegangan berfluktuasi di atas pola biasa",warning
+"arus meningkat mendekati batas simulasi",warning
+"pembacaan kwh menunjukkan lonjakan sesaat",warning
+"meter mendeteksi variasi tidak biasa",warning
+"pola energi berubah dari interval sebelumnya",warning
+"peningkatan konsumsi signifikan terpantau",warning
+"nilai tegangan tidak stabil selama pengamatan",warning
+"peringatan pemakaian daya melebihi baseline",warning
+"kwh mendekati batas analisis",warning
+"data arus menunjukkan fluktuasi tajam",warning
+"kenaikan energi tiba tiba pada interval",warning
+"indikasi anomali konsumsi selama satu jam",warning
+"pembacaan berbeda dari tren historis",warning
+"konsumsi puncak lebih tinggi dari prediksi",warning
+"meter menunjukkan arus berlebih sesaat",warning
+"alarm analitik memberi peringatan lonjakan",warning
+"sensor meter offline tidak mengirim data",fault
+"alat pengukur gagal sinkronisasi",fault
+"perangkat sensor rusak tidak merespons",fault
+"meter berhenti melaporkan pembacaan",fault
+"koneksi modul telemetri putus total",fault
+"pengiriman data listrik gagal berulang",fault
+"sensor kehilangan koneksi ke gateway",fault
+"kerusakan modul pengukuran terdeteksi",fault
+"perangkat mati dan pembacaan kosong",fault
+"gateway jaringan tidak menerima telemetri",fault
+"meter mengembalikan kode kesalahan perangkat",fault
+"pembacaan sensor tidak tersedia akibat error",fault
+"sistem mencatat kegagalan pengiriman data",fault
+"perangkat pengukuran mengalami gangguan",fault
+"modul meter tidak aktif setelah restart",fault
+"sensor terputus dari jaringan",fault
+"gateway gagal memproses data meter",fault
+"kerusakan konektor sensor menghentikan data",fault

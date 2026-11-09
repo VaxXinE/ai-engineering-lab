@@ -2,7 +2,7 @@
 
 ## Tugas inti
 
-1. A: Buat alternate flow ketika dua agent mengedit inquiry yang sama.
+1. A: Buat alternate flow ketika dua operator mengedit meter reading yang sama.
 
 2. B: Desain tampilan model version tanpa mengganggu agen yang bukan teknisi.
 

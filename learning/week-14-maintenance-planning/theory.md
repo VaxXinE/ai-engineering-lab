@@ -8,7 +8,7 @@ Service availability 99.9% bukan bukti prediksi baik. Pantau error rate, P95 inf
 
 ## 2. Observability and signal quality
 
-Log untuk incident diagnosis, metric untuk trend/alert, trace untuk request flow. Log harus memakai request ID dan menyamarkan PII; hindari menulis teks customer, token dan headers sensitif. Alert harus actionable, bukan noisy; threshold dibuat berdasarkan baseline lalu dievaluasi.
+Log untuk incident diagnosis, metric untuk trend/alert, trace untuk request flow. Log harus memakai request ID dan menyamarkan PII; hindari menulis teks device, token dan headers sensitif. Alert harus actionable, bukan noisy; threshold dibuat berdasarkan baseline lalu dievaluasi.
 
 ## 3. Data/model drift
 
@@ -20,7 +20,7 @@ Susun schedule harian untuk health/error, mingguan untuk failed predictions dan 
 
 ## 5. Incident response and recovery planning
 
-Buat severity matrix, escalation path, keputusan disable AI, fallback manual, backup/restore schedule, dan model rollback criteria. Untuk fitur customer-critical, service manual harus jelas. Lakukan tabletop exercise sebelum production. Rencana saja belum membuktikan pemulihan.
+Buat severity matrix, escalation path, keputusan disable AI, fallback manual, backup/restore schedule, dan model rollback criteria. Untuk fitur device-critical, service manual harus jelas. Lakukan tabletop exercise sebelum production. Rencana saja belum membuktikan pemulihan.
 
 ## Studi kasus
 

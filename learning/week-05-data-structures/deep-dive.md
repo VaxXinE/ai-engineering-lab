@@ -21,19 +21,19 @@ Big-O berbicara tentang pertumbuhan, bukan benchmark detik. Deduplikasi nested-l
 
 ### 3. Aggregation tanpa memori berlebih
 
-Record bisa diproses streaming menggunakan iterator ketika file besar. Untuk ringkasan count per kelas, gunakan Counter tanpa menyimpan semua message. Namun jika perlu audit full row, catat storage persisten yang sesuai dan retention, bukan memori proses. Chunk processing harus menjaga consistency boundary dan checksum serta mampu resume dari checkpoint.
+Record bisa diproses streaming menggunakan iterator ketika file besar. Untuk ringkasan count per kelas, gunakan Counter tanpa menyimpan semua event_note. Namun jika perlu audit full row, catat storage persisten yang sesuai dan retention, bukan memori proses. Chunk processing harus menjaga consistency boundary dan checksum serta mampu resume dari checkpoint.
 
 ### 4. Unicode dan normalization
 
-Casefold lebih kuat daripada lower untuk beberapa teks, tetapi normalisasi tidak boleh diam-diam membuang makna. Misal 'refund' dan 'refund?' dapat dianggap setara untuk dedup tertentu, tetapi angka transaksi mungkin penting. Selalu bedakan identitas record (event_id) dari kemiripan isi pesan; dua pelanggan mengirim teks yang sama bukan berarti event yang sama.
+Casefold lebih kuat daripada lower untuk beberapa teks, tetapi normalisasi tidak boleh diam-diam membuang makna. Misal 'refund' dan 'refund?' dapat dianggap setara untuk dedup tertentu, tetapi angka transaksi mungkin penting. Selalu bedakan identitas record (event_id) dari kemiripan isi pesan; dua perangkat mengirim teks yang sama bukan berarti event yang sama.
 
 ### 5. Concurrency dan security
 
 Set/dict dalam satu proses tidak menjamin konsistensi dua worker. Saat concurrency meningkat, uniqueness DB constraint tetap diperlukan. Input attacker dapat memaksa memory exhaustion dengan batch terlalu besar; enforce limit di API, parser, dan queue. Hindari menyimpan seluruh file ketika streaming cukup. Pengujian memuat batas input dan timeout.
 
-## Aplikasi dalam AI Customer Intelligence
+## Aplikasi dalam AI Smart Energy Monitoring
 
-Pikirkan perubahan berikut: traffic 10 kali lebih tinggi, pelanggan memakai dua tenant, pengguna dapat memasukkan teks tidak tepercaya, dan AI service suatu saat mati. Desain mana yang tetap aman? Apa yang mesti diubah? Tuliskan konsekuensi pada kode, data, UX, keamanan, dan monitoring.
+Pikirkan perubahan berikut: traffic 10 kali lebih tinggi, perangkat memakai dua tenant, pengguna dapat memasukkan teks tidak tepercaya, dan AI service suatu saat mati. Desain mana yang tetap aman? Apa yang mesti diubah? Tuliskan konsekuensi pada kode, data, UX, keamanan, dan monitoring.
 
 ## Bacaan primer
 

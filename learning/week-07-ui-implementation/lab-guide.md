@@ -8,11 +8,11 @@ Menerapkan wireframe Week 06 menjadi frontend yang responsif, aksesibel, dan ama
 
 ## Skenario
 
-Untuk inquiry yang masuk dengan label 'support', agent melihat prediksi lalu memilih 'sales'. UI menampilkan konfirmasi, menyimpan action, serta mengembalikan hasil audit. Request gagal tidak menghilangkan perubahan yang belum tersimpan.
+Untuk meter reading yang masuk dengan label 'warning', operator melihat prediksi lalu memilih 'normal'. UI menampilkan konfirmasi, menyimpan action, serta mengembalikan hasil audit. Request gagal tidak menghilangkan perubahan yang belum tersimpan.
 
 ## Langkah implementasi
 
-1. Review wireframe dari Week 06 dan definisikan type Inquiry, Prediction, ReviewStatus dengan union yang jelas.
+1. Review wireframe dari Week 06 dan definisikan type MeterReading, Prediction, ReviewStatus dengan union yang jelas.
 
 2. Bangun halaman Inbox dengan filter kategori dan review state serta empty/error/loading states.
 

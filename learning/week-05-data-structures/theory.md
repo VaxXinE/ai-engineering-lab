@@ -14,7 +14,7 @@ Big O mengukur tingkat pertumbuhan resource terhadap input, bukan durasi absolut
 
 ### 3. Data aggregation
 
-Untuk klasifikasi pesan, diperlukan grouping by category, penghitungan statistik, dan dedup per inquiry_id. Hindari mengubah collection saat iterasi, serta pikirkan stable ordering agar hasil deterministik dalam testing. Streaming/chunking mengurangi penggunaan memori untuk file besar.
+Untuk klasifikasi pesan, diperlukan grouping by category, penghitungan statistik, dan dedup per meter_reading_id. Hindari mengubah collection saat iterasi, serta pikirkan stable ordering agar hasil deterministik dalam testing. Streaming/chunking mengurangi penggunaan memori untuk file besar.
 
 ### 4. Determinism dan testability
 

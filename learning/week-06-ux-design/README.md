@@ -7,7 +7,7 @@
 
 > **Ruang lingkup unit pada daftar LSP yang terpublikasi:** J.620100.006.01 — Merancang User Experience. Kode/skema final harus diverifikasi kembali pada dokumen LSP terkini.
 
-**Tujuan:** Mendesain alur agent CRM yang dapat mengerti, memeriksa, memperbaiki dan menolak rekomendasi AI.
+**Tujuan:** Mendesain alur operator dashboard energi yang dapat mengerti, memeriksa, memperbaiki dan menolak rekomendasi AI.
 
 **Prasyarat:** Use-case Week 01 dan acceptance criteria capstone.
 
@@ -25,6 +25,6 @@
 - Wireframe mencakup loading/empty/error state dan aksesibilitas.
 - Ada minimal tiga task usability dengan success criteria.
 
-**Catatan:** seluruh latihan merujuk proyek [AI Customer Intelligence](../../projects/ai-customer-intelligence/README.md), menggunakan data sintetis. Materi yang lengkap tidak berarti code, pengujian atau asesmen telah diselesaikan.
+**Catatan:** seluruh latihan merujuk proyek [AI Smart Energy Monitoring](../../projects/ai-energy-intelligence/README.md), menggunakan data sintetis. Materi yang lengkap tidak berarti code, pengujian atau asesmen telah diselesaikan.
 
 [Lihat roadmap](../../docs/learning-roadmap.md) · [Tracker](../../docs/progress-tracker.md) · [Evidence matrix](../../certification/evidence-matrix.md)

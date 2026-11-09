@@ -5,7 +5,7 @@
 ## Retrieval questions
 
 1. Apakah sistem if/else termasuk supervised ML?
-2. Jika support TP=6 FP=2 FN=4, bagaimana precision dan recall?
+2. Jika warning TP=6 FP=2 FN=4, bagaimana precision dan recall?
 3. Mengapa 18 contoh test tidak cukup untuk SLA?
 4. Apa fungsi abstain?
 5. Bolehkah score Naive Bayes ditampilkan sebagai probabilitas kepastian?
@@ -17,9 +17,9 @@
 
 Tidak. Aturan ditulis developer, bukan parameter dipelajari dari pasangan data-label.
 
-**2. Jika support TP=6 FP=2 FN=4, bagaimana precision dan recall?**
+**2. Jika warning TP=6 FP=2 FN=4, bagaimana precision dan recall?**
 
-Precision=0.75 dan recall=0.60; jelaskan dampak empat komplain yang terlewat.
+Precision=0.75 dan recall=0.60; jelaskan dampak empat anomali yang terlewat.
 
 **3. Mengapa 18 contoh test tidak cukup untuk SLA?**
 
@@ -43,7 +43,7 @@ Evaluation mengukur model terhadap dataset acuan; monitoring mengamati kinerja d
 - Training accuracy bukan production accuracy → data bisa berbeda dan test leakage membuat angka terlalu optimistis.
 - Confidence tinggi bukan kepastian → relatif score atau softmax bisa miscalibrated.
 - Tidak ada error HTTP berarti model benar → valid JSON bisa memuat prediksi salah.
-- Data sintetis tidak perlu diuji privasinya → tetap jangan mencampur potongan chat nyata.
+- Data sintetis tidak perlu diuji privasinya → tetap jangan mencampur potongan telemetri nyata.
 
 ## Spaced review (jadwal usulan)
 

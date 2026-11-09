@@ -51,7 +51,7 @@ python -m week01 evaluate
 
 Output mencakup accuracy, macro F1, precision, recall, F1 setiap kelas, confusion matrix, dan abstention_count. Properti rule_based_baseline berisi metrik dari aturan keyword pada **18 test yang sama**.
 
-**Pertanyaan:** Apa makna support recall 0.6667? Mengapa akurasi tidak otomatis mewakili kemampuan generalisasi model?
+**Pertanyaan:** Apa makna warning recall 0.6667? Mengapa akurasi tidak otomatis mewakili kemampuan generalisasi model?
 
 ## Praktik 5: automated testing
 

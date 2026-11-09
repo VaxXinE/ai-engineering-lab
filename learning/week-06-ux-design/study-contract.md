@@ -4,7 +4,7 @@
 
 ## LO-1
 
-**Dapat dilakukan:** Memetakan task dan error flow dari inquiry hingga keputusan agent.
+**Dapat dilakukan:** Memetakan task dan error flow dari meter reading hingga keputusan operator.
 
 **Evidence:** berikan satu artefak asli (kode/diagram/test/design record) dan jelaskan reasoning + failure case, tautkan commit setelah praktik.
 

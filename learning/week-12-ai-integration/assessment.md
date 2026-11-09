@@ -23,7 +23,7 @@
 ## Bukti demonstrasi
 
 - [ ] Prediksi yang tersimpan selalu mempunyai model_version dan valid label.
-- [ ] Data inquiry tidak hilang ketika AI gagal.
+- [ ] Data meter reading tidak hilang ketika AI gagal.
 - [ ] Izin akses dites untuk resource berbeda dan tenant lain.
 - [ ] UI dapat menerima hasil normal, abstain, timeout dan invalid model output.
 - [ ] Ada bukti tests yang dijalankan, bukan screenshot tanpa reproduksi.

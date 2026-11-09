@@ -4,18 +4,18 @@
 
 ## Konteks
 
-Message '  ' invalid secara bisnis walau bertipe string. Timestamp di masa depan bisa valid secara format ISO namun tidak semestinya diterima. Train/test dengan teks identik tapi ejaan berbeda juga bisa membocorkan informasi semantik.
+EventNote '  ' invalid secara bisnis walau bertipe string. Timestamp di masa depan bisa valid secara format ISO namun tidak semestinya diterima. Train/test dengan teks identik tapi ejaan berbeda juga bisa membocorkan informasi semantik.
 
 **Prasyarat:** Modul 3; Python, skema data, data ingestion report.  
 **Dataset:** data sintetis dari capstone; jangan memakai data perusahaan atau kredensial sungguhan.
 
 ## Langkah kerja
 
-1. Susun tabel aturan validasi untuk ID, timestamp, channel, message, source, dan label (bila ada).
+1. Susun tabel aturan validasi untuk ID, timestamp, channel, event_note, source, dan label (bila ada).
 
 2. Gunakan schema validator (Pydantic atau standard-library validator) terpisah dari parser ingestion.
 
-3. Buat fixture sintetis berisi valid row, blank message, unsupported source, duplicate ID, future timestamp, dan pesan berlebihan.
+3. Buat fixture sintetis berisi valid row, blank event_note, unsupported source, duplicate ID, future timestamp, dan pesan berlebihan.
 
 4. Hitung quality metrics sebelum dan sesudah validasi, disertai denominator dan definisi metrik.
 

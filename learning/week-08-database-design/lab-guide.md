@@ -8,11 +8,11 @@ Merancang struktur data untuk pesan, prediksi AI, versi model, review, dan audit
 
 ## Skenario
 
-Inquiry dibuat pada 09.00 dengan model v1, lalu direview ulang oleh agent. Model v2 dipasang minggu berikutnya. Riwayat harus tetap bisa menunjukkan prediksi v1 dan tindakan agent tanpa menghapus data historis.
+MeterReading dibuat pada 09.00 dengan model v1, lalu direview ulang oleh operator. Model v2 dipasang minggu berikutnya. Riwayat harus tetap bisa menunjukkan prediksi v1 dan tindakan operator tanpa menghapus data historis.
 
 ## Langkah implementasi
 
-1. Definisikan entity diagram untuk organization, user, inquiry, model_version, prediction, review_event, ingestion_batch.
+1. Definisikan entity diagram untuk organization, user, meter reading, model_version, prediction, review_event, ingestion_batch.
 
 2. Tentukan data dictionary berisi tipe, nullable rules, uniqueness, retention dan relasi.
 
@@ -26,14 +26,14 @@ Inquiry dibuat pada 09.00 dengan model v1, lalu direview ulang oleh agent. Model
 
 ## Acceptance criteria
 
-- [ ] Setiap prediction memiliki model_version dan inquiry_id yang valid.
+- [ ] Setiap prediction memiliki model_version dan meter_reading_id yang valid.
 - [ ] Foreign key menolak orphan record; rollback transaksi menjaga konsistensi.
 - [ ] Akses tenant A tidak dapat membaca atau mengubah record tenant B.
 - [ ] Re-running migration dan duplicate event ditangani sesuai rencana.
 
 ## Rencana verifikasi
 
-1. Buat skenario bukti untuk: Setiap prediction memiliki model_version dan inquiry_id yang valid.
+1. Buat skenario bukti untuk: Setiap prediction memiliki model_version dan meter_reading_id yang valid.
 2. Buat skenario bukti untuk: Foreign key menolak orphan record; rollback transaksi menjaga konsistensi.
 3. Buat skenario bukti untuk: Akses tenant A tidak dapat membaca atau mengubah record tenant B.
 4. Buat skenario bukti untuk: Re-running migration dan duplicate event ditangani sesuai rencana.

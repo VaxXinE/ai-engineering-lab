@@ -22,7 +22,7 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument("--train", type=Path, default=DEFAULT_TRAIN)
     subparsers = parser.add_subparsers(dest="command", required=True)
 
-    predict_parser = subparsers.add_parser("predict", help="Classify one synthetic inquiry")
+    predict_parser = subparsers.add_parser("predict", help="Classify one synthetic device event")
     predict_parser.add_argument("--text", required=True)
     eval_parser = subparsers.add_parser("evaluate", help="Evaluate on separate held-out CSV")
     eval_parser.add_argument("--test", type=Path, default=DEFAULT_TEST)

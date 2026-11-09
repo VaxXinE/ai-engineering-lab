@@ -4,23 +4,23 @@ Semua langkah berikut adalah **contoh pembelajaran**, bukan laporan pelaksanaan.
 
 ## Contoh 1: Fault injection timeout tanpa merusak data
 
-**Problem:** Untuk satu inquiry sintetis, fake AI adapter selalu melempar TimeoutError.
+**Problem:** Untuk satu meter reading sintetis, fake AI adapter selalu melempar TimeoutError.
 
-1. Sebelum uji, snapshot state test DB dan catat inquiry count.
+1. Sebelum uji, snapshot state test DB dan catat meter reading count.
 
-2. Buat 1 inquiry; API harus menyimpannya, lalu AI adapter gagal dengan timeout yang disengaja.
+2. Buat 1 meter reading; API harus menyimpannya, lalu AI adapter gagal dengan timeout yang disengaja.
 
 3. Periksa bahwa status berubah ke pending_manual_review dan data tetap ada; log hanya menyimpan request ID serta error class.
 
 4. Pulihkan adapter normal dan jalankan regression test. Bandingkan counts dan audit history terhadap baseline.
 
-**Common failure:** Menghapus inquiry saat AI error berarti coupling salah antara data ingestion dan inference; test harus gagal.
+**Common failure:** Menghapus meter reading saat AI error berarti coupling salah antara data ingestion dan inference; test harus gagal.
 
 **Why-question:** kenapa langkah sebelumnya mencegah risiko tersebut dan test apa yang membuktikannya?
 
 ## Contoh 2: Checklist verifikasi restore
 
-**Problem:** Restore berhasil mengembalikan database test berisi 1200 inquiry dan 1300 prediction, tetapi UI menunjukkan 0 inquiry.
+**Problem:** Restore berhasil mengembalikan database test berisi 1200 meter reading dan 1300 prediction, tetapi UI menunjukkan 0 meter reading.
 
 1. Periksa schema dan tenant filter; bisa jadi restored database memakai tenant_id berbeda dari test user.
 

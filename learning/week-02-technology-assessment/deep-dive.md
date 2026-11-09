@@ -45,7 +45,7 @@ Rencana validasi memerlukan acceptance threshold: misalnya review cost per 1000 
 
 ## Transfer ke profesi full-stack
 
-Ambil satu kebutuhan dari capstone [AI Customer Intelligence](../../projects/ai-customer-intelligence/README.md). Jelaskan **data apa yang tepercaya, aturan bisnis mana yang harus deterministik, apa yang bisa diprediksi AI, bagaimana failure ditangani, dan bagaimana keputusan diuji**. Jangan menyatakan modul selesai hanya dengan menyalin contoh.
+Ambil satu kebutuhan dari capstone [AI Smart Energy Monitoring](../../projects/ai-energy-intelligence/README.md). Jelaskan **data apa yang tepercaya, aturan bisnis mana yang harus deterministik, apa yang bisa diprediksi AI, bagaimana failure ditangani, dan bagaimana keputusan diuji**. Jangan menyatakan modul selesai hanya dengan menyalin contoh.
 
 ## Bacaan lanjutan (dokumentasi dan pembelajaran primer)
 

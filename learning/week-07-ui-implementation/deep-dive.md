@@ -17,7 +17,7 @@ Pecah layar menjadi InquiryList, InquiryDetail, PredictionBadge, ReviewForm, dan
 
 ### 2. Representasi asynchronous state
 
-Boolean isLoading + error + data dapat memunculkan kombinasi mustahil (misal loading true tetapi data error). Discriminated union menjamin state eksklusif dengan union TypeScript: idle, loading, success(data), error(message). Ini membantu rendering dan pengujian. Untuk optimistic update, simpan snapshot sebelum request dan rollback jika API menolak; hindari menyembunyikan konflik.
+Boolean isLoading + error + data dapat memunculkan kombinasi mustahil (misal loading true tetapi data error). Discriminated union menjamin state eksklusif dengan union TypeScript: idle, loading, success(data), error(event_note). Ini membantu rendering dan pengujian. Untuk optimistic update, simpan snapshot sebelum request dan rollback jika API menolak; hindari menyembunyikan konflik.
 
 ### 3. Request race, idempotency dan cancellation
 
@@ -31,9 +31,9 @@ React secara default meng-escape text nodes, tetapi raw HTML injection tetap ber
 
 Prediksi perlu status, label, model_version, action history. Relative score pada Week 01 bukan probabilitas yang dapat dipahami user; jika menampilkan angka, beri konteks dan hindari angka palsu. Tombol override perlu reason dan submit confirmation; error server harus menjaga draft. Review by user hanya berhasil jika API mengonfirmasi.
 
-## Aplikasi dalam AI Customer Intelligence
+## Aplikasi dalam AI Smart Energy Monitoring
 
-Pikirkan perubahan berikut: traffic 10 kali lebih tinggi, pelanggan memakai dua tenant, pengguna dapat memasukkan teks tidak tepercaya, dan AI service suatu saat mati. Desain mana yang tetap aman? Apa yang mesti diubah? Tuliskan konsekuensi pada kode, data, UX, keamanan, dan monitoring.
+Pikirkan perubahan berikut: traffic 10 kali lebih tinggi, perangkat memakai dua tenant, pengguna dapat memasukkan teks tidak tepercaya, dan AI service suatu saat mati. Desain mana yang tetap aman? Apa yang mesti diubah? Tuliskan konsekuensi pada kode, data, UX, keamanan, dan monitoring.
 
 ## Bacaan primer
 

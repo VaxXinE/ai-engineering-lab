@@ -15,13 +15,13 @@
 3. Kerjakan [exercises](exercises.md) dan [simulasi asesmen](assessment.md).
 4. Simpan artefak nyata di repo dan hubungkan ke [evidence matrix](../../certification/evidence-matrix.md).
 
-**Skenario:** Simulasikan service inference offline sehingga klasifikasi gagal. Data inquiry tetap disimpan. Operator memverifikasi degraded mode, memulihkan service, menjalankan regression test, dan mendokumentasikan insiden.
+**Skenario:** Simulasikan service inference offline sehingga klasifikasi gagal. Data meter reading tetap disimpan. Operator memverifikasi degraded mode, memulihkan service, menjalankan regression test, dan mendokumentasikan insiden.
 
 **Indikator:** 
-- Simulasi outage tidak kehilangan inquiry yang sudah diterima.
+- Simulasi outage tidak kehilangan meter reading yang sudah diterima.
 - Restore dijalankan pada environment uji dan diperiksa integritasnya.
 - Setiap langkah pemulihan beserta hasil uji dicatat.
 - Regression test menguji akar masalah, bukan hanya happy path.
-- Tidak ada data customer asli atau secret dalam incident report.
+- Tidak ada data device asli atau secret dalam incident report.
 
-Baca [roadmap](../../docs/learning-roadmap.md) dan [capstone](../../projects/ai-customer-intelligence/README.md). Keberadaan panduan tidak berarti kompetensi telah diverifikasi.
+Baca [roadmap](../../docs/learning-roadmap.md) dan [capstone](../../projects/ai-energy-intelligence/README.md). Keberadaan panduan tidak berarti kompetensi telah diverifikasi.

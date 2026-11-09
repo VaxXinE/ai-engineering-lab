@@ -6,7 +6,7 @@ import csv
 from dataclasses import dataclass
 from pathlib import Path
 
-LABELS = ("sales", "support", "general")
+LABELS = ("normal", "warning", "fault")
 MAX_TEXT_LENGTH = 500
 
 
@@ -40,7 +40,7 @@ def read_examples(path: Path) -> list[Example]:
                 raise ValueError(f"Unknown label at row {row_number}: {label!r}")
             key = normalize_text(text)
             if key in seen:
-                raise ValueError(f"Duplicate inquiry at row {row_number}")
+                raise ValueError(f"Duplicate device event at row {row_number}")
             seen.add(key)
             examples.append(Example(text=text, label=label))
     if not examples:

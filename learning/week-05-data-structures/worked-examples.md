@@ -26,13 +26,13 @@ for key in rows:
 assert unique == ['a', 'b', 'c']
 ```
 
-**Kesalahan yang harus dihindari:** Mengubah seen menjadi penyimpanan nama customer saja dapat menyatukan dua pelanggan dengan nama sama; gunakan stable event ID.
+**Kesalahan yang harus dihindari:** Mengubah seen menjadi penyimpanan nama device saja dapat menyatukan dua perangkat dengan nama sama; gunakan stable event ID.
 
 **Teach-back:** jelaskan mengapa langkah 1→2→3 menghasilkan solusi dan bagaimana kegagalannya diuji.
 
 ## Contoh 2: Batch 1 juta event — memory versus streaming
 
-**Masalah:** Dataset input 1.000.000 message, dengan batas memory kecil dan hanya perlu count per label.
+**Masalah:** Dataset input 1.000.000 event_note, dengan batas memory kecil dan hanya perlu count per label.
 
 **Solusi bertahap:**
 

@@ -4,16 +4,16 @@
 
 ## Konteks
 
-CSV sintetis dengan kolom inquiry_id, message, received_at, source. Dua baris punya inquiry_id sama: loader menolak duplikasi atau melakukan upsert sesuai kebijakan yang terdokumentasi, tidak diam-diam menambah dua inquiry.
+CSV sintetis dengan kolom meter_reading_id, event_note, received_at, source. Dua baris punya meter_reading_id sama: loader menolak duplikasi atau melakukan upsert sesuai kebijakan yang terdokumentasi, tidak diam-diam menambah dua meter reading.
 
 **Prasyarat:** Modul 1 dan 2; Python standard library CSV; dasar SQL.  
 **Dataset:** data sintetis dari capstone; jangan memakai data perusahaan atau kredensial sungguhan.
 
 ## Langkah kerja
 
-1. Buat docs/data-dictionary.md yang mendefinisikan inquiry_id, message, received_at, source, schema version, contoh valid dan tidak valid.
+1. Buat docs/data-dictionary.md yang mendefinisikan meter_reading_id, event_note, received_at, source, schema version, contoh valid dan tidak valid.
 
-2. Generate sedikitnya 100 pesan **sintetis**, tidak menggunakan data kantor atau customer nyata; simpan generator/seed dan keterangan dataset.
+2. Generate sedikitnya 100 pesan **sintetis**, tidak menggunakan data kantor atau device nyata; simpan generator/seed dan keterangan dataset.
 
 3. Implementasikan parser CSV yang memvalidasi header, encoding, field wajib, jumlah kolom, dan panjang input.
 
@@ -26,7 +26,7 @@ CSV sintetis dengan kolom inquiry_id, message, received_at, source. Dua baris pu
 ## Test plan minimal
 
 1. Satu row valid dan satu row missing required field.
-2. Input duplicate inquiry_id pada file sama dan import ulang.
+2. Input duplicate meter_reading_id pada file sama dan import ulang.
 3. File tidak ada, kolom berlebih, file terlalu besar dan interruption skenario.
 4. Jumlah accepted + rejected + skipped sama dengan jumlah rows input.
 

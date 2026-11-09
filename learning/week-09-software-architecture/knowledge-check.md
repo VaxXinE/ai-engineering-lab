@@ -19,11 +19,11 @@
 
 **3.** Model/provider dapat diganti dan diuji tanpa mengubah domain/API contract.
 
-**4.** Lock duration dan resource contention meningkat, rollback bisa membuang inquiry.
+**4.** Lock duration dan resource contention meningkat, rollback bisa membuang meter reading.
 
 **5.** Membantu menyelaraskan state database dengan penerbitan event asynchronous saat ada crash.
 
-**6.** Simpan inquiry, tandai fallback/retry state, berikan manual review dan monitoring.
+**6.** Simpan meter reading, tandai fallback/retry state, berikan manual review dan monitoring.
 
 ## Koreksi aktif
 
