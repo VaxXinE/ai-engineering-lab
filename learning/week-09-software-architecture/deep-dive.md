@@ -19,7 +19,7 @@ Monolith modular memiliki deployment sederhana, transaksi DB lebih mudah, latenc
 
 ### 3. Ports and adapters untuk vendor-independent AI
 
-Domain energy scoring bergantung pada `score(reading_features)->AnomalyResult`, bukan `classify(event_note)`. Adapter dapat menjalankan IQR baseline atau numeric anomaly model. Return harus finite normalized score, flagged, reason_codes, model_version. Raw scores tidak otomatis probability. Perubahan provider/model tidak mengubah route atau permission policy.
+Domain energy scoring bergantung pada `score(reading_features)->AnomalyResult`, bukan interface klasifikasi catatan teks dari Week 01. Adapter dapat menjalankan IQR baseline atau numeric anomaly model. Return harus finite normalized score, flagged, reason_codes, model_version. Raw scores tidak otomatis probability. Perubahan provider/model tidak mengubah route atau permission policy.
 
 ### 4. Consistency dan asynchronous workflows
 

@@ -25,7 +25,7 @@ Kita memerlukan algoritma yang menandai interval konsumsi tidak biasa, bukan cla
 ## Acceptance criteria (belum dicentang)
 
 - [ ] Tidak ada leakage dari masa depan atau held-out test saat threshold fitting.
-- [ ] Model mengevaluasi numeric readings, bukan event_note teks.
+- [ ] Model mengevaluasi numeric readings, bukan klasifikasi catatan teks Modul 01.
 - [ ] Metrik berlabel sintetis tidak dipromosikan sebagai validasi kerusakan listrik nyata.
 - [ ] Missing intervals diperlakukan sebagai kualitas data, bukan nol.
 
